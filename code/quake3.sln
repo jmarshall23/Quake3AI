@@ -1,0 +1,66 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Splines", "splines\Splines.vcxproj", "{DBAF2C53-3858-455D-A1AE-3FC093515314}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cgame", "cgame\cgame.vcxproj", "{C878E295-CB82-4B40-8ECF-5CE5525466FA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game\game.vcxproj", "{F9EE10DA-2404-4154-B904-F93C936C040A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quake3", "quake3.vcxproj", "{81CB51C4-B434-4E12-B69B-BAEE102F2852}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "renderer", "renderer\renderer.vcxproj", "{AB424155-FBED-4D8D-B007-5B6CF93EA395}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ui", "ui\ui.vcxproj", "{A8EAC38E-C7DA-42F8-811D-77FD092B9D19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{5C2B01EC-DA40-4FFC-B53F-64867B41407E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameCode", "GameCode", "{CEEF904B-8B67-4D23-AC1B-EFBBD9B5FE29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{1F9F78D9-A679-4F38-B9DD-A99A342B3788}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBAF2C53-3858-455D-A1AE-3FC093515314}.Debug|x86.ActiveCfg = Debug|Win32
+		{DBAF2C53-3858-455D-A1AE-3FC093515314}.Debug|x86.Build.0 = Debug|Win32
+		{DBAF2C53-3858-455D-A1AE-3FC093515314}.Release|x86.ActiveCfg = Release|Win32
+		{DBAF2C53-3858-455D-A1AE-3FC093515314}.Release|x86.Build.0 = Release|Win32
+		{C878E295-CB82-4B40-8ECF-5CE5525466FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{C878E295-CB82-4B40-8ECF-5CE5525466FA}.Debug|x86.Build.0 = Debug|Win32
+		{C878E295-CB82-4B40-8ECF-5CE5525466FA}.Release|x86.ActiveCfg = Release|Win32
+		{C878E295-CB82-4B40-8ECF-5CE5525466FA}.Release|x86.Build.0 = Release|Win32
+		{F9EE10DA-2404-4154-B904-F93C936C040A}.Debug|x86.ActiveCfg = Debug|Win32
+		{F9EE10DA-2404-4154-B904-F93C936C040A}.Debug|x86.Build.0 = Debug|Win32
+		{F9EE10DA-2404-4154-B904-F93C936C040A}.Release|x86.ActiveCfg = Release|Win32
+		{F9EE10DA-2404-4154-B904-F93C936C040A}.Release|x86.Build.0 = Release|Win32
+		{81CB51C4-B434-4E12-B69B-BAEE102F2852}.Debug|x86.ActiveCfg = Debug|Win32
+		{81CB51C4-B434-4E12-B69B-BAEE102F2852}.Debug|x86.Build.0 = Debug|Win32
+		{81CB51C4-B434-4E12-B69B-BAEE102F2852}.Release|x86.ActiveCfg = Release|Win32
+		{81CB51C4-B434-4E12-B69B-BAEE102F2852}.Release|x86.Build.0 = Release|Win32
+		{AB424155-FBED-4D8D-B007-5B6CF93EA395}.Debug|x86.ActiveCfg = Debug|Win32
+		{AB424155-FBED-4D8D-B007-5B6CF93EA395}.Debug|x86.Build.0 = Debug|Win32
+		{AB424155-FBED-4D8D-B007-5B6CF93EA395}.Release|x86.ActiveCfg = Release|Win32
+		{AB424155-FBED-4D8D-B007-5B6CF93EA395}.Release|x86.Build.0 = Release|Win32
+		{A8EAC38E-C7DA-42F8-811D-77FD092B9D19}.Debug|x86.ActiveCfg = Debug|Win32
+		{A8EAC38E-C7DA-42F8-811D-77FD092B9D19}.Release|x86.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DBAF2C53-3858-455D-A1AE-3FC093515314} = {5C2B01EC-DA40-4FFC-B53F-64867B41407E}
+		{C878E295-CB82-4B40-8ECF-5CE5525466FA} = {CEEF904B-8B67-4D23-AC1B-EFBBD9B5FE29}
+		{F9EE10DA-2404-4154-B904-F93C936C040A} = {CEEF904B-8B67-4D23-AC1B-EFBBD9B5FE29}
+		{81CB51C4-B434-4E12-B69B-BAEE102F2852} = {5C2B01EC-DA40-4FFC-B53F-64867B41407E}
+		{AB424155-FBED-4D8D-B007-5B6CF93EA395} = {5C2B01EC-DA40-4FFC-B53F-64867B41407E}
+		{A8EAC38E-C7DA-42F8-811D-77FD092B9D19} = {CEEF904B-8B67-4D23-AC1B-EFBBD9B5FE29}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FFA8FF4-EAC6-4793-AFEA-FC9A47C87818}
+	EndGlobalSection
+EndGlobal
