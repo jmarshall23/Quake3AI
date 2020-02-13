@@ -21,6 +21,7 @@ BotAIStartFrame
 ==================
 */
 int BotAIStartFrame(int time) {
+	G_CheckBotSpawn();
 	return 1;
 }
 
@@ -73,7 +74,7 @@ BotAISetup
 ==============
 */
 int BotAISetup(int restart) {
-	return 0;
+	return 1;
 }
 
 /*
@@ -84,5 +85,5 @@ BotAILoadMap
 ==============
 */
 int BotAILoadMap(int restart) {
-	return 0;
+	return 1;
 }
