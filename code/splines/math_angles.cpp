@@ -24,6 +24,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 angles_t ang_zero( 0.0f, 0.0f, 0.0f );
 
+// jmarshall
+/*
+=================
+angles_t::ToMat3
+=================
+*/
+mat3_t angles_t::ToMat3(void) const {
+	mat3_t mat;
+	float sr, sp, sy, cr, cp, cy;
+
+	SinCos(DEG2RAD(yaw), sy, cy);
+	SinCos(DEG2RAD(pitch), sp, cp);
+	SinCos(DEG2RAD(roll), sr, cr);
+
+	mat[0] = idVec3_t(cp * cy, cp * sy, -sp);
+	mat[1] = idVec3_t(sr * sp * cy + cr * -sy, sr * sp * sy + cr * cy, sr * cp);
+	mat[2] = idVec3_t(cr * sp * cy + -sr * -sy, cr * sp * sy + -sr * cy, cr * cp);
+
+	return mat;
+}
+// jmarshall end
+
 void toAngles( mat3_t &src, angles_t &dst ) {
 	double		theta;
 	double		cp;

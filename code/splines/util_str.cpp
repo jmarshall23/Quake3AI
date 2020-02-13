@@ -494,6 +494,38 @@ void idStr::snprintf
    strncpy (dst, buffer, size-1);
    }
 
+/*
+============
+idStr::SetFileExtension
+============
+*/
+idStr& idStr::SetFileExtension(const char* extension) {
+	StripFileExtension();
+	if (*extension != '.') {
+		Append('.');
+	}
+	Append(extension);
+	return *this;
+}
+
+/*
+============
+idStr::StripFileExtension
+============
+*/
+idStr& idStr::StripFileExtension(void) {
+	int i;
+
+	for (i = m_data->len - 1; i >= 0; i--) {
+		if (m_data->data[i] == '.') {
+			m_data->data[i] = '\0';
+			m_data->len = i;
+			break;
+		}
+	}
+	return *this;
+}
+
 #ifdef _WIN32
 #pragma warning(disable : 4189)		// local variable is initialized but not referenced
 #endif

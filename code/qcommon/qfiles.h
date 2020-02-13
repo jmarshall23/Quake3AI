@@ -299,6 +299,37 @@ typedef struct {
 	int			ofsEnd;				// end of file
 } md4Header_t;
 
+// jmarshall
+/*
+==============================================================================
+
+  .NAV file format
+
+==============================================================================
+*/
+
+#define NAV_FILE_VERSION				2
+#define NAV_FILE_EXTENSION				".nav"
+#define NAV_MAX_PATHSTEPS				512
+
+//
+// navFileHeader_t
+//
+struct navFileHeader_t {
+	int version;
+	int mapCRC;
+	int numTiles;
+};
+
+//
+// NavMeshTileHeader_t
+//
+struct NavMeshTileHeader_t
+{
+	unsigned int tileRef;
+	int dataSize;
+};
+// jmarshall end
 
 /*
 ==============================================================================

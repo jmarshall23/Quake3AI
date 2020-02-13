@@ -45,7 +45,9 @@ public:
 	friend void		toAngles( idVec3_t &src, angles_t &dst );
 	friend void		toAngles( quat_t &src, angles_t &dst );
 	friend void		toAngles( mat3_t &src, angles_t &dst );
-
+// jmarshall
+	mat3_t			ToMat3(void) const;
+// jmarshall end
 					operator vec3_p();
 
 	float			operator[]( int index ) const;

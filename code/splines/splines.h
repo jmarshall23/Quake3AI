@@ -32,6 +32,13 @@ extern "C" {
 #include "util_list.h"
 #include "util_str.h"
 #include "math_vector.h"
+#include "math_angles.h"
+#include "math_matrix.h"
+
+extern "C" {
+	void QuakeCoordsToNav(float* pt, float* _out);
+	void NavToQuakeCoords(float* pt, float* _out);
+};
 
 typedef int fileHandle_t;
 

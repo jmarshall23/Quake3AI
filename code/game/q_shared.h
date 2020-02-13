@@ -1429,5 +1429,13 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	void QuakeCoordsToNav(float* pt, float* _out);
+	void NavToQuakeCoords(float* pt, float* _out);
+#ifdef __cplusplus
+};
+#endif
 
 #endif	// __Q_SHARED_H

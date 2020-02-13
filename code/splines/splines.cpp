@@ -40,6 +40,22 @@ float Q_fabs( float f ) {
 	return * ( float * ) &tmp;
 }
 
+// jmarshall
+void QuakeCoordsToNav(float *pt, float *_out) {
+	idVec3_t v = idVec3_t(pt[0], pt[1], pt[2]) * angles_t(0, 0, -90).ToMat3();
+	_out[0] = v.x;
+	_out[1] = v.y;
+	_out[2] = v.z;
+}
+
+void NavToQuakeCoords(float* pt, float* _out) {
+	idVec3_t v = idVec3_t(pt[0], pt[1], pt[2]) * angles_t(0, 0, 90).ToMat3();
+	_out[0] = v.x;
+	_out[1] = v.y;
+	_out[2] = v.z;
+}
+// jmarshall end
+
 
 //#include "../shared/windings.h"
 //#include "../qcommon/qcommon.h"

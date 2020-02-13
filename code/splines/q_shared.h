@@ -806,5 +806,10 @@ void Info_NextPair( const char *(*s), char key[MAX_INFO_KEY], char value[MAX_INF
 //#include "../shared/idflags.h"
 #endif	// __cplusplus
 
+__forceinline void SinCos(float a, float& s, float& c) {
+	s = sinf(a);
+	c = cosf(a);
+}
+
 #endif	// __Q_SHARED_H
 

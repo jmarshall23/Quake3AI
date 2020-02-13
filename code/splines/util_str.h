@@ -109,6 +109,13 @@ public:
 	idStr&		operator+=( const unsigned a );
 	idStr&		operator+=( const bool a );
 
+// jmarshall
+	void Append(const char a);
+	void Append(const char* text);
+	idStr& SetFileExtension(const char* extension);		// set the given file extension;
+	idStr& StripFileExtension(void);
+// jmarshall end
+
 	static   char     *toLower( char *s1 );
 	static   char     *toUpper( char *s1 );
 
@@ -165,6 +172,29 @@ inline idStr::idStr() : m_data ( NULL )
    EnsureAlloced ( 1 );
 	m_data->data[ 0 ] = 0;
 	}
+
+// jmarshall
+inline void idStr::Append(const char a) {
+	EnsureAlloced(m_data->len + 2);
+	m_data->data[m_data->len] = a;
+	m_data->len++;
+	m_data->data[m_data->len] = '\0';
+}
+inline void idStr::Append(const char* text) {
+	int newLen;
+	int i;
+
+	if (text) {
+		newLen = m_data->len + strlen(text);
+		EnsureAlloced(newLen + 1);
+		for (i = 0; text[i]; i++) {
+			m_data->data[m_data->len + i] = text[i];
+		}
+		m_data->len = newLen;
+		m_data->data[m_data->len] = '\0';
+	}
+}
+// jmarshall end
 
 inline idStr::idStr
 	(
