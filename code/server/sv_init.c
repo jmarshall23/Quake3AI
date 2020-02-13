@@ -412,10 +412,6 @@ void SV_SpawnServer( char *server, qboolean killBots ) {
 
 	CM_LoadMap( va("maps/%s.bsp", server), qfalse, &checksum );
 
-// jmarshall
-	SV_LoadNavMesh(va("maps/%s.bsp", server));
-// jmarshall end
-
 	// set serverinfo visible name
 	Cvar_Set( "mapname", server );
 

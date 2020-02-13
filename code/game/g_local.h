@@ -325,7 +325,6 @@ struct gclient_s {
 	char		*areabits;
 };
 
-
 //
 // this structure is cleared as each map is entered
 //
@@ -413,6 +412,10 @@ typedef struct {
 #ifdef MISSIONPACK
 	int			portalSequence;
 #endif
+
+// jmarshall
+	qhandle_t		navMeshFile;
+// jmarshall end
 } level_locals_t;
 
 
@@ -764,6 +767,8 @@ extern	vmCvar_t	g_enableDust;
 extern	vmCvar_t	g_enableBreath;
 extern	vmCvar_t	g_singlePlayer;
 extern	vmCvar_t	g_proxMineTimeout;
+extern  vmCvar_t	g_mapName;
+
 
 void	trap_Printf( const char *fmt );
 void	trap_Error( const char *fmt );
@@ -815,3 +820,6 @@ int		trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *paren
 
 void	trap_SnapVector( float *v );
 
+// jmarshall
+qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
+// jmarshall end

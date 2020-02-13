@@ -227,3 +227,9 @@ void trap_SnapVector( float *v ) {
 	syscall( G_SNAPVECTOR, v );
 	return;
 }
+
+// jmarshall
+qhandle_t trap_Nav_LoadMesh(const char *bspFileName) {
+	return syscall(G_NAV_LOADMESH, bspFileName);
+}
+// jmarshall end

@@ -229,6 +229,9 @@ typedef enum {
 	// 1.32
 	G_FS_SEEK,
 
+	// Nav Mesh
+	G_NAV_LOADMESH,
+
 } gameImport_t;
 
 

@@ -78,10 +78,6 @@ typedef struct {
 	int				gameClientSize;		// will be > sizeof(playerState_t) due to game private data
 
 	int				restartTime;
-
-// jmarshall
-	qhandle_t	navMeshFile;
-// jmarshall end
 } server_t;
 
 
@@ -341,10 +337,6 @@ int			SV_BotLibSetup( void );
 int			SV_BotLibShutdown( void );
 int			SV_BotGetSnapshotEntity( int client, int ent );
 int			SV_BotGetConsoleMessage( int client, char *buf, int size );
-
-// jmarshall
-void SV_LoadNavMesh(char* mapFileName);
-// jmarshall end
 
 int BotImport_DebugPolygonCreate(int color, int numPoints, vec3_t *points);
 void BotImport_DebugPolygonDelete(int id);

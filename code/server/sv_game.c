@@ -449,8 +449,10 @@ int SV_GameSystemCalls( int *args ) {
 	case G_SNAPVECTOR:
 		Sys_SnapVector( VMA(1) );
 		return 0;
-
-
+// jmarshall
+	case G_NAV_LOADMESH:
+		return Nav_LoadMesh(VMA(1));
+// jmarshall end
 	case TRAP_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );
 		return 0;

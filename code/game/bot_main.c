@@ -64,6 +64,9 @@ BotAISetupClient
 ==============
 */
 int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean restart) {
+	if (level.navMeshFile <= 0)
+		return -1;
+
 	//BotScheduleBotThink();
 	return 1;
 }
@@ -80,10 +83,16 @@ int BotAISetup(int restart) {
 /*
 ==============
 BotAILoadMap
-
-// NOT USED, LOADED ON THE ENGINE SIDE
 ==============
 */
 int BotAILoadMap(int restart) {
+	if (restart)
+		return 1;
+
+	// Try and load the navmesh.
+	level.navMeshFile = trap_Nav_LoadMesh(va("maps/%s.bsp", g_mapName.string));
+	if (level.navMeshFile <= 0)
+		return -1;
+
 	return 1;
 }

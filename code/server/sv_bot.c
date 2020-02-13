@@ -281,21 +281,9 @@ SV_BotFrame
 ==================
 */
 void SV_BotFrame( int time ) {
-	if (sv.navMeshFile <= 0)
-		return;
-
 	//NOTE: maybe the game is already shutdown
 	if (!gvm) return;
 	VM_Call( gvm, BOTAI_START_FRAME, time );
-}
-
-/*
-==================
-SV_BotFrame
-==================
-*/
-void SV_LoadNavMesh(char *mapFileName) {
-	sv.navMeshFile = Nav_LoadMesh(mapFileName);
 }
 
 /*
