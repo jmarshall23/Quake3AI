@@ -822,6 +822,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='vector|Win32'">MaxSpeed</Optimization>
     </ClCompile>
+    <ClCompile Include="qcommon\nav_file.cpp" />
     <ClCompile Include="qcommon\net_chan.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug TA DEMO|Win32'">Disabled</Optimization>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug TA DEMO|Win32'">true</BrowseInformation>
@@ -1093,12 +1094,15 @@
     <ClInclude Include="game\bg_public.h" />
     <ClInclude Include="game\g_public.h" />
     <ClInclude Include="game\q_shared.h" />
+    <ClInclude Include="game\q_shared.hpp" />
     <ClInclude Include="game\surfaceflags.h" />
     <ClInclude Include="qcommon\cm_local.h" />
     <ClInclude Include="qcommon\cm_patch.h" />
     <ClInclude Include="qcommon\cm_polylib.h" />
     <ClInclude Include="qcommon\cm_public.h" />
+    <ClInclude Include="qcommon\nav_local.h" />
     <ClInclude Include="qcommon\qcommon.h" />
+    <ClInclude Include="qcommon\qcommon.hpp" />
     <ClInclude Include="qcommon\qfiles.h" />
     <ClInclude Include="qcommon\unzip.h" />
     <ClInclude Include="qcommon\vm_local.h" />
@@ -1133,8 +1137,14 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="bspnav\bspnav.vcxproj">
+      <Project>{c6cbccd9-1bb8-4fee-a9bf-6ec0261359c1}</Project>
+    </ProjectReference>
     <ProjectReference Include="cgame\cgame.vcxproj">
       <Project>{c878e295-cb82-4b40-8ecf-5ce5525466fa}</Project>
+    </ProjectReference>
+    <ProjectReference Include="external\external.vcxproj">
+      <Project>{f297178d-39ca-4aa6-bf1c-2005e14c8296}</Project>
     </ProjectReference>
     <ProjectReference Include="game\game.vcxproj">
       <Project>{f9ee10da-2404-4154-b904-f93c936c040a}</Project>

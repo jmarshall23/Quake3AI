@@ -1429,6 +1429,7 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
+// jmarshall
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1437,5 +1438,6 @@ extern "C" {
 #ifdef __cplusplus
 };
 #endif
+// jmarshall end
 
 #endif	// __Q_SHARED_H
