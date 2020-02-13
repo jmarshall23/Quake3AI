@@ -128,7 +128,6 @@ rvmNavFileLocal::WriteNavFile
 */
 void WriteNavFile(const char* name, rcPolyMesh* mesh, rcPolyMeshDetail* detailMesh, int mapCRC) {
 	idStr navFileName;
-	navFileName = "maps/";
 	navFileName += name;
 	navFileHeader_t header;
 
@@ -281,8 +280,10 @@ void BuildNavMesh(const char * mapName)
 	int numTris = mapGeometry.size() / 3;
 
 	int* indexes = new int[mapGeometry.size()];
-	for (int n = 0; n < mapGeometry.size(); n++) {
-		indexes[n] = n;
+	for (int n = 0; n < mapGeometry.size(); n+=3) {
+		indexes[n + 0] = n + 2;
+		indexes[n + 1] = n + 1;
+		indexes[n + 2] = n + 0;
 	}
 
 	rcCalcBounds(verts, mapGeometry.size(), bmin, bmax);
