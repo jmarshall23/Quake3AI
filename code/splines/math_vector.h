@@ -52,8 +52,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //#define VectorSet(v, x, y, z)	((v)[0]=(x), (v)[1]=(y), (v)[2]=(z))
 #define Vector4Copy(a,b)		((b)[0]=(a)[0],(b)[1]=(a)[1],(b)[2]=(a)[2],(b)[3]=(a)[3])
 
+#ifndef BSPNAV
 #define	SnapVector(v) {v[0]=(int)v[0];v[1]=(int)v[1];v[2]=(int)v[2];}
-
+#endif
 
 //#include "util_heap.h"
 
@@ -524,6 +525,7 @@ ID_INLINE idVec2_t::operator float *( void ) {
 	return &x;
 }
 
+#ifndef BSPNAV
 class vec4_t : public idVec3_t {
 public:
 #ifndef	FAT_VEC3
@@ -552,7 +554,7 @@ ID_INLINE float vec4_t::operator[]( int index ) const {
 ID_INLINE float& vec4_t::operator[]( int index ) {
 	return ( &x )[ index ];
 }
-
+#endif
 
 class idVec5_t : public idVec3_t {
 public:

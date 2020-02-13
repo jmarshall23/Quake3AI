@@ -1305,4 +1305,20 @@ void PerpendicularVector( vec3_t dst, const vec3_t src )
 	VectorNormalize( dst );
 }
 
+/*
+==============
+AngleDifference
+==============
+*/
+float AngleDifference(float ang1, float ang2) {
+	float diff;
 
+	diff = ang1 - ang2;
+	if (ang1 > ang2) {
+		if (diff > 180.0) diff -= 360.0;
+	}
+	else {
+		if (diff < -180.0) diff += 360.0;
+	}
+	return diff;
+}

@@ -711,6 +711,8 @@ void BotTestAAS(vec3_t origin);
 
 #include "g_team.h" // teamplay specific stuff
 
+void BotAIInit(void);
+
 
 extern	level_locals_t	level;
 extern	gentity_t		g_entities[MAX_GENTITIES];
@@ -822,4 +824,5 @@ void	trap_SnapVector( float *v );
 
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
+void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd);
 // jmarshall end

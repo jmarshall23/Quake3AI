@@ -99,6 +99,9 @@
     <ClCompile Include="bot_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bot_input.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="syn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_local.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

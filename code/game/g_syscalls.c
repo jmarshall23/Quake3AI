@@ -232,4 +232,8 @@ void trap_SnapVector( float *v ) {
 qhandle_t trap_Nav_LoadMesh(const char *bspFileName) {
 	return syscall(G_NAV_LOADMESH, bspFileName);
 }
+
+void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd) {
+	syscall(G_SV_CLIENTTHINK, clientNum, ucmd);
+}
 // jmarshall end

@@ -8,6 +8,7 @@
 #include "../external/detour/Include/DetourNavMesh.h"
 #include "../external/detour/Include/DetourNavMeshBuilder.h"
 #include "../splines/util_str.h"
+#include "../splines/splines.h"
 
 #include <vector>
 

@@ -452,6 +452,10 @@ int SV_GameSystemCalls( int *args ) {
 // jmarshall
 	case G_NAV_LOADMESH:
 		return Nav_LoadMesh(VMA(1));
+
+	case G_SV_CLIENTTHINK:
+		SV_ClientThink(&svs.clients[args[1]], VMA(2));
+		return 0;
 // jmarshall end
 	case TRAP_MEMSET:
 		Com_Memset( VMA(1), args[2], args[3] );

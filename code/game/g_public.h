@@ -229,6 +229,8 @@ typedef enum {
 	// 1.32
 	G_FS_SEEK,
 
+	G_SV_CLIENTTHINK,
+
 	// Nav Mesh
 	G_NAV_LOADMESH,
 
