@@ -205,6 +205,11 @@ typedef enum {
 	G_ENTITY_CONTACT,	// ( const vec3_t mins, const vec3_t maxs, const gentity_t *ent );
 	// perform an exact check against inline brush models of non-square shape
 
+	// access for bots to get and free a server client (FIXME?)
+	G_BOT_ALLOCATE_CLIENT,	// ( void );
+
+	G_BOT_FREE_CLIENT,	// ( int clientNum );
+
 	G_GET_USERCMD,	// ( int clientNum, usercmd_t *cmd )
 
 	G_GET_ENTITY_TOKEN,	// qboolean ( char *buffer, int bufferSize )
@@ -223,6 +228,7 @@ typedef enum {
 	
 	// 1.32
 	G_FS_SEEK,
+
 } gameImport_t;
 
 

@@ -417,6 +417,12 @@ int SV_GameSystemCalls( int *args ) {
 	case G_AREAS_CONNECTED:
 		return CM_AreasConnected( args[1], args[2] );
 
+	case G_BOT_ALLOCATE_CLIENT:
+		return SV_BotAllocateClient();
+	case G_BOT_FREE_CLIENT:
+		SV_BotFreeClient(args[1]);
+		return 0;
+
 	case G_GET_USERCMD:
 		SV_GetUsercmd( args[1], VMA(2) );
 		return 0;
@@ -433,7 +439,11 @@ int SV_GameSystemCalls( int *args ) {
 			}
 		}
 
-	
+	case G_DEBUG_POLYGON_CREATE:
+		return BotImport_DebugPolygonCreate( args[1], args[2], VMA(3) );
+	case G_DEBUG_POLYGON_DELETE:
+		BotImport_DebugPolygonDelete( args[1] );
+		return 0;
 	case G_REAL_TIME:
 		return Com_RealTime( VMA(1) );
 	case G_SNAPVECTOR:

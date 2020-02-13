@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #ifdef _WIN32
 
-#pragma warning(disable : 4996)
 #pragma warning(disable : 4018)     // signed/unsigned mismatch
 #pragma warning(disable : 4032)
 #pragma warning(disable : 4051)
@@ -1429,15 +1428,5 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
-// jmarshall
-#ifdef __cplusplus
-extern "C" {
-#endif
-	void QuakeCoordsToNav(float* pt, float* _out);
-	void NavToQuakeCoords(float* pt, float* _out);
-#ifdef __cplusplus
-};
-#endif
-// jmarshall end
 
 #endif	// __Q_SHARED_H

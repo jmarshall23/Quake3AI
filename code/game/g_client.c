@@ -948,6 +948,14 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	}
 	G_ReadSessionData( client );
 
+	if( isBot ) {
+		ent->r.svFlags |= SVF_BOT;
+		ent->inuse = qtrue;
+		if( !G_BotConnect( clientNum, !firstTime ) ) {
+			return "BotConnectfailed";
+		}
+	}
+
 	// get and distribute relevent paramters
 	G_LogPrintf( "ClientConnect: %i\n", clientNum );
 	ClientUserinfoChanged( clientNum );
@@ -1270,6 +1278,10 @@ void ClientDisconnect( int clientNum ) {
 	gentity_t	*tent;
 	int			i;
 
+	// cleanup if we are kicking a bot that
+	// hasn't spawned yet
+	G_RemoveQueuedBotBegin( clientNum );
+
 	ent = g_entities + clientNum;
 	if ( !ent->client ) {
 		return;
@@ -1323,6 +1335,10 @@ void ClientDisconnect( int clientNum ) {
 	trap_SetConfigstring( CS_PLAYERS + clientNum, "");
 
 	CalculateRanks();
+
+	if ( ent->r.svFlags & SVF_BOT ) {
+		BotAIShutdownClient( clientNum, qfalse );
+	}
 }
 
 

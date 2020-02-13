@@ -803,9 +803,15 @@ void	trap_LinkEntity( gentity_t *ent );
 void	trap_UnlinkEntity( gentity_t *ent );
 int		trap_EntitiesInBox( const vec3_t mins, const vec3_t maxs, int *entityList, int maxcount );
 qboolean trap_EntityContact( const vec3_t mins, const vec3_t maxs, const gentity_t *ent );
+int		trap_BotAllocateClient( void );
+void	trap_BotFreeClient( int clientNum );
+void	trap_GetUsercmd( int clientNum, usercmd_t *cmd );
+qboolean	trap_GetEntityToken( char *buffer, int bufferSize );
+
+int		trap_DebugPolygonCreate(int color, int numPoints, vec3_t *points);
+void	trap_DebugPolygonDelete(int id);
+
 int		trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *parent1, int *parent2, int *child);
 
 void	trap_SnapVector( float *v );
 
-void trap_GetUsercmd(int clientNum, usercmd_t* cmd);
-qboolean trap_GetEntityToken(char* buffer, int bufferSize);

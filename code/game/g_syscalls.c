@@ -195,6 +195,13 @@ qboolean trap_EntityContactCapsule( const vec3_t mins, const vec3_t maxs, const 
 	return syscall( G_ENTITY_CONTACTCAPSULE, mins, maxs, ent );
 }
 
+int trap_BotAllocateClient( void ) {
+	return syscall( G_BOT_ALLOCATE_CLIENT );
+}
+
+void trap_BotFreeClient( int clientNum ) {
+	syscall( G_BOT_FREE_CLIENT, clientNum );
+}
 
 void trap_GetUsercmd( int clientNum, usercmd_t *cmd ) {
 	syscall( G_GET_USERCMD, clientNum, cmd );
