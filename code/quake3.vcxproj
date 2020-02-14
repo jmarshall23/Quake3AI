@@ -823,6 +823,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='vector|Win32'">MaxSpeed</Optimization>
     </ClCompile>
     <ClCompile Include="qcommon\nav_file.cpp" />
+    <ClCompile Include="qcommon\nav_query.cpp" />
     <ClCompile Include="qcommon\net_chan.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug TA DEMO|Win32'">Disabled</Optimization>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug TA DEMO|Win32'">true</BrowseInformation>

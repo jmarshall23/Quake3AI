@@ -824,5 +824,6 @@ void	trap_SnapVector( float *v );
 
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
+int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints);
 void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd);
 // jmarshall end

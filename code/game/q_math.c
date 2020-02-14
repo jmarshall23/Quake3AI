@@ -1090,6 +1090,15 @@ void AddPointToBounds( const vec3_t v, vec3_t mins, vec3_t maxs ) {
 	}
 }
 
+// jmarshall
+void GetCenterOfBounds(const vec3_t mins, const vec3_t maxs, vec3_t center)
+{
+	center[0] = (maxs[0] + mins[0]) * 0.5f;
+	center[1] = (maxs[1] + mins[1]) * 0.5f;
+	center[2] = (maxs[2] + mins[2]) * 0.5;
+}
+// jmarshall end
+
 
 vec_t VectorNormalize( vec3_t v ) {
 	// NOTE: TTimo - Apple G4 altivec source uses double?

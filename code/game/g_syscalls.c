@@ -233,7 +233,12 @@ qhandle_t trap_Nav_LoadMesh(const char *bspFileName) {
 	return syscall(G_NAV_LOADMESH, bspFileName);
 }
 
+int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints) {
+	return syscall(G_NAV_GETPATHBETWEENPOINTS, p1, p2, waypoints);
+}
+
 void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd) {
 	syscall(G_SV_CLIENTTHINK, clientNum, ucmd);
 }
+
 // jmarshall end

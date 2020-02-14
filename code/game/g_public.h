@@ -233,6 +233,7 @@ typedef enum {
 
 	// Nav Mesh
 	G_NAV_LOADMESH,
+	G_NAV_GETPATHBETWEENPOINTS,
 
 } gameImport_t;
 

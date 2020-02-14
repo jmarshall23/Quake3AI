@@ -660,6 +660,9 @@ float NormalizeColor( const vec3_t in, vec3_t out );
 float RadiusFromBounds( const vec3_t mins, const vec3_t maxs );
 void ClearBounds( vec3_t mins, vec3_t maxs );
 void AddPointToBounds( const vec3_t v, vec3_t mins, vec3_t maxs );
+// jmarshall
+void GetCenterOfBounds(const vec3_t mins, const vec3_t maxs, vec3_t center);
+// jmarshall end
 
 #ifndef __LCC__
 static ID_INLINE int VectorCompare( const vec3_t v1, const vec3_t v2 ) {
@@ -1429,5 +1432,13 @@ typedef enum _flag_status {
 #define CDKEY_LEN 16
 #define CDCHKSUM_LEN 2
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	void QuakeCoordsToNav(float* pt, float* _out);
+	void NavToQuakeCoords(float* pt, float* _out);
+#ifdef __cplusplus
+};
+#endif
 
 #endif	// __Q_SHARED_H
