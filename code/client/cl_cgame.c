@@ -636,15 +636,15 @@ int CL_CgameSystemCalls( int *args ) {
 		return FloatAsInt( Q_acos( VMF(1) ) );
 
 	case CG_PC_ADD_GLOBAL_DEFINE:
-		return 0;
+		return PC_AddGlobalDefine( VMA(1) );
 	case CG_PC_LOAD_SOURCE:
-		return 0;
+		return PC_LoadSourceHandle( VMA(1) );
 	case CG_PC_FREE_SOURCE:
-		return 0;
+		return PC_FreeSourceHandle( args[1] );
 	case CG_PC_READ_TOKEN:
-		return 0;
+		return PC_ReadTokenHandle( args[1], VMA(2) );
 	case CG_PC_SOURCE_FILE_AND_LINE:
-		return 0;
+		return PC_SourceFileAndLine( args[1], VMA(2), VMA(3) );
 
 	case CG_S_STOPBACKGROUNDTRACK:
 		S_StopBackgroundTrack();

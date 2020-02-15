@@ -228,6 +228,34 @@ void trap_SnapVector( float *v ) {
 	return;
 }
 
+int trap_PC_LoadSource(const char* filename) {
+	return syscall(G_PC_LOAD_SOURCE, filename);
+}
+
+int trap_PC_FreeSource(int handle) {
+	return syscall(G_PC_FREE_SOURCE, handle);
+}
+
+int trap_PC_ReadToken(int handle, pc_token_t* pc_token) {
+	return syscall(G_PC_READ_TOKEN, handle, pc_token);
+}
+
+int trap_PC_SourceFileAndLine(int handle, char* filename, int* line) {
+	return syscall(G_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
+}
+
+void trap_PC_SetBaseFolder(char* path) {
+	return syscall(G_PC_SETBASEFOLDER, path);
+}
+
+int	trap_PC_ExpectTokenString(int source, char* string) {
+	return syscall(G_PC_EXPECTTOKENSTRING, source, string);
+}
+
+int trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_token) {
+	return syscall(G_PC_EXPECTTOKENTYPE, handle, type, subtype, pc_token);
+}
+
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char *bspFileName) {
 	return syscall(G_NAV_LOADMESH, bspFileName);

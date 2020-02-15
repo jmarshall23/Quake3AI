@@ -298,6 +298,8 @@ BotAISetupClient
 ==============
 */
 int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean restart) {
+	bot_state_t* bs;
+	
 	if (level.navMeshFile <= 0)
 		return -1;
 
@@ -306,8 +308,17 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	}
 
 	botstates[client] = (bot_state_t *)malloc(sizeof(bot_state_t));
-	memset(botstates[client], 0, sizeof(bot_state_t));
-	botstates[client]->inuse = qtrue;
+	bs = botstates[client];
+
+	memset(bs, 0, sizeof(bot_state_t));
+	bs->inuse = qtrue;
+
+	//load the bot character
+	bs->character = BotLoadCharacterFromFile(settings->characterfile, settings->skill);
+	if (!bs->character) {
+		G_Error("couldn't load skill %f from %s\n", settings->skill, settings->characterfile);
+		return qfalse;
+	}
 
 	botstates[client]->client = client;
 

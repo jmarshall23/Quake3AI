@@ -102,6 +102,9 @@
     <ClCompile Include="bot_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bot_char.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">
@@ -153,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bg_public.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="botlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="chars.h">

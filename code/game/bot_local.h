@@ -349,3 +349,36 @@ void AIEnter_Respawn(bot_state_t* bs, char* s);
 
 extern float floattime;
 #define FloatTime() floattime
+
+#define MAX_CHARACTERISTICS		80
+
+#define CT_INTEGER				1
+#define CT_FLOAT				2
+#define CT_STRING				3
+
+#define DEFAULT_CHARACTER		"bots/default_c.c"
+
+//characteristic value
+union cvalue
+{
+	int integer;
+	float _float;
+	char* string;
+};
+//a characteristic
+typedef struct bot_characteristic_s
+{
+	char type;						//characteristic type
+	union cvalue value;				//characteristic value
+} bot_characteristic_t;
+
+//a bot character
+typedef struct bot_character_s
+{
+	char filename[MAX_QPATH];
+	float skill;
+	bot_characteristic_t c[1];		//variable sized
+} bot_character_t;
+
+
+bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill);

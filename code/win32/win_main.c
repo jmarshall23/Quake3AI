@@ -161,6 +161,9 @@ Sys_Print
 ==============
 */
 void Sys_Print( const char *msg ) {
+// jmarshall
+	OutputDebugStringA(msg);
+// jmarshall end
 	Conbuf_AppendText( msg );
 }
 

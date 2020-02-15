@@ -1250,7 +1250,40 @@ void Info_SetValueForKey_Big( char *s, const char *key, const char *value ) {
 	strcat (s, newi);
 }
 
+/*
+======================
+StripDoubleQuotes
+======================
+*/
+void StripDoubleQuotes(char* string)
+{
+	if (*string == '\"')
+	{
+		strcpy(string, string + 1);
+	}
 
+	if (string[strlen(string) - 1] == '\"')
+	{
+		string[strlen(string) - 1] = '\0';
+	}
+}
+
+/*
+======================
+StripSingleQuotes
+======================
+*/
+void StripSingleQuotes(char* string)
+{
+	if (*string == '\'')
+	{
+		strcpy(string, string + 1);
+	} 
+	if (string[strlen(string) - 1] == '\'')
+	{
+		string[strlen(string) - 1] = '\0';
+	}
+} 
 
 
 //====================================================================

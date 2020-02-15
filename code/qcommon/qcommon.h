@@ -1068,6 +1068,17 @@ void	Huff_offsetTransmit (huff_t *huff, int ch, byte *fout, int *offset);
 void	Huff_putBit( int bit, byte *fout, int *offset);
 int		Huff_getBit( byte *fout, int *offset);
 
+// jmarshall - put these here, so we don't need to include all of the l_ header stuff, todo fix this.
+int PC_LoadSourceHandle(const char* filename);
+int PC_FreeSourceHandle(int handle);
+int PC_ReadTokenHandle(int handle, pc_token_t* pc_token);
+int PC_SourceFileAndLine(int handle, char* filename, int* line);
+int PC_AddGlobalDefine(char* string);
+void PC_SetBaseFolder(char* path);
+int PC_ExpectTokenString2(int handle, char* string);
+int PC_ExpectTokenType2(int handle, int type, int subtype, pc_token_t* pc_token);
+// jmarshall end
+
 extern huffman_t clientHuffTables;
 
 #define	SV_ENCODE_START		4

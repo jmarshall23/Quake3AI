@@ -822,6 +822,15 @@ int		trap_GeneticParentsAndChildSelection(int numranks, float *ranks, int *paren
 
 void	trap_SnapVector( float *v );
 
+int			trap_PC_AddGlobalDefine(char* define);
+int			trap_PC_LoadSource(const char* filename);
+int			trap_PC_FreeSource(int handle);
+int			trap_PC_ReadToken(int handle, pc_token_t* pc_token);
+int			trap_PC_SourceFileAndLine(int handle, char* filename, int* line);
+void		trap_PC_SetBaseFolder(char* path);
+int			trap_PC_ExpectTokenString(int source, char* string);
+int			trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_token);
+
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
 int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints);

@@ -66,6 +66,7 @@
       <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
       <OutputFile>.\Release\Splines.lib</OutputFile>
@@ -91,6 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
       <OutputFile>.\Debug\Splines.lib</OutputFile>
@@ -102,6 +104,13 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lexer\l_crc.c" />
+    <ClCompile Include="lexer\l_libvar.c" />
+    <ClCompile Include="lexer\l_log.c" />
+    <ClCompile Include="lexer\l_memory.c" />
+    <ClCompile Include="lexer\l_precomp.c" />
+    <ClCompile Include="lexer\l_script.c" />
+    <ClCompile Include="lexer\l_struct.c" />
     <ClCompile Include="math_angles.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -144,6 +153,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lexer\l_crc.h" />
+    <ClInclude Include="lexer\l_libvar.h" />
+    <ClInclude Include="lexer\l_log.h" />
+    <ClInclude Include="lexer\l_memory.h" />
+    <ClInclude Include="lexer\l_precomp.h" />
+    <ClInclude Include="lexer\l_script.h" />
+    <ClInclude Include="lexer\l_struct.h" />
     <ClInclude Include="math_angles.h" />
     <ClInclude Include="math_matrix.h" />
     <ClInclude Include="math_quaternion.h" />

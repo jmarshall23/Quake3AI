@@ -449,6 +449,28 @@ int SV_GameSystemCalls( int *args ) {
 	case G_SNAPVECTOR:
 		Sys_SnapVector( VMA(1) );
 		return 0;
+
+//	case G_PC_ADD_GLOBAL_DEFINE:
+//		return PC_AddGlobalDefine(VMA(1));
+	case G_PC_LOAD_SOURCE:
+		return PC_LoadSourceHandle(VMA(1));
+	case G_PC_FREE_SOURCE:
+		return PC_FreeSourceHandle(args[1]);
+	case G_PC_READ_TOKEN:
+		return PC_ReadTokenHandle(args[1], VMA(2));
+	case G_PC_SOURCE_FILE_AND_LINE:
+		return PC_SourceFileAndLine(args[1], VMA(2), VMA(3));
+
+	case G_PC_EXPECTTOKENSTRING:
+		return PC_ExpectTokenString2(args[1], VMA(2));
+
+	case G_PC_SETBASEFOLDER:
+		PC_SetBaseFolder(VMA(1));
+		return 0;
+
+	case G_PC_EXPECTTOKENTYPE:
+		return PC_ExpectTokenType2(args[1], args[2], args[3], VMA(4));
+
 // jmarshall
 	case G_NAV_LOADMESH:
 		return Nav_LoadMesh(VMA(1));
