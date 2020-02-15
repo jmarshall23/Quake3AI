@@ -316,8 +316,16 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	//load the bot character
 	bs->character = BotLoadCharacterFromFile(settings->characterfile, settings->skill);
 	if (!bs->character) {
-		G_Error("couldn't load skill %f from %s\n", settings->skill, settings->characterfile);
-		return qfalse;
+		// Try and load the bot with a skill level of 1.
+		G_Printf("BotAISetupClient: Client %d has missing skill %d\n", client, settings->skill);
+
+		settings->skill = 1;
+		bs->character = BotLoadCharacterFromFile(settings->characterfile, settings->skill);
+		if (bs->character == NULL)
+		{
+			G_Error("couldn't load skill %f from %s\n", settings->skill, settings->characterfile);
+			return qfalse;
+		}
 	}
 
 	botstates[client]->client = client;

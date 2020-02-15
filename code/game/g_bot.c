@@ -546,9 +546,7 @@ qboolean G_BotConnect( int clientNum, qboolean restart ) {
 	trap_GetUserinfo( clientNum, userinfo, sizeof(userinfo) );
 
 	Q_strncpyz( settings.characterfile, Info_ValueForKey( userinfo, "characterfile" ), sizeof(settings.characterfile) );
-// jmarshall - set skill to 1 for testing.
-	settings.skill = 1; // atof(Info_ValueForKey(userinfo, "skill"));
-// jmarshall end
+	settings.skill = atof(Info_ValueForKey(userinfo, "skill"));
 	Q_strncpyz( settings.team, Info_ValueForKey( userinfo, "team" ), sizeof(settings.team) );
 
 	if (!BotAISetupClient( clientNum, &settings, restart )) {
