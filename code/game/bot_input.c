@@ -3,7 +3,7 @@
 
 #include "q_shared.h"
 #include "g_local.h"
-
+#include "chars.h"
 #include "bot_local.h"
 
 /*
@@ -99,16 +99,15 @@ void BotChangeViewAngles(bot_state_t* bs, float thinktime) {
 
 	if (bs->ideal_viewangles[PITCH] > 180) bs->ideal_viewangles[PITCH] -= 360;
 	//
-// jmarshall - add characteristics.
-	//if (bs->enemy >= 0) {
-	//	factor = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_VIEW_FACTOR, 0.01f, 1);
-	//	maxchange = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_VIEW_MAXCHANGE, 1, 1800);
-	//}
-	//else {
+	if (bs->enemy >= 0) {
+		factor = Characteristic_BFloat(bs->character, CHARACTERISTIC_VIEW_FACTOR, 0.01f, 1);
+		maxchange = Characteristic_BFloat(bs->character, CHARACTERISTIC_VIEW_MAXCHANGE, 1, 1800);
+	}
+	else {
 		factor = 0.05f;
 		maxchange = 360;
-	//}
-// jmarshall end
+	}
+
 	if (maxchange < 240) maxchange = 240;
 	maxchange *= thinktime;
 	for (i = 0; i < 2; i++) {

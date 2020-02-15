@@ -6,6 +6,76 @@
 
 /*
 ============================
+CheckCharacteristicIndex
+============================
+*/
+int CheckCharacteristicIndex(bot_character_t* ch, int index)
+{
+	if (index < 0 || index >= MAX_CHARACTERISTICS)
+	{
+		G_Error("characteristic %d does not exist\n", index);
+		return qfalse;
+	}
+	if (!ch->c[index].type)
+	{
+		G_Error("characteristic %d is not initialized\n", index);
+		return qfalse;
+	}
+	return qtrue;
+}
+
+/*
+============================
+Characteristic_Float
+============================
+*/
+float Characteristic_Float(bot_character_t* ch, int index)
+{
+	if (!ch) 
+		return 0;
+	//check if the index is in range
+	if (!CheckCharacteristicIndex(ch, index)) 
+		return 0;
+
+	if (ch->c[index].type == CT_INTEGER)
+	{
+		//an integer will be converted to a float
+		return (float)ch->c[index].value.integer;
+	}	
+	else if (ch->c[index].type == CT_FLOAT)
+	{
+		//floats are just returned
+		return ch->c[index].value._float;
+	} 
+
+	//cannot convert a string pointer to a float
+	G_Error("characteristic %d is not a float\n", index);
+	return 0;
+}
+
+/*
+============================
+Characteristic_BFloat
+============================
+*/
+float Characteristic_BFloat(bot_character_t* ch, int index, float min, float max)
+{
+	float value;
+
+	if (min > max)
+	{
+		G_Error("cannot bound characteristic %d between %f and %f\n", index, min, max);
+		return 0;
+	}
+	
+	value = Characteristic_Float(ch, index);
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+} 
+
+/*
+============================
 BotFreeCharacterStrings
 ============================
 */

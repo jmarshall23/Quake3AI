@@ -104,6 +104,37 @@
 //
 #define MAX_PROXMINES				64
 
+
+#define MAX_CHARACTERISTICS		80
+
+#define CT_INTEGER				1
+#define CT_FLOAT				2
+#define CT_STRING				3
+
+#define DEFAULT_CHARACTER		"bots/default_c.c"
+
+//characteristic value
+union cvalue
+{
+	int integer;
+	float _float;
+	char* string;
+};
+//a characteristic
+typedef struct bot_characteristic_s
+{
+	char type;						//characteristic type
+	union cvalue value;				//characteristic value
+} bot_characteristic_t;
+
+//a bot character
+typedef struct bot_character_s
+{
+	char filename[MAX_QPATH];
+	float skill;
+	bot_characteristic_t c[1];		//variable sized
+} bot_character_t;
+
 //the bot input, will be converted to an usercmd_t
 typedef struct bot_input_s
 {
@@ -269,7 +300,7 @@ typedef struct bot_state_s
 	int proxmines[MAX_PROXMINES];
 	int numproxmines;
 	//
-	int character;									//the bot character
+	bot_character_t *character;						//the bot character
 	int ms;											//move state of the bot
 	int gs;											//goal state of the bot
 	int cs;											//chat state of the bot
@@ -350,35 +381,7 @@ void AIEnter_Respawn(bot_state_t* bs, char* s);
 extern float floattime;
 #define FloatTime() floattime
 
-#define MAX_CHARACTERISTICS		80
 
-#define CT_INTEGER				1
-#define CT_FLOAT				2
-#define CT_STRING				3
-
-#define DEFAULT_CHARACTER		"bots/default_c.c"
-
-//characteristic value
-union cvalue
-{
-	int integer;
-	float _float;
-	char* string;
-};
-//a characteristic
-typedef struct bot_characteristic_s
-{
-	char type;						//characteristic type
-	union cvalue value;				//characteristic value
-} bot_characteristic_t;
-
-//a bot character
-typedef struct bot_character_s
-{
-	char filename[MAX_QPATH];
-	float skill;
-	bot_characteristic_t c[1];		//variable sized
-} bot_character_t;
-
+float Characteristic_BFloat(bot_character_t* ch, int index, float min, float max);
 
 bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill);
