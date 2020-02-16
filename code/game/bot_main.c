@@ -310,7 +310,8 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	}
 
 	////allocate a weapon state
-	//bs->ws = trap_BotAllocWeaponState();
+	bs->ws = BotAllocWeaponState();
+
 	////load the weapon weights
 	//trap_Characteristic_String(bs->character, CHARACTERISTIC_WEAPONWEIGHTS, filename, MAX_PATH);
 	//errnum = trap_BotLoadWeaponWeights(bs->ws, filename);
@@ -393,6 +394,8 @@ int BotAILoadMap(int restart) {
 		return -1;
 
 	BotSetupGoalAI();
+
+	BotSetupWeaponAI();
 
 	return 1;
 }

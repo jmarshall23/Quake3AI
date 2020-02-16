@@ -449,6 +449,7 @@
     <ClCompile Include="bot_input.c" />
     <ClCompile Include="bot_main.c" />
     <ClCompile Include="bot_route.c" />
+    <ClCompile Include="bot_weapons.c" />
     <ClCompile Include="bot_weights.c" />
     <ClCompile Include="g_active.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">Disabled</Optimization>
