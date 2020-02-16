@@ -1842,12 +1842,13 @@ int BotSetupGoalAI(void)
 	char* filename;
 
 	//check if teamplay is on
-	g_gametype.integer = LibVarValue("g_gametype.integer", "0");
+//	g_gametype.integer = LibVarValue("g_gametype.integer", "0");
 	
 	//item configuration file
 	filename = LibVarString("itemconfig", "items.c");
 	
 	//load the item configuration
+	trap_PC_SetBaseFolder(BOTFILESBASEFOLDER);
 	itemconfig = LoadItemConfig(filename);
 	if (!itemconfig)
 	{

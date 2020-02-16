@@ -257,7 +257,7 @@ int trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_to
 }
 
 int trap_PC_ReadStructure(int handle, structdef_t* def, char* structure) {
-	return syscall(G_PC_READSTRUCTURE, def, structure);
+	return syscall(G_PC_READSTRUCTURE, handle, def, structure);
 }
 
 int trap_PC_CheckTokenString(int handle, char* string) {

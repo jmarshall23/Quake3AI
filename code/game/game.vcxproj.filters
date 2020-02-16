@@ -13,6 +13,9 @@
       <UniqueIdentifier>{9a3fb71d-c04f-47b9-802b-d7a1155da3f7}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
+    <Filter Include="Source Files\BotAI">
+      <UniqueIdentifier>{35e8f7be-35c6-422c-ab65-7d72524fc36e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bg_lib.c">
@@ -117,6 +120,12 @@
     <ClCompile Include="bot_route.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BotAI\BotAI_dmq3.c">
+      <Filter>Source Files\BotAI</Filter>
+    </ClCompile>
+    <ClCompile Include="BotAI\BotAI_ltg.c">
+      <Filter>Source Files\BotAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">
@@ -199,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="bot_local.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BotAI\BotAI.h">
+      <Filter>Source Files\BotAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

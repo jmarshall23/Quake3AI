@@ -5,6 +5,7 @@
 #include "g_local.h"
 
 #include "bot_local.h"
+#include "chars.h"
 
 bot_state_t *botstates[MAX_CLIENTS];
 int local_time = 0;
@@ -17,39 +18,6 @@ BotIsDead
 */
 qboolean BotIsDead(bot_state_t* bs) {
 	return (bs->cur_ps.pm_type == PM_DEAD);
-}
-
-/*
-==================
-BotAIRespawn
-==================
-*/
-int BotAIRespawn(bot_state_t* bs) {
-	bs->input.actionflags |= ACTION_RESPAWN;
-
-	//if(bs->respawn_time == 0) {
-	//	bs->respawn_time = FloatTime() + 3.0f;
-	//}
-	//
-	//if (bs->respawn_time < FloatTime()) {
-	//	// wait until respawned
-	//	bs->respawn_wait = qtrue;
-	//	// elementary action respawn
-	//	//trap_EA_Respawn(bs->client);
-	//	bs->input.actionflags |= ACTION_RESPAWN;
-	//	//
-	//	if (bs->respawnchat_time) {
-	//		//trap_BotEnterChat(bs->cs, 0, bs->chatto);
-	//		bs->enemy = -1;
-	//	}
-	//
-	//	bs->respawn_time = 0;
-	//}
-	//if (bs->respawnchat_time && bs->respawnchat_time < FloatTime() - 0.5) {
-	//	//trap_EA_Talk(bs->client);
-	//}
-	//
-	return qtrue;
 }
 
 
@@ -196,7 +164,8 @@ int BotAI(int client, float thinktime) {
 //	bs->areanum = BotPointAreaNum(bs->origin);
 
 //	//the real AI
-	//BotDeathmatchAI(bs, thinktime);
+	BotDeathmatchAI(bs, thinktime);
+
 //	//set the weapon selection every AI frame
 	BotAI_SelectWeapon(bs, bs->weaponnum);
 
@@ -292,6 +261,10 @@ BotAISetupClient
 */
 int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean restart) {
 	bot_state_t* bs;
+	int errnum;
+	char filename[MAX_QPATH];
+	char name[MAX_QPATH];
+	char gender[MAX_QPATH];
 	
 	if (level.navMeshFile <= 0)
 		return -1;
@@ -325,16 +298,17 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	memcpy(&bs->settings, settings, sizeof(bot_settings_t));
 
 	//allocate a goal state
-	//bs->gs = trap_BotAllocGoalState(client);
+	bs->gs = BotAllocGoalState(client);
 
 	//load the item weights
-	//trap_Characteristic_String(bs->character, CHARACTERISTIC_ITEMWEIGHTS, filename, MAX_PATH);
-	//
-	//errnum = trap_BotLoadItemWeights(bs->gs, filename);
-	//if (errnum != BLERR_NOERROR) {
-	//	trap_BotFreeGoalState(bs->gs);
-	//	return qfalse;
-	//}
+	Characteristic_String(bs->character, CHARACTERISTIC_ITEMWEIGHTS, filename, MAX_QPATH);
+
+	errnum = BotLoadItemWeights(bs->gs, filename);
+	if (errnum != BLERR_NOERROR) {
+		BotFreeGoalState(bs->gs);
+		return qfalse;
+	}
+
 	////allocate a weapon state
 	//bs->ws = trap_BotAllocWeaponState();
 	////load the weapon weights
@@ -364,13 +338,13 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	//else if (*gender == 'm' || *gender == 'M') trap_BotSetChatGender(bs->cs, CHAT_GENDERMALE);
 	//else trap_BotSetChatGender(bs->cs, CHAT_GENDERLESS);
 	//
-	//bs->inuse = qtrue;
-	//bs->client = client;
-	//bs->entitynum = client;
-	//bs->setupcount = 4;
-	//bs->entergame_time = FloatTime();
-	//bs->ms = trap_BotAllocMoveState();
-	//bs->walker = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_WALKER, 0, 1);
+	bs->inuse = qtrue;
+	bs->client = client;
+	bs->entitynum = client;
+	bs->setupcount = 4;
+	bs->entergame_time = FloatTime();
+	//bs->ms = BotAllocMoveState();
+	//bs->walker = Characteristic_BFloat(bs->character, CHARACTERISTIC_WALKER, 0, 1);
 	//numbots++;
 	//
 	//if (trap_Cvar_VariableIntegerValue("bot_testichat")) {
@@ -379,17 +353,19 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	//}
 	////NOTE: reschedule the bot thinking
 	//BotScheduleBotThink();
+	//
 	////if interbreeding start with a mutation
 	//if (bot_interbreed) {
 	//	trap_BotMutateGoalFuzzyLogic(bs->gs, 1);
 	//}
+	//
 	//// if we kept the bot client
 	//if (restart) {
 	//	BotReadSessionData(bs);
 	//}
-	////bot has been setup succesfully
-	//
-	////BotScheduleBotThink();
+	//bot has been setup succesfully
+	
+	//BotScheduleBotThink();
 	return 1;
 }
 
@@ -415,6 +391,8 @@ int BotAILoadMap(int restart) {
 	level.navMeshFile = trap_Nav_LoadMesh(va("maps/%s.bsp", g_mapName.string));
 	if (level.navMeshFile <= 0)
 		return -1;
+
+	BotSetupGoalAI();
 
 	return 1;
 }

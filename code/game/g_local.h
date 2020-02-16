@@ -705,13 +705,6 @@ void BotInterbreedEndMatch( void );
 // ai_main.c
 #define MAX_FILEPATH			144
 
-//bot settings
-typedef struct bot_settings_s
-{
-	char characterfile[MAX_FILEPATH];
-	float skill;
-	char team[MAX_FILEPATH];
-} bot_settings_t;
 
 int BotAISetup( int restart );
 int BotAIShutdown( int restart );

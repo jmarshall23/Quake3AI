@@ -442,6 +442,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS;GLOBALRANK</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="BotAI\BotAI_dmq3.c" />
+    <ClCompile Include="BotAI\BotAI_ltg.c" />
     <ClCompile Include="bot_char.c" />
     <ClCompile Include="bot_goal.c" />
     <ClCompile Include="bot_input.c" />
@@ -827,6 +829,7 @@
     <ClInclude Include="be_ea.h" />
     <ClInclude Include="bg_local.h" />
     <ClInclude Include="bg_public.h" />
+    <ClInclude Include="BotAI\BotAI.h" />
     <ClInclude Include="bot_local.h" />
     <ClInclude Include="chars.h" />
     <ClInclude Include="g_local.h" />

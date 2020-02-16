@@ -55,6 +55,27 @@ float Characteristic_Float(bot_character_t* ch, int index)
 
 /*
 ============================
+Characteristic_String
+============================
+*/
+void Characteristic_String(bot_character_t* ch, int index, char* buf, int size)
+{
+	//check if the index is in range
+	if (!CheckCharacteristicIndex(ch, index)) 
+		return;
+
+	//an integer will be converted to a float
+	if (ch->c[index].type == CT_STRING)
+	{
+		strncpy(buf, ch->c[index].value.string, size - 1);
+		buf[size - 1] = '\0';
+		return;
+	}
+	G_Error("characteristic %d is not a string\n", index);
+}
+
+/*
+============================
 Characteristic_BFloat
 ============================
 */
