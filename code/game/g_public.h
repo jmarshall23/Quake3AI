@@ -234,6 +234,7 @@ typedef enum {
 	// Nav Mesh
 	G_NAV_LOADMESH,
 	G_NAV_GETPATHBETWEENPOINTS,
+	G_NAV_GETRANDOMPOINTNEARPOSITION,
 
 	// Parsing/Lexer functions.
 	G_PC_LOAD_SOURCE,

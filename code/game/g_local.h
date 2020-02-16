@@ -844,6 +844,7 @@ static int			trap_PC_ExpectAnyToken(int handle, pc_token_t* pc_token) { return t
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
 int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints);
+void trap_Nav_GetRandomPointNearPosition(vec3_t point, vec3_t randomPoint, float radius);
 void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd);
 void trap_Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime);
 // jmarshall end

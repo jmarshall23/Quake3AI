@@ -1565,6 +1565,11 @@ void ExpandBox(box_t* box, float d);
 
 // jmarshall
 byte Ftob(float f);
+int	Rand();
+float FRand();
+float FRandRange(float min, float max);
 // jmarshall end
+
+
 
 #endif	// __Q_SHARED_H

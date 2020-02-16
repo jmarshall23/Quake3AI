@@ -269,6 +269,10 @@ qhandle_t trap_Nav_LoadMesh(const char *bspFileName) {
 	return syscall(G_NAV_LOADMESH, bspFileName);
 }
 
+void trap_Nav_GetRandomPointNearPosition(vec3_t point, vec3_t randomPoint, float radius) {
+	return syscall(G_NAV_GETRANDOMPOINTNEARPOSITION, point, randomPoint, radius);
+}
+
 int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints) {
 	return syscall(G_NAV_GETPATHBETWEENPOINTS, p1, p2, waypoints);
 }

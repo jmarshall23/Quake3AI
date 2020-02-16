@@ -7,6 +7,27 @@
 
 /*
 ===================
+Nav_GetRandomPointNearPosition
+===================
+*/
+void Nav_GetRandomPointNearPosition(vec3_t point, vec3_t randomPoint, float radius) {
+	vec3_t extents = { 280, 480, 280 };
+	dtQueryFilter filter;
+	dtPolyRef polyRef;
+	vec3_t nearestPoint;
+	vec3_t randomPointRaw;
+	vec3_t pointConv;
+	QuakeCoordsToNav(point, pointConv);
+
+	navMeshGlobals.navMeshFile->navQuery->findNearestPoly(pointConv, extents, &filter, &polyRef, nearestPoint);
+
+	dtPolyRef randomPolyRef;
+	navMeshGlobals.navMeshFile->navQuery->findRandomPointAroundCircle(polyRef, point, radius, &filter, FRand, &randomPolyRef, randomPointRaw);
+	NavToQuakeCoords(randomPointRaw, randomPoint);
+}
+
+/*
+===================
 rvmNavFileLocal::GetPathBetweenPoints
 ===================
 */

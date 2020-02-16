@@ -489,6 +489,10 @@ int SV_GameSystemCalls( int *args ) {
 	case G_NAV_GETPATHBETWEENPOINTS:
 		return Nav_GetPathBetweenPoints(VMA(1), VMA(2), VMA(3));
 
+	case G_NAV_GETRANDOMPOINTNEARPOSITION:
+		Nav_GetRandomPointNearPosition(VMA(1), VMA(2), VMF(3));
+		return 0;
+
 	case G_SV_CLIENTTHINK:
 		SV_ClientThink(&svs.clients[args[1]], VMA(2));
 		return 0;

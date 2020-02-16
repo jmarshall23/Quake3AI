@@ -63,9 +63,10 @@ void BotDeathmatchAI(bot_state_t* bs, float thinktime) {
 	//BotCheckConsoleMessages(bs);
 	////if not in the intermission and not in observer mode
 	//if (!BotIntermission(bs) && !BotIsObserver(bs)) {
-	//	//do team AI
+		//do team AI
 	//	BotTeamAI(bs);
 	//}
+	
 	//if the bot has no ai node
 	if (!bs->ainode) {
 		AIEnter_Seek_LTG(bs, "BotDeathmatchAI: no ai node");
@@ -86,7 +87,9 @@ void BotDeathmatchAI(bot_state_t* bs, float thinktime) {
 			break;
 	}
 	////if the bot removed itself :)
-	//if (!bs->inuse) return;
+	if (!bs->inuse) 
+		return;
+	
 	////if the bot executed too many AI nodes
 	//if (i >= MAX_NODESWITCHES) {
 	//	trap_BotDumpGoalStack(bs->gs);

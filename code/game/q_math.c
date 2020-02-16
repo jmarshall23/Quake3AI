@@ -1404,4 +1404,32 @@ void ExpandBox(box_t* box, float d) {
 	box->extents[1] += d;
 	box->extents[2] += d;
 }
+
+/*
+===============
+Rand
+===============
+*/
+int	Rand()  { 
+	return rand(); 
+}
+
+/*
+===============
+FRand
+===============
+*/
+float FRand() { 
+	return Rand() / (float)RAND_MAX; 
+}
+
+/*
+===============
+FRandRange
+===============
+*/
+float FRandRange(float min, float max) { 
+	return min + (max - min) * FRand(); 
+}
+
 // jmarshall end

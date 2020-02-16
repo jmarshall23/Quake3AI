@@ -903,6 +903,7 @@ NAV MESH
 
 qhandle_t Nav_LoadMesh(const char* bspFileName);
 int Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints);
+void Nav_GetRandomPointNearPosition(vec3_t point, vec3_t randomPoint, float radius);
 
 /*
 ==============================================================

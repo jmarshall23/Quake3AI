@@ -84,24 +84,63 @@ BotMoveToGoal
 void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 	bot_input_t* bi;
 	gentity_t* ent = &level.gentities[bs->client];
+	vec3_t move_goal;
 	
 	bi = &bs->input;
 
-	if (!BotFindRouteToGoal(bs, goal))
-		return;
-
-	float distToGoal = VectorDistanceSquared(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin);
-	distToGoal = sqrt(distToGoal);
-	if (distToGoal <= 50) {
-		bs->currentWaypoint++;
+	vec3_t movedelta;
+	VectorSubtract(ent->r.currentOrigin, bs->last_origin, movedelta);
+	float currentMoveSpeed = VectorLength(movedelta);
+	if (currentMoveSpeed <= 0.05f) {
+		bs->stuck_time++;
+	}
+	else {
+		bs->stuck_time = 0;
 	}
 
-	BotDrawRoute(bs);
+	if(bs->stuck_time > 30) {
+		if (VectorLength(bs->very_short_term_origin) <= 0)
+		{
+			trap_Nav_GetRandomPointNearPosition(ent->r.currentOrigin, bs->very_short_term_origin, 50.0f);			
+		}
 
-	if (bs->currentWaypoint >= bs->numMovementWaypoints)
-		return;
+		float distToGoal = VectorDistanceSquared(move_goal, ent->r.currentOrigin);
+		distToGoal = sqrt(distToGoal);
+		if(distToGoal > 60.0f) {
+			VectorClear(bs->very_short_term_origin);
+		}
+		else
+		{
+			if (distToGoal <= 10) {
+				VectorClear(bs->very_short_term_origin);
+			}
+		}
 
-	VectorSubtract(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin, bi->dir);
+		VectorCopy(bs->very_short_term_origin, move_goal);
+	}
+	else 
+	{
+		VectorClear(bs->very_short_term_origin);
+		VectorCopy(ent->r.currentOrigin, bs->last_origin);
+
+		if (!BotFindRouteToGoal(bs, goal))
+			return;
+
+		float distToGoal = VectorDistanceSquared(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin);
+		distToGoal = sqrt(distToGoal);
+		if (distToGoal <= 50) {
+			bs->currentWaypoint++;
+		}
+
+		BotDrawRoute(bs);
+
+		if (bs->currentWaypoint >= bs->numMovementWaypoints)
+			return;
+
+		VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
+	}
+
+	VectorSubtract(move_goal, ent->r.currentOrigin, bi->dir);
 	VectorNormalize(bi->dir);
 	bi->dir[2] = 0;
 

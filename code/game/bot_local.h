@@ -541,6 +541,11 @@ typedef struct bot_state_s
 	vec3_t		movement_waypoints[NAV_MAX_PATHSTEPS];
 	int			numMovementWaypoints;
 	int			currentWaypoint;
+
+	vec3_t		last_origin;
+	vec3_t		very_short_term_origin;
+
+	int			stuck_time;
 // jmarshall end
 
 	bot_input_t input;
