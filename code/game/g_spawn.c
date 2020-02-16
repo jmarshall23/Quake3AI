@@ -106,12 +106,18 @@ field_t fields[] = {
 	{"targetname", FOFS(targetname), F_LSTRING},
 	{"message", FOFS(message), F_LSTRING},
 	{"team", FOFS(team), F_LSTRING},
+	{"range", FOFS(range), F_FLOAT},
+	{"weight", FOFS(weight), F_FLOAT},
 	{"wait", FOFS(wait), F_FLOAT},
 	{"random", FOFS(random), F_FLOAT},
 	{"count", FOFS(count), F_INT},
 	{"health", FOFS(health), F_INT},
 	{"light", 0, F_IGNORE},
 	{"dmg", FOFS(damage), F_INT},
+	{"notfree", FOFS(notfree), F_INT},
+	{"notteam", FOFS(notteam), F_INT},
+	{"notsingle", FOFS(notsingle), F_INT},
+	{"notbot", FOFS(notbot), F_INT},
 	{"angles", FOFS(s.angles), F_VECTOR},
 	{"angle", FOFS(s.angles), F_ANGLEHACK},
 	{"targetShaderName", FOFS(targetShaderName), F_LSTRING},
@@ -637,6 +643,8 @@ void G_SpawnEntitiesFromString( void ) {
 	while( G_ParseSpawnVars() ) {
 		G_SpawnGEntityFromSpawnVars();
 	}	
+
+	BotInitLevelItems();
 
 	level.spawning = qfalse;			// any future calls to G_Spawn*() will be errors
 }

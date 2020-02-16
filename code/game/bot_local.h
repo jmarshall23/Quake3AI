@@ -1,6 +1,75 @@
 // bot_local.h
 //
 
+#define BLERR_NOERROR					0	//no error
+#define BLERR_LIBRARYNOTSETUP			1	//library not setup
+#define BLERR_INVALIDENTITYNUMBER		2	//invalid entity number
+#define BLERR_NOAASFILE					3	//no AAS file available
+#define BLERR_CANNOTOPENAASFILE			4	//cannot open AAS file
+#define BLERR_WRONGAASFILEID			5	//incorrect AAS file id
+#define BLERR_WRONGAASFILEVERSION		6	//incorrect AAS file version
+#define BLERR_CANNOTREADAASLUMP			7	//cannot read AAS file lump
+#define BLERR_CANNOTLOADICHAT			8	//cannot load initial chats
+#define BLERR_CANNOTLOADITEMWEIGHTS		9	//cannot load item weights
+#define BLERR_CANNOTLOADITEMCONFIG		10	//cannot load item config
+#define BLERR_CANNOTLOADWEAPONWEIGHTS	11	//cannot load weapon weights
+#define BLERR_CANNOTLOADWEAPONCONFIG	12	//cannot load weapon config
+
+#define WT_BALANCE			1
+#define MAX_WEIGHTS			128
+
+//fuzzy seperator
+typedef struct fuzzyseperator_s
+{
+	int index;
+	int value;
+	int type;
+	float weight;
+	float minweight;
+	float maxweight;
+	struct fuzzyseperator_s* child;
+	struct fuzzyseperator_s* next;
+} fuzzyseperator_t;
+
+//fuzzy weight
+typedef struct weight_s
+{
+	char* name;
+	struct fuzzyseperator_s* firstseperator;
+} weight_t;
+
+//weight configuration
+typedef struct weightconfig_s
+{
+	int numweights;
+	weight_t weights[MAX_WEIGHTS];
+	char		filename[MAX_QPATH];
+} weightconfig_t;
+
+//reads a weight configuration
+weightconfig_t* ReadWeightConfig(char* filename);
+//free a weight configuration
+void FreeWeightConfig(weightconfig_t* config);
+//writes a weight configuration, returns true if successfull
+qboolean WriteWeightConfig(char* filename, weightconfig_t* config);
+//find the fuzzy weight with the given name
+int FindFuzzyWeight(weightconfig_t* wc, char* name);
+//returns the fuzzy weight for the given inventory and weight
+float FuzzyWeight(int* inventory, weightconfig_t* wc, int weightnum);
+float FuzzyWeightUndecided(int* inventory, weightconfig_t* wc, int weightnum);
+//scales the weight with the given name
+void ScaleWeight(weightconfig_t* config, char* name, float scale);
+//scale the balance range
+void ScaleBalanceRange(weightconfig_t* config, float scale);
+//evolves the weight configuration
+void EvolveWeightConfig(weightconfig_t* config);
+//interbreed the weight configurations and stores the interbreeded one in configout
+void InterbreedWeightConfigs(weightconfig_t* config1, weightconfig_t* config2, weightconfig_t* configout);
+//frees cached weight configurations
+void BotShutdownWeights(void);
+
+// ------------------------------------------------------------------------------------
+
 #define BOTFILESBASEFOLDER		"botfiles"
 //debug line colors
 #define LINECOLOR_NONE			-1
@@ -112,6 +181,15 @@
 #define CT_STRING				3
 
 #define DEFAULT_CHARACTER		"bots/default_c.c"
+
+#define MAX_AVOIDGOALS			256
+#define MAX_GOALSTACK			8
+
+#define GFL_NONE				0
+#define GFL_ITEM				1
+#define GFL_ROAM				2
+#define GFL_DROPPED				4
+#define MAX_EPAIRKEY		128
 
 //characteristic value
 union cvalue
@@ -385,3 +463,11 @@ extern float floattime;
 float Characteristic_BFloat(bot_character_t* ch, int index, float min, float max);
 
 bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill);
+
+void BotInitLevelItems(void);
+
+inline float AAS_Time() {
+	return floattime;
+}
+
+unsigned short int BotTravelTime(vec3_t start, vec3_t end);

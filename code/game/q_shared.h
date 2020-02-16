@@ -1460,7 +1460,88 @@ extern "C" {
 };
 #endif
 
+// Prescence Code.
+#define PRESENCE_NONE				1
+#define PRESENCE_NORMAL				2
+#define PRESENCE_CROUCH				4
+void NAV_PresenceTypeBoundingBox(int presencetype, vec3_t mins, vec3_t maxs);
+
 void StripSingleQuotes(char* string);
 void StripDoubleQuotes(char* string);
+
+// jmarshall - library variable's are now q_shared.h
+#ifndef __cplusplus
+typedef void *libvar_t;
+#else
+struct libvar_t;
+#endif
+
+//removes all library variables
+void LibVarDeAllocAll(void);
+
+//gets the library variable with the given name
+libvar_t* LibVarGet(char* var_name);
+
+//gets the string of the library variable with the given name
+char* LibVarGetString(char* var_name);
+
+//gets the value of the library variable with the given name
+float LibVarGetValue(char* var_name);
+
+//creates the library variable if not existing already and returns it
+libvar_t* LibVar(char* var_name, char* value);
+
+//creates the library variable if not existing already and returns the value
+float LibVarValue(char* var_name, char* value);
+
+//creates the library variable if not existing already and returns the value string
+char* LibVarString(char* var_name, char* value);
+
+//sets the library variable
+void LibVarSet(char* var_name, char* value);
+
+//returns true if the library variable has been modified
+qboolean LibVarChanged(char* var_name);
+
+//sets the library variable to unmodified
+void LibVarSetNotModified(char* var_name);
+
+float GetValueFromLibVar(libvar_t* libVar);
+// jmarshall end
+
+// jmarshall
+#define MAX_STRINGFIELD				80
+//field types
+#define FT_CHAR						1			// char
+#define FT_INT							2			// int
+#define FT_FLOAT						3			// float
+#define FT_STRING						4			// char [MAX_STRINGFIELD]
+#define FT_STRUCT						6			// struct (sub structure)
+//type only mask
+#define FT_TYPE						0x00FF	// only type, clear subtype
+//sub types
+#define FT_ARRAY						0x0100	// array of type
+#define FT_BOUNDED					0x0200	// bounded value
+#define FT_UNSIGNED					0x0400
+
+//structure field definition
+typedef struct fielddef_s
+{
+	char* name;										//name of the field
+	int offset;										//offset in the structure
+	int type;										//type of the field
+	//type specific fields
+	int maxarray;									//maximum array size
+	float floatmin, floatmax;					//float min and max
+	struct structdef_s* substruct;			//sub structure
+} fielddef_t;
+
+//structure definition
+typedef struct structdef_s
+{
+	int size;
+	fielddef_t* fields;
+} structdef_t;
+// jmarshall end
 
 #endif	// __Q_SHARED_H

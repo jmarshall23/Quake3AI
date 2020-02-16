@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "g_local.h"
 
 
-#define POOLSIZE	(256 * 1024)
+#define POOLSIZE	(1024 * 1024 * 10)
 
 static char		memoryPool[POOLSIZE];
-static int		allocPoint;
+static int		allocPoint = 0;
 
 void *G_Alloc( int size ) {
 	char	*p;
@@ -51,6 +51,14 @@ void *G_Alloc( int size ) {
 
 	return p;
 }
+
+// jmarshall
+void *G_AllocClearedMemory(int size) {
+	void* data = G_Alloc(size);
+	memset(data, 0, size);
+	return data;
+}
+// jmarshall end
 
 void G_InitMemory( void ) {
 	allocPoint = 0;

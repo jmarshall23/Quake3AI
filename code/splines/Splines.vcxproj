@@ -105,7 +105,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lexer\l_crc.c" />
-    <ClCompile Include="lexer\l_libvar.c" />
     <ClCompile Include="lexer\l_log.c" />
     <ClCompile Include="lexer\l_memory.c" />
     <ClCompile Include="lexer\l_precomp.c" />
@@ -154,7 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer\l_crc.h" />
-    <ClInclude Include="lexer\l_libvar.h" />
     <ClInclude Include="lexer\l_log.h" />
     <ClInclude Include="lexer\l_memory.h" />
     <ClInclude Include="lexer\l_precomp.h" />

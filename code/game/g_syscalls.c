@@ -245,7 +245,7 @@ int trap_PC_SourceFileAndLine(int handle, char* filename, int* line) {
 }
 
 void trap_PC_SetBaseFolder(char* path) {
-	return syscall(G_PC_SETBASEFOLDER, path);
+	syscall(G_PC_SETBASEFOLDER, path);
 }
 
 int	trap_PC_ExpectTokenString(int source, char* string) {
@@ -254,6 +254,14 @@ int	trap_PC_ExpectTokenString(int source, char* string) {
 
 int trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_token) {
 	return syscall(G_PC_EXPECTTOKENTYPE, handle, type, subtype, pc_token);
+}
+
+int trap_PC_ReadStructure(int handle, structdef_t* def, char* structure) {
+	return syscall(G_PC_READSTRUCTURE, def, structure);
+}
+
+int trap_PC_CheckTokenString(int handle, char* string) {
+	return syscall(G_PC_CHECKTOKENSTRING, handle, string);
 }
 
 // jmarshall

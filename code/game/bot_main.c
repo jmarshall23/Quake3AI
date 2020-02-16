@@ -196,14 +196,7 @@ int BotAI(int client, float thinktime) {
 //	bs->areanum = BotPointAreaNum(bs->origin);
 
 //	//the real AI
-	if (BotIsDead(bs))
-	{
-		BotAIRespawn(bs);
-	}
-	else
-	{
-	//	BotDeathmatchAI(bs, thinktime);
-	}
+	//BotDeathmatchAI(bs, thinktime);
 //	//set the weapon selection every AI frame
 	BotAI_SelectWeapon(bs, bs->weaponnum);
 
@@ -328,9 +321,75 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 		}
 	}
 
-	botstates[client]->client = client;
+	//copy the settings
+	memcpy(&bs->settings, settings, sizeof(bot_settings_t));
 
+	//allocate a goal state
+	//bs->gs = trap_BotAllocGoalState(client);
+
+	//load the item weights
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_ITEMWEIGHTS, filename, MAX_PATH);
+	//
+	//errnum = trap_BotLoadItemWeights(bs->gs, filename);
+	//if (errnum != BLERR_NOERROR) {
+	//	trap_BotFreeGoalState(bs->gs);
+	//	return qfalse;
+	//}
+	////allocate a weapon state
+	//bs->ws = trap_BotAllocWeaponState();
+	////load the weapon weights
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_WEAPONWEIGHTS, filename, MAX_PATH);
+	//errnum = trap_BotLoadWeaponWeights(bs->ws, filename);
+	//if (errnum != BLERR_NOERROR) {
+	//	trap_BotFreeGoalState(bs->gs);
+	//	trap_BotFreeWeaponState(bs->ws);
+	//	return qfalse;
+	//}
+	////allocate a chat state
+	//bs->cs = trap_BotAllocChatState();
+	////load the chat file
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_CHAT_FILE, filename, MAX_PATH);
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_CHAT_NAME, name, MAX_PATH);
+	//errnum = trap_BotLoadChatFile(bs->cs, filename, name);
+	//if (errnum != BLERR_NOERROR) {
+	//	trap_BotFreeChatState(bs->cs);
+	//	trap_BotFreeGoalState(bs->gs);
+	//	trap_BotFreeWeaponState(bs->ws);
+	//	return qfalse;
+	//}
+	////get the gender characteristic
+	//trap_Characteristic_String(bs->character, CHARACTERISTIC_GENDER, gender, MAX_PATH);
+	////set the chat gender
+	//if (*gender == 'f' || *gender == 'F') trap_BotSetChatGender(bs->cs, CHAT_GENDERFEMALE);
+	//else if (*gender == 'm' || *gender == 'M') trap_BotSetChatGender(bs->cs, CHAT_GENDERMALE);
+	//else trap_BotSetChatGender(bs->cs, CHAT_GENDERLESS);
+	//
+	//bs->inuse = qtrue;
+	//bs->client = client;
+	//bs->entitynum = client;
+	//bs->setupcount = 4;
+	//bs->entergame_time = FloatTime();
+	//bs->ms = trap_BotAllocMoveState();
+	//bs->walker = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_WALKER, 0, 1);
+	//numbots++;
+	//
+	//if (trap_Cvar_VariableIntegerValue("bot_testichat")) {
+	//	trap_BotLibVarSet("bot_testichat", "1");
+	//	BotChatTest(bs);
+	//}
+	////NOTE: reschedule the bot thinking
 	//BotScheduleBotThink();
+	////if interbreeding start with a mutation
+	//if (bot_interbreed) {
+	//	trap_BotMutateGoalFuzzyLogic(bs->gs, 1);
+	//}
+	//// if we kept the bot client
+	//if (restart) {
+	//	BotReadSessionData(bs);
+	//}
+	////bot has been setup succesfully
+	//
+	////BotScheduleBotThink();
 	return 1;
 }
 

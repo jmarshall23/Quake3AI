@@ -309,6 +309,18 @@ int ReadStructure(source_t *source, structdef_t *def, char *structure)
 	} //end while
 	return qtrue;
 } //end of the function ReadStructure
+
+// jmarshall
+int PC_ReadStructure(int handle, structdef_t* def, char* structure) {
+	if (handle < 1 || handle >= MAX_SOURCEFILES)
+		return qfalse;
+	if (!sourceFiles[handle])
+		return qfalse;
+
+	return ReadStructure(sourceFiles[handle], def, structure);
+}
+// jmarshall end
+
 //===========================================================================
 //
 // Parameter:				-

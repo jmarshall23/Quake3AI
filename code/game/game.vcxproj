@@ -122,7 +122,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug TA|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;BUILDING_REF_GL;DEBUG;MISSIONPACK;QAGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;_DEBUG;_WINDOWS;BUILDING_REF_GL;DEBUG;MISSIONPACK;QAGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>.\Debug_TA/game.pch</PrecompiledHeaderOutputFile>
@@ -165,7 +165,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;BUILDING_REF_GL;DEBUG;GLOBALRANK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;_DEBUG;_WINDOWS;BUILDING_REF_GL;DEBUG;GLOBALRANK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>.\Debug/game.pch</PrecompiledHeaderOutputFile>
@@ -210,7 +210,7 @@
       <AdditionalOptions>/QA21164  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;C_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;NDEBUG;_WINDOWS;C_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -251,7 +251,7 @@
     <ClCompile>
       <AdditionalOptions>/QA21164 /MTd  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;C_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;_DEBUG;_WINDOWS;C_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <PrecompiledHeaderOutputFile>.\DebugAxp/game.pch</PrecompiledHeaderOutputFile>
@@ -291,7 +291,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;GLOBALRANK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;NDEBUG;_WINDOWS;GLOBALRANK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -334,7 +334,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;MISSIONPACK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME;WIN32;NDEBUG;_WINDOWS;MISSIONPACK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -443,8 +443,11 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS;GLOBALRANK</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="bot_char.c" />
+    <ClCompile Include="bot_goal.c" />
     <ClCompile Include="bot_input.c" />
     <ClCompile Include="bot_main.c" />
+    <ClCompile Include="bot_route.c" />
+    <ClCompile Include="bot_weights.c" />
     <ClCompile Include="g_active.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">WIN32;_DEBUG;_WINDOWS;C_ONLY</PreprocessorDefinitions>
@@ -766,6 +769,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS;GLOBALRANK</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="q_libvar.cpp" />
     <ClCompile Include="q_math.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'">WIN32;_DEBUG;_WINDOWS;C_ONLY</PreprocessorDefinitions>

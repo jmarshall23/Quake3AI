@@ -172,6 +172,9 @@ typedef struct pc_token_s
 #endif //!_Q_SHARED_H
 #endif //BSPC
 
+#define MAX_SOURCEFILES		64
+extern source_t* sourceFiles[MAX_SOURCEFILES];
+
 //
 int PC_LoadSourceHandle(const char *filename);
 int PC_FreeSourceHandle(int handle);

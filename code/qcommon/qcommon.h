@@ -1077,6 +1077,8 @@ int PC_AddGlobalDefine(char* string);
 void PC_SetBaseFolder(char* path);
 int PC_ExpectTokenString2(int handle, char* string);
 int PC_ExpectTokenType2(int handle, int type, int subtype, pc_token_t* pc_token);
+int PC_ReadStructure(int handle, structdef_t* def, char* structure);
+int PC_CheckTokenString2(int handle, char* string);
 // jmarshall end
 
 extern huffman_t clientHuffTables;

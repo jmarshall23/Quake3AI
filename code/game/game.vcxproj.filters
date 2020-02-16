@@ -105,6 +105,18 @@
     <ClCompile Include="bot_char.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bot_goal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="q_libvar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_weights.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_route.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">

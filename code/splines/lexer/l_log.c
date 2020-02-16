@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../../game/q_shared.h"
 //#include "../game/botlib.h"
 //#include "be_interface.h"			//for Com_Printf
-#include "l_libvar.h"
+//#include "l_libvar.h"
 
 #define MAX_LOGFILENAMESIZE		1024
 
@@ -57,25 +57,25 @@ static logfile_t logfile;
 //===========================================================================
 void Log_Open(char *filename)
 {
-	if (!LibVarValue("log", "0")) return;
-	if (!filename || !strlen(filename))
-	{
-		Com_Printf( "openlog <filename>\n");
-		return;
-	} //end if
-	if (logfile.fp)
-	{
-		Com_Error(ERR_FATAL, "log file %s is already opened\n", logfile.filename);
-		return;
-	} //end if
-	logfile.fp = fopen(filename, "wb");
-	if (!logfile.fp)
-	{
-		Com_Error(ERR_FATAL, "can't open the log file %s\n", filename);
-		return;
-	} //end if
-	strncpy(logfile.filename, filename, MAX_LOGFILENAMESIZE);
-	Com_Printf( "Opened log %s\n", logfile.filename);
+	//if (!LibVarValue("log", "0")) return;
+	//if (!filename || !strlen(filename))
+	//{
+	//	Com_Printf( "openlog <filename>\n");
+	//	return;
+	//} //end if
+	//if (logfile.fp)
+	//{
+	//	Com_Error(ERR_FATAL, "log file %s is already opened\n", logfile.filename);
+	//	return;
+	//} //end if
+	//logfile.fp = fopen(filename, "wb");
+	//if (!logfile.fp)
+	//{
+	//	Com_Error(ERR_FATAL, "can't open the log file %s\n", filename);
+	//	return;
+	//} //end if
+	//strncpy(logfile.filename, filename, MAX_LOGFILENAMESIZE);
+	//Com_Printf( "Opened log %s\n", logfile.filename);
 } //end of the function Log_Create
 //===========================================================================
 //

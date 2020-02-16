@@ -463,13 +463,20 @@ int SV_GameSystemCalls( int *args ) {
 
 	case G_PC_EXPECTTOKENSTRING:
 		return PC_ExpectTokenString2(args[1], VMA(2));
-
+// jmarshall
 	case G_PC_SETBASEFOLDER:
 		PC_SetBaseFolder(VMA(1));
 		return 0;
 
 	case G_PC_EXPECTTOKENTYPE:
 		return PC_ExpectTokenType2(args[1], args[2], args[3], VMA(4));
+
+	case G_PC_READSTRUCTURE:
+		return PC_ReadStructure(args[1], VMA(2), VMA(3));
+
+	case G_PC_CHECKTOKENSTRING:
+		return PC_CheckTokenString2(args[1], VMA(2));
+// jmarshall end
 
 // jmarshall
 	case G_NAV_LOADMESH:

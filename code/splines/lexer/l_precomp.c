@@ -46,8 +46,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define DEFINEHASHING			1
 
-#define MAX_SOURCEFILES		64
-
 //directive name with parse function
 typedef struct directive_s
 {
@@ -2875,6 +2873,19 @@ int PC_CheckTokenString(source_t *source, char *string)
 	PC_UnreadSourceToken(source, &tok);
 	return qfalse;
 } //end of the function PC_CheckTokenString
+
+// jmarshall
+int PC_CheckTokenString2(int handle, char *string) {
+	if (handle < 1 || handle >= MAX_SOURCEFILES)
+		return qfalse;
+	if (!sourceFiles[handle])
+		return qfalse;
+
+	return PC_CheckTokenString(sourceFiles[handle], string);
+}
+// jmarshall end
+
+
 //============================================================================
 //
 // Parameter:				-

@@ -17,9 +17,6 @@
     <ClCompile Include="lexer\l_crc.c">
       <Filter>lexer</Filter>
     </ClCompile>
-    <ClCompile Include="lexer\l_libvar.c">
-      <Filter>lexer</Filter>
-    </ClCompile>
     <ClCompile Include="lexer\l_log.c">
       <Filter>lexer</Filter>
     </ClCompile>
@@ -46,9 +43,6 @@
     <ClInclude Include="splines.h" />
     <ClInclude Include="util_list.h" />
     <ClInclude Include="lexer\l_crc.h">
-      <Filter>lexer</Filter>
-    </ClInclude>
-    <ClInclude Include="lexer\l_libvar.h">
       <Filter>lexer</Filter>
     </ClInclude>
     <ClInclude Include="lexer\l_log.h">

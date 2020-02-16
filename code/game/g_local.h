@@ -175,6 +175,15 @@ struct gentity_s {
 	float		random;
 
 	gitem_t		*item;			// for bonus items
+
+	float		range;
+	float		weight;
+
+	int			notfree;
+	int			notteam;
+	int			notsingle;
+	int			notbot;
+
 };
 
 
@@ -658,6 +667,9 @@ qboolean CheckObeliskAttack( gentity_t *obelisk, gentity_t *attacker );
 // g_mem.c
 //
 void *G_Alloc( int size );
+// jmarshall
+void* G_AllocClearedMemory(int size);
+// jmarshall end
 void G_InitMemory( void );
 void Svcmd_GameMem_f( void );
 
@@ -830,6 +842,10 @@ int			trap_PC_SourceFileAndLine(int handle, char* filename, int* line);
 void		trap_PC_SetBaseFolder(char* path);
 int			trap_PC_ExpectTokenString(int source, char* string);
 int			trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_token);
+int			trap_PC_ReadStructure(int handle, structdef_t* def, char* structure);
+int			trap_PC_CheckTokenString(int handle, char* string);
+
+static int			trap_PC_ExpectAnyToken(int handle, pc_token_t* pc_token) { return trap_PC_ReadToken(handle, pc_token); }
 
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
