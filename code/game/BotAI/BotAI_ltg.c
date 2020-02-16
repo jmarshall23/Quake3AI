@@ -2,7 +2,10 @@
 //
 
 #include "../q_shared.h"
+#include "../g_local.h"
+
 #include "BotAI.h"
+
 
 /*
 ==================
@@ -74,6 +77,21 @@ int BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal) {
 		BotChooseWeapon(bs);
 		bs->ltg_time = 0;
 	}
+
+	// Check to see that we can get to our goal, if not get a new goal.
+	if (bs->numMovementWaypoints > 0)
+	{
+		trace_t tr;
+		gentity_t* ent = &g_entities[bs->client];
+		trap_Trace(&tr, ent->r.currentOrigin, NULL, NULL, bs->movement_waypoints[bs->currentWaypoint], bs->client, CONTENTS_SOLID);
+
+		if(tr.fraction  < 0.9f)
+		{
+			BotChooseWeapon(bs);
+			bs->ltg_time = 0;
+		}
+	}
+
 	//if it is time to find a new long term goal
 	if (bs->ltg_time < FloatTime()) {
 		//pop the current goal from the stack
