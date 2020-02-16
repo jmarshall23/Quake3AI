@@ -1305,4 +1305,18 @@ void NAV_PresenceTypeBoundingBox(int presencetype, vec3_t mins, vec3_t maxs)
 	VectorCopy(boxmaxs[index], maxs);
 }
 
+
+byte Ftob(float f) {
+	#define C_FLOAT_TO_INT( x )		(int)(x)
+	int i = C_FLOAT_TO_INT(f);
+	if (i < 0) {
+		return 0;
+	}
+	else if (i > 255) {
+		return 255;
+	}
+
+	return (byte)(i);
+}
+
 //====================================================================

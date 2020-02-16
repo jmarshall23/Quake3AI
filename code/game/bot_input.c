@@ -182,11 +182,11 @@ void BotUpdateInput(bot_state_t* bs, int time, int elapsed_time) {
 	int j;
 
 	//add the delta angles to the bot's current view angles
-	for (j = 0; j < 3; j++) {
-		bs->viewangles[j] = AngleMod(bs->viewangles[j] + SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
-	}
+	//for (j = 0; j < 3; j++) {
+	//	bs->viewangles[j] = AngleMod(bs->viewangles[j] + SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
+	//}
 	//change the bot view angles
-	BotChangeViewAngles(bs, (float)elapsed_time / 1000);
+	//BotChangeViewAngles(bs, (float)elapsed_time / 1000);
 	
 	//retrieve the bot input
 	//trap_EA_GetInput(bs->client, (float)time / 1000, &bi);
@@ -204,7 +204,7 @@ void BotUpdateInput(bot_state_t* bs, int time, int elapsed_time) {
 	BotInputToUserCommand(&bs->input, &bs->lastucmd, bs->cur_ps.delta_angles, time);
 	
 	//subtract the delta angles
-	for (j = 0; j < 3; j++) {
-		bs->viewangles[j] = AngleMod(bs->viewangles[j] - SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
-	}
+	//for (j = 0; j < 3; j++) {
+	//	bs->viewangles[j] = AngleMod(bs->viewangles[j] - SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
+	//}
 }

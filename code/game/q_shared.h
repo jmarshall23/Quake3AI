@@ -1563,4 +1563,8 @@ void BoxToPoints(box_t* box, vec3_t points[8]);
 void ExpandBox(box_t* box, float d);
 // jmarshall end
 
+// jmarshall
+byte Ftob(float f);
+// jmarshall end
+
 #endif	// __Q_SHARED_H

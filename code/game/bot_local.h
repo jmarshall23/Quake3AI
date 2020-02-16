@@ -646,3 +646,13 @@ void BotResetWeaponState(int weaponstate);
 // New NavMesh Movement System.
 qboolean BotFindRouteToGoal(bot_state_t* bs, bot_goal_t* goal);
 void BotMoveToGoal(bot_state_t* bs, bot_goal_t* goal);
+
+typedef enum {
+	NULLMOVEFLAG = -1,
+	PRONE,
+	CROUCH,
+	WALK,
+	RUN,
+	SPRINT,
+	STRAFEJUMP
+} botMoveFlags_t;

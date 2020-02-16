@@ -7,7 +7,19 @@
 
 #include "bot_local.h"
 
-vec4_t color_white = { 1.00f, 1.00f, 1.00f, 1.00f };
+//vec4_t color_white = { 1.00f, 1.00f, 1.00f, 1.00f };
+
+vec4_t color_waypoints[8] = {
+	{ 1.00f, 1.00f, 1.00f, 1.00f },
+	{ 1.00f, 1.00f, 0.00f, 1.00f },
+	{ 1.00f, 0.00f, 1.00f, 1.00f },
+	{ 0.00f, 1.00f, 1.00f, 1.00f },
+	{ 1.00f, 0.00f, 1.00f, 1.00f },
+	{ 0.00f, 1.00f, 0.00f, 1.00f },
+	{ 0.00f, 1.00f, 0.00f, 1.00f },
+};
+
+vec4_t color_next_waypoint = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 #define DISTANCEFACTOR_CROUCH		1.3f		//crouch speed = 100
 #define DISTANCEFACTOR_SWIM			1		//should be 0.66, swim speed = 150
@@ -19,13 +31,26 @@ BotDrawRoute
 =======================
 */
 void BotDrawRoute(bot_state_t *bs) {
-	for(int i = 0; i < bs->numMovementWaypoints; i++)
+	{
+		box_t box;
+		InitBox(&box);
+		AddPointToBox(&box, g_entities[bs->client].r.currentOrigin);
+		ExpandBox(&box, 12.0f);
+
+		trap_Debug_DrawDebugBox(color_waypoints[bs->client % 8], &box, 0);
+	}
+
+	for(int i = bs->currentWaypoint; i < bs->numMovementWaypoints; i++)
 	{
 		box_t box;
 		InitBox(&box);
 		AddPointToBox(&box, bs->movement_waypoints[i]);
-		ExpandBox(&box, 10.0f);
-		trap_Debug_DrawDebugBox(color_white, &box, 0);
+		ExpandBox(&box, 3.0f);
+
+		if(i == bs->currentWaypoint)
+			trap_Debug_DrawDebugBox(color_next_waypoint, &box, 0);
+		else
+			trap_Debug_DrawDebugBox(color_waypoints[bs->client % 8], &box, 0);
 	}
 }
 
@@ -66,7 +91,8 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 		return;
 
 	float distToGoal = VectorDistanceSquared(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin);
-	if (distToGoal <= 70) {
+	distToGoal = sqrt(distToGoal);
+	if (distToGoal <= 50) {
 		bs->currentWaypoint++;
 	}
 
