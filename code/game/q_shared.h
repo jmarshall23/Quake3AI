@@ -26,13 +26,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-#define	Q3_VERSION		"Q3 1.32b"
-// 1.32 released 7-10-2002
+#define	Q3_VERSION		"Quake 3(New AI) 0.01"
 
 #define MAX_TEAMNAME 32
 
 #ifdef _WIN32
-
+#pragma warning(disable : 4996)
 #pragma warning(disable : 4018)     // signed/unsigned mismatch
 #pragma warning(disable : 4032)
 #pragma warning(disable : 4051)
@@ -625,6 +624,8 @@ void ByteToDir( int b, vec3_t dir );
 #define	VectorMA(v, s, b, o)	_VectorMA(v,s,b,o)
 
 #endif
+
+float VectorDistanceSquared(vec3_t p1, vec3_t p2);
 
 #ifdef __LCC__
 #ifdef VectorCopy
@@ -1542,6 +1543,24 @@ typedef struct structdef_s
 	int size;
 	fielddef_t* fields;
 } structdef_t;
+// jmarshall end
+
+// jmarshall
+#define NAV_MAX_PATHSTEPS				512
+// jmarshall end
+
+// jmarshall
+typedef struct {
+	vec3_t	center;
+	vec3_t	maxs;
+	vec3_t	mins;
+	vec3_t  extents;
+} box_t;
+
+void InitBox(box_t* box);
+void AddPointToBox(box_t* box, vec3_t point);
+void BoxToPoints(box_t* box, vec3_t points[8]);
+void ExpandBox(box_t* box, float d);
 // jmarshall end
 
 #endif	// __Q_SHARED_H

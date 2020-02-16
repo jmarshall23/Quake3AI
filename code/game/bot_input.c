@@ -7,6 +7,29 @@
 #include "bot_local.h"
 
 /*
+==================
+BotChooseWeapon
+==================
+*/
+void BotChooseWeapon(bot_state_t* bs) {
+	int newweaponnum;
+
+	if (bs->cur_ps.weaponstate == WEAPON_RAISING ||
+		bs->cur_ps.weaponstate == WEAPON_DROPPING) {
+		//trap_EA_SelectWeapon(bs->client, bs->weaponnum);
+		bs->input.weapon = bs->weaponnum;
+	}
+	else {
+		newweaponnum = BotChooseBestFightWeapon(bs->ws, bs->inventory);
+		if (bs->weaponnum != newweaponnum) bs->weaponchange_time = FloatTime();
+		bs->weaponnum = newweaponnum;
+		//BotAI_Print(PRT_MESSAGE, "bs->weaponnum = %d\n", bs->weaponnum);
+		//trap_EA_SelectWeapon(bs->client, bs->weaponnum);
+		bs->input.weapon = bs->weaponnum;
+	}
+}
+
+/*
 ==============
 BotInputToUserCommand
 ==============

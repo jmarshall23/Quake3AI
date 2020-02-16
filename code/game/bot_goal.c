@@ -559,7 +559,7 @@ void BotInitLevelItems(void)
 
 		// AAS_IntForBSPEpairKey(ent, "spawnflags", &spawnflags);
 		spawnflags = ent->spawnflags;
-		
+		strcpy(classname, ent->classname);
 		
 		for (i = 0; i < ic->numiteminfo; i++)
 		{
@@ -579,6 +579,10 @@ void BotInitLevelItems(void)
 		//	continue;
 		//}
 		VectorCopy(ent->r.currentOrigin, origin);
+		if(VectorLength(ent->r.currentOrigin) == 0)
+		{
+			GetCenterOfBounds(ent->r.mins, ent->r.maxs, origin);
+		}
 
 		goalareanum = 0;
 // jmarshall - fix floating items
@@ -610,7 +614,7 @@ void BotInitLevelItems(void)
 		
 		li->number = ++numlevelitems;
 		li->timeout = 0;
-		li->entitynum = 0;
+		li->entitynum = idx;
 		
 		li->flags = 0;
 		if (ent->notfree) 
@@ -644,6 +648,7 @@ void BotInitLevelItems(void)
 		
 		//origin of the item
 		VectorCopy(origin, li->origin);
+		VectorCopy(origin, li->goalorigin);
 				
 		AddLevelItemToList(li);
 	}
@@ -1358,8 +1363,8 @@ int BotChooseLTGItem(int goalstate, vec3_t origin, int* inventory, int travelfla
 		if (li->flags & IFL_NOTBOT)
 			continue;
 		//if the item is not in a possible goal area
-		if (!li->goalareanum)
-			continue;
+		//if (!li->goalareanum)
+		//	continue;
 		//FIXME: is this a good thing? added this for items that never spawned into the game (f.i. CTF flags in obelisk)
 		if (!li->entitynum && !(li->flags & IFL_ROAM))
 			continue;

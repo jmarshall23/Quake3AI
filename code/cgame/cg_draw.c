@@ -2644,7 +2644,9 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	}
 
 	// draw 3D view
+	cg.refdef.renderDebug = qtrue;
 	trap_R_RenderScene( &cg.refdef );
+	cg.refdef.renderDebug = qfalse;
 
 	// restore original viewpoint if running stereo
 	if ( separation != 0 ) {

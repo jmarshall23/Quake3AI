@@ -534,6 +534,15 @@ typedef struct bot_state_s
 	bot_waypoint_t* curpatrolpoint;					//current patrol point the bot is going for
 	int patrolflags;								//patrol flags
 
+// jmarshall	
+	bot_goal_t  currentgoal;
+
+	vec3_t		currentMoveGoal;
+	vec3_t		movement_waypoints[NAV_MAX_PATHSTEPS];
+	int			numMovementWaypoints;
+	int			currentWaypoint;
+// jmarshall end
+
 	bot_input_t input;
 } bot_state_t;
 
@@ -552,6 +561,8 @@ void Characteristic_String(bot_character_t* ch, int index, char* buf, int size);
 bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill);
 
 void BotInitLevelItems(void);
+
+void BotChooseWeapon(bot_state_t* bs);
 
 inline float AAS_Time() {
 	return floattime;
@@ -631,3 +642,7 @@ int BotAllocWeaponState(void);
 void BotFreeWeaponState(int weaponstate);
 //resets the whole weapon state
 void BotResetWeaponState(int weaponstate);
+
+// New NavMesh Movement System.
+qboolean BotFindRouteToGoal(bot_state_t* bs, bot_goal_t* goal);
+void BotMoveToGoal(bot_state_t* bs, bot_goal_t* goal);

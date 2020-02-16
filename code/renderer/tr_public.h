@@ -77,6 +77,10 @@ typedef struct {
 	void	(*DrawStretchRaw) (int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty);
 	void	(*UploadCinematic) (int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty);
 
+// jmarshall
+	void	(*AddDebugBoxCommand)(vec4_t color, box_t* box, int lifetime);
+// jmarshall end
+
 	void	(*BeginFrame)( stereoFrame_t stereoFrame );
 
 	// if the pointers are not NULL, timing info will be returned

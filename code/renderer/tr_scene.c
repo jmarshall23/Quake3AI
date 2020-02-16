@@ -52,6 +52,9 @@ void R_ToggleSmpFrame( void ) {
 	}
 
 	backEndData[tr.smpFrame]->commands.used = 0;
+// jmarshall
+	backEndData[tr.smpFrame]->numDebugLines = 0;
+// jmarshall end
 
 	r_firstSceneDrawSurf = 0;
 
@@ -312,6 +315,7 @@ void RE_RenderScene( const refdef_t *fd ) {
 	tr.refdef.height = fd->height;
 	tr.refdef.fov_x = fd->fov_x;
 	tr.refdef.fov_y = fd->fov_y;
+	tr.refdef.renderDebug = fd->renderDebug;
 
 	VectorCopy( fd->vieworg, tr.refdef.vieworg );
 	VectorCopy( fd->viewaxis[0], tr.refdef.viewaxis[0] );

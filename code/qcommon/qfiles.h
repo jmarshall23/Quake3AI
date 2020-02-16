@@ -310,7 +310,6 @@ typedef struct {
 
 #define NAV_FILE_VERSION				2
 #define NAV_FILE_EXTENSION				".nav"
-#define NAV_MAX_PATHSTEPS				512
 
 //
 // navFileHeader_t

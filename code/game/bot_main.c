@@ -393,9 +393,16 @@ int BotAILoadMap(int restart) {
 	if (level.navMeshFile <= 0)
 		return -1;
 
-	BotSetupGoalAI();
-
-	BotSetupWeaponAI();
-
 	return 1;
+}
+
+/*
+==============
+BotAIPostSpawn
+==============
+*/
+void BotAIPostSpawn(void) {
+	BotSetupGoalAI();
+	BotSetupWeaponAI();
+	BotInitLevelItems();
 }

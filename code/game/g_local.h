@@ -713,6 +713,7 @@ int BotAISetupClient(int client, struct bot_settings_s *settings, qboolean resta
 int BotAIShutdownClient( int client, qboolean restart );
 int BotAIStartFrame( int time );
 void BotTestAAS(vec3_t origin);
+void BotAIPostSpawn(void);
 
 #include "g_team.h" // teamplay specific stuff
 
@@ -844,4 +845,5 @@ static int			trap_PC_ExpectAnyToken(int handle, pc_token_t* pc_token) { return t
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
 int trap_Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t* waypoints);
 void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd);
+void trap_Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime);
 // jmarshall end

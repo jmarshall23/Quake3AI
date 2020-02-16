@@ -1081,6 +1081,10 @@ int PC_ReadStructure(int handle, structdef_t* def, char* structure);
 int PC_CheckTokenString2(int handle, char* string);
 // jmarshall end
 
+// jmarshall
+void Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime);
+// jmarshall end
+
 extern huffman_t clientHuffTables;
 
 #define	SV_ENCODE_START		4

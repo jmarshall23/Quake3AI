@@ -644,7 +644,7 @@ void G_SpawnEntitiesFromString( void ) {
 		G_SpawnGEntityFromSpawnVars();
 	}	
 
-	BotInitLevelItems();
+	BotAIPostSpawn();
 
 	level.spawning = qfalse;			// any future calls to G_Spawn*() will be errors
 }

@@ -476,6 +476,10 @@ int SV_GameSystemCalls( int *args ) {
 
 	case G_PC_CHECKTOKENSTRING:
 		return PC_CheckTokenString2(args[1], VMA(2));
+
+	case G_DEBUG_DRAWBOX:
+		Debug_DrawDebugBox(VMA(1), VMA(2), args[3]);
+		return 0;
 // jmarshall end
 
 // jmarshall

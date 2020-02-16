@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 backEndData_t	*backEndData[SMP_FRAMES];
 backEndState_t	backEnd;
 
+void RB_ShowDebugLines(void);
 
 static float	s_flipMatrix[16] = {
 	// convert from our coordinate system (looking down X)
@@ -656,6 +657,11 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 		qglDepthRange (0, 1);
 	}
 
+// jmarshall
+	if(backEnd.refdef.renderDebug) {
+		RB_ShowDebugLines();
+	}
+// jmarshall end
 #if 0
 	RB_DrawSun();
 #endif
@@ -1010,6 +1016,95 @@ void RB_ShowImages( void ) {
 
 }
 
+/*
+================
+RB_SimpleWorldSetup
+================
+*/
+void RB_SimpleWorldSetup(void) {
+	//backEnd.currentSpace = &backEnd.viewDef->worldSpace;
+	SetViewportAndScissor();
+
+	//qglLoadMatrixf(backEnd.or.modelMatrix);
+
+	//backEnd.currentScissor = backEnd.viewDef->scissor;
+	//qglScissor(backEnd.viewDef->viewport.x1 + backEnd.currentScissor.x1,
+	//	backEnd.viewDef->viewport.y1 + backEnd.currentScissor.y1,
+	//	backEnd.currentScissor.x2 + 1 - backEnd.currentScissor.x1,
+	//	backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1);
+}
+
+
+/*
+================
+RB_ShowDebugLines
+================
+*/
+// jmarshall
+void RB_ShowDebugLines(void) {
+	int			i;
+	int			width;
+	debugLine_t* line;
+
+	if (backEndData[0]->numDebugLines <= 0)
+		return;
+
+	// all lines are expressed in world coordinates
+	RB_SimpleWorldSetup();
+	qglDisable(GL_TEXTURE_2D);
+
+	//globalImages->BindNull();
+
+	width = 4; // r_debugLineWidth.GetInteger();
+	if (width < 1) {
+		width = 1;
+	}
+	else if (width > 10) {
+		width = 10;
+	}
+
+	// draw lines
+	GL_State(GLS_POLYMODE_LINE);//| GLS_DEPTHMASK ); //| GLS_SRCBLEND_ONE | GLS_DSTBLEND_ONE );
+	qglLineWidth(width);
+
+	//if (!r_debugLineDepthTest.GetBool()) {
+		qglDisable(GL_DEPTH_TEST);
+	//}
+
+	qglBegin(GL_LINES);
+
+	line = backEndData[0]->debugLines;
+	for (i = 0; i < backEndData[0]->numDebugLines; i++, line++) {
+		if (!line->depthTest) {
+			qglColor3fv(line->rgb);
+			qglVertex3fv(line->start);
+			qglVertex3fv(line->end);
+		}
+	}
+	qglEnd();
+
+	//if (!r_debugLineDepthTest.GetBool()) {
+		qglEnable(GL_DEPTH_TEST);
+	//}
+
+	qglBegin(GL_LINES);
+
+	line = backEndData[0]->debugLines;
+	for (i = 0; i < backEndData[0]->numDebugLines; i++, line++) {
+		if (line->depthTest) {
+			qglColor4fv(line->rgb);
+			qglVertex3fv(line->start);
+			qglVertex3fv(line->end);
+		}
+	}
+
+	qglEnd();
+
+	qglLineWidth(1);
+	GL_State(GLS_DEFAULT);
+	qglEnable(GL_TEXTURE_2D);
+}
+// jmarshall end
 
 /*
 =============

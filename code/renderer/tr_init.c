@@ -1212,6 +1212,9 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	re.RemapShader = R_RemapShader;
 	re.GetEntityToken = R_GetEntityToken;
 	re.inPVS = R_inPVS;
+// jmarshall
+	re.AddDebugBoxCommand = RE_AddDebugBoxCommand;
+// jmarshall end
 
 	return &re;
 }

@@ -1331,3 +1331,77 @@ float AngleDifference(float ang1, float ang2) {
 	}
 	return diff;
 }
+
+// jmarshall
+/*
+=========================
+VectorDistanceSquared
+=========================
+*/
+float VectorDistanceSquared(vec3_t p1, vec3_t p2)
+{
+	vec3_t dir;
+	VectorSubtract(p2, p1, dir);
+	return VectorLengthSquared(dir);
+}
+
+/*
+==========
+InitBox
+==========
+*/
+void InitBox(box_t* box) {
+	memset(box, 0, sizeof(box_t));
+	ClearBounds(box->mins, box->maxs);
+}
+
+/*
+==========
+AddPointToBox
+==========
+*/
+void AddPointToBox(box_t* box, vec3_t point) {
+	AddPointToBounds(point, box->mins, box->maxs);
+	GetCenterOfBounds(box->mins, box->maxs, box->center);
+	VectorSubtract(box->maxs, box->center, box->extents);
+}
+
+/*
+==========
+BoxToPoints
+==========
+*/
+void BoxToPoints(box_t* box, vec3_t points[8]) {
+	vec3_t axis[3];
+	vec3_t temp[4];
+	
+	VectorSet(axis[0], box->extents[0], 0, 0);
+	VectorSet(axis[1], 0, box->extents[1], 0);
+	VectorSet(axis[2], 0, 0, box->extents[2]);
+
+	VectorSubtract(box->center, axis[0], temp[0]);
+	VectorAdd(box->center, axis[0], temp[1]);
+	VectorSubtract(axis[1], axis[2], temp[2]);
+	VectorAdd(axis[1], axis[2], temp[3]);
+
+	VectorSubtract(temp[0], temp[3], points[0]);
+	VectorSubtract(temp[1], temp[3], points[1]);
+	VectorAdd(temp[1], temp[2], points[2]);
+	VectorAdd(temp[0], temp[2], points[3]);
+	VectorSubtract(temp[0], temp[2], points[4]);
+	VectorSubtract(temp[1], temp[2], points[5]);
+	VectorAdd(temp[1], temp[3], points[6]);
+	VectorAdd(temp[0], temp[3], points[7]);
+}
+
+/*
+===============
+ExpandBox
+===============
+*/
+void ExpandBox(box_t* box, float d) {
+	box->extents[0] += d;
+	box->extents[1] += d;
+	box->extents[2] += d;
+}
+// jmarshall end

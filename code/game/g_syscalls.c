@@ -277,4 +277,7 @@ void trap_SV_ClientThink(int clientNum, usercmd_t* ucmd) {
 	syscall(G_SV_CLIENTTHINK, clientNum, ucmd);
 }
 
+void trap_Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime) {
+	syscall(G_DEBUG_DRAWBOX, color, box, lifetime);
+}
 // jmarshall end

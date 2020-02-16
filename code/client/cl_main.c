@@ -103,6 +103,15 @@ void CL_ServerStatus_f(void);
 void CL_ServerStatusResponse( netadr_t from, msg_t *msg );
 
 /*
+======================
+Debug_DrawDebugBox
+======================
+*/
+void Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime) {
+	re.AddDebugBoxCommand(color, box, lifetime);
+}
+
+/*
 ===============
 CL_CDDialog
 

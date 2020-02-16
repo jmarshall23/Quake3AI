@@ -233,6 +233,43 @@ void	R_AddDrawSurfCmd( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 	cmd->viewParms = tr.viewParms;
 }
 
+/*
+=================
+R_AddDebugBoxCommand
+=================
+*/
+// jmarshall
+/*
+================
+RB_AddDebugLine
+================
+*/
+void RB_AddDebugLine(const vec4_t color, const vec3_t start, const vec3_t end, const int lifeTime, const qboolean depthTest) {
+	debugLine_t* line;
+
+	if (backEndData[tr.smpFrame]->numDebugLines < MAX_DEBUG_LINES) {
+		line = &backEndData[tr.smpFrame]->debugLines[backEndData[tr.smpFrame]->numDebugLines++];
+		VectorCopy(color, line->rgb);
+		VectorCopy(start, line->start);
+		VectorCopy(end, line->end);
+		line->depthTest = depthTest;
+		//line->lifeTime = rb_debugLineTime + lifeTime;
+	}
+}
+
+void RE_AddDebugBoxCommand(vec4_t color, box_t *box, int lifetime) {
+	int i;
+	vec3_t v[8];
+
+	BoxToPoints(box, v);
+
+	for (i = 0; i < 4; i++) {
+		RB_AddDebugLine(color, v[i], v[(i + 1) & 3], lifetime, qfalse);
+		RB_AddDebugLine(color, v[4 + i], v[4 + ((i + 1) & 3)], lifetime, qfalse);
+		RB_AddDebugLine(color, v[i], v[4 + i], lifetime, qfalse);
+	}
+}
+// jmarshall end
 
 /*
 =============

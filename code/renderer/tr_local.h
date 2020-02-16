@@ -433,6 +433,8 @@ typedef struct {
 	vec3_t		vieworg;
 	vec3_t		viewaxis[3];		// transformation matrix
 
+	qboolean	renderDebug;
+
 	int			time;				// time in milliseconds for shader effects and other time dependent rendering issues
 	int			rdflags;			// RDF_NOWORLDMODEL, etc
 
@@ -1166,6 +1168,10 @@ void	GL_Cull( int cullType );
 
 #define GLS_DEFAULT			GLS_DEPTHMASK_TRUE
 
+// jmarshall
+void RE_AddDebugBoxCommand(vec4_t color, box_t* box, int lifetime);
+// jmarshall end
+
 void	RE_StretchRaw (int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty);
 void	RE_UploadCinematic (int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty);
 
@@ -1560,6 +1566,17 @@ typedef enum {
 #define	MAX_POLYS		600
 #define	MAX_POLYVERTS	3000
 
+// jmarshall
+#define MAX_DEBUG_LINES			16384
+typedef struct debugLine_s {
+	vec4_t		rgb;
+	vec3_t		start;
+	vec3_t		end;
+	qboolean	depthTest;
+	int			lifeTime;
+} debugLine_t;
+// jmarshall end
+
 // all of the information needed by the back end must be
 // contained in a backEndData_t.  This entire structure is
 // duplicated so the front and back end can run in parallel
@@ -1570,6 +1587,10 @@ typedef struct {
 	trRefEntity_t	entities[MAX_ENTITIES];
 	srfPoly_t	*polys;//[MAX_POLYS];
 	polyVert_t	*polyVerts;//[MAX_POLYVERTS];
+// jmarshall
+	int			numDebugLines;
+	debugLine_t		debugLines[MAX_DEBUG_LINES];
+// jmarshall end
 	renderCommandList_t	commands;
 } backEndData_t;
 

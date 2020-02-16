@@ -245,6 +245,9 @@ typedef enum {
 	G_PC_EXPECTTOKENTYPE,
 	G_PC_READSTRUCTURE,
 	G_PC_CHECKTOKENSTRING,
+
+	// Debug Render
+	G_DEBUG_DRAWBOX,
 } gameImport_t;
 
 

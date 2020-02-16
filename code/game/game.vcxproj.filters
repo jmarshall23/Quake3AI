@@ -120,14 +120,17 @@
     <ClCompile Include="bot_route.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BotAI\BotAI_dmq3.c">
-      <Filter>Source Files\BotAI</Filter>
-    </ClCompile>
     <ClCompile Include="BotAI\BotAI_ltg.c">
       <Filter>Source Files\BotAI</Filter>
     </ClCompile>
     <ClCompile Include="bot_weapons.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BotAI\BotAI.c">
+      <Filter>Source Files\BotAI</Filter>
+    </ClCompile>
+    <ClCompile Include="BotAI\BotAI_deathmatch.c">
+      <Filter>Source Files\BotAI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
