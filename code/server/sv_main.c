@@ -692,7 +692,9 @@ void SV_CheckTimeouts( void ) {
 			cl->state = CS_FREE;	// can now be reused
 			continue;
 		}
-		if ( cl->state >= CS_CONNECTED && cl->lastPacketTime < droppoint) {
+// jmarshall - don't disconnect the bots.
+		if ( cl->state >= CS_CONNECTED && cl->lastPacketTime < droppoint && cl->netchan.remoteAddress.type != NA_BOT) {
+// jmarshall end
 			// wait several frames so a debugger session doesn't
 			// cause a timeout
 			if ( ++cl->timeoutCount > 5 ) {
