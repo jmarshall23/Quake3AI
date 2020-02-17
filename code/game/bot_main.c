@@ -377,6 +377,7 @@ BotAISetup
 ==============
 */
 int BotAISetup(int restart) {
+	InitCharacteristicSystem();
 	return 1;
 }
 

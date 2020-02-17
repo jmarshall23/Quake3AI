@@ -4,6 +4,22 @@
 #include "g_local.h"
 #include "bot_local.h"
 
+// jmarshall
+bot_character_t* default_char_profile = NULL;
+
+/*
+============================
+InitCharacteristicSystem
+============================
+*/
+void InitCharacteristicSystem(void) {
+	default_char_profile = BotLoadCharacterFromFile("bots/default_c.c", 1);
+	if(default_char_profile == NULL) {
+		G_Error("Failed to load default characteristic def file\n");
+	}
+}
+// jmarshall end
+
 /*
 ============================
 CheckCharacteristicIndex
@@ -136,8 +152,17 @@ bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill)
 		return NULL;
 	} 
 
-	ch = (bot_character_t*)malloc(sizeof(bot_character_t) + MAX_CHARACTERISTICS * sizeof(bot_characteristic_t));
-	memset(ch, 0, sizeof(bot_character_t) + MAX_CHARACTERISTICS * sizeof(bot_characteristic_t));
+	ch = (bot_character_t*)G_Alloc(sizeof(bot_character_t) + MAX_CHARACTERISTICS * sizeof(bot_characteristic_t));
+// jmarshall -- apply the defaults
+	if (default_char_profile == NULL)
+	{
+		memset(ch, 0, sizeof(bot_character_t) + MAX_CHARACTERISTICS * sizeof(bot_characteristic_t));
+	}
+	else
+	{
+		memcpy(ch, default_char_profile, sizeof(bot_character_t) + MAX_CHARACTERISTICS * sizeof(bot_characteristic_t));
+	}	
+// jmarshall end
 	strcpy(ch->filename, charfile);
 	while (trap_PC_ReadToken(source, &token))
 	{
@@ -187,15 +212,16 @@ bot_character_t* BotLoadCharacterFromFile(char* charfile, int skill)
 						//FreeMemory(ch);
 						return NULL;
 					}
-
-					if (ch->c[index].type)
-					{
-						G_Error("characteristic %d already initialized\n", index);
-						trap_PC_FreeSource(source);
-						BotFreeCharacterStrings(ch);
-						//FreeMemory(ch);
-						return NULL;
-					}
+// jmarshall - not sure what we loose by removing this check, basically duplicate definition check?
+					//if (ch->c[index].type)
+					//{
+					//	G_Error("characteristic %d already initialized\n", index);
+					//	trap_PC_FreeSource(source);
+					//	BotFreeCharacterStrings(ch);
+					//	//FreeMemory(ch);
+					//	return NULL;
+					//}
+// jmarshall end
 
 					if (!trap_PC_ReadToken(source, &token))
 					{

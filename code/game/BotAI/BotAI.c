@@ -174,9 +174,7 @@ void BotCheckAttack(bot_state_t* bs) {
 	if (bs->firethrottlewait_time > FloatTime()) 
 		return;
 
-// jmarshall
-	firethrottle = 1; // Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1);
-// jmarshall end
+	firethrottle = Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1);
 	if (bs->firethrottleshoot_time < FloatTime()) {
 		if (random() > firethrottle) {
 			bs->firethrottlewait_time = FloatTime() + firethrottle;
