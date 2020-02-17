@@ -312,14 +312,15 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	////allocate a weapon state
 	bs->ws = BotAllocWeaponState();
 
-	////load the weapon weights
-	//trap_Characteristic_String(bs->character, CHARACTERISTIC_WEAPONWEIGHTS, filename, MAX_PATH);
-	//errnum = trap_BotLoadWeaponWeights(bs->ws, filename);
-	//if (errnum != BLERR_NOERROR) {
+	//load the weapon weights
+	Characteristic_String(bs->character, CHARACTERISTIC_WEAPONWEIGHTS, filename, MAX_QPATH);
+	errnum = BotLoadWeaponWeights(bs->ws, filename);
+	if (errnum != BLERR_NOERROR) {
 	//	trap_BotFreeGoalState(bs->gs);
-	//	trap_BotFreeWeaponState(bs->ws);
-	//	return qfalse;
-	//}
+		BotFreeWeaponState(bs->ws);
+		return qfalse;
+	}
+
 	////allocate a chat state
 	//bs->cs = trap_BotAllocChatState();
 	////load the chat file

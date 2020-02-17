@@ -132,6 +132,9 @@
     <ClCompile Include="BotAI\BotAI_deathmatch.c">
       <Filter>Source Files\BotAI</Filter>
     </ClCompile>
+    <ClCompile Include="BotAI\BotAI_battle.c">
+      <Filter>Source Files\BotAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">

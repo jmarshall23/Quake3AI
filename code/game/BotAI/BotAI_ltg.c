@@ -6,7 +6,6 @@
 
 #include "BotAI.h"
 
-
 /*
 ==================
 BotReachedGoal
@@ -1007,7 +1006,7 @@ int AINode_Seek_LTG(bot_state_t* bs)
 //		return qfalse;
 //	}
 //	//
-//	bs->tfl = TFL_DEFAULT;
+	//bs->tfl = TFL_DEFAULT;
 //	if (bot_grapple.integer) bs->tfl |= TFL_GRAPPLEHOOK;
 //	//if in lava or slime the bot should be able to get out
 //	if (BotInLavaOrSlime(bs)) bs->tfl |= TFL_LAVA | TFL_SLIME;
@@ -1017,30 +1016,34 @@ int AINode_Seek_LTG(bot_state_t* bs)
 //	}
 //	//map specific code
 //	BotMapScripts(bs);
-//	//no enemy
-//	bs->enemy = -1;
-//	//
-//	if (bs->killedenemy_time > FloatTime() - 2) {
-//		if (random() < bs->thinktime * 1) {
-//			trap_EA_Gesture(bs->client);
-//		}
-//	}
-//	//if there is an enemy
-	//if (BotFindEnemy(bs, -1)) {
-	//	if (BotWantsToRetreat(bs)) {
-	//		//keep the current long term goal and retreat
-	//		AIEnter_Battle_Retreat(bs, "seek ltg: found enemy");
-	//		return qfalse;
-	//	}
-	//	else {
-	//		trap_BotResetLastAvoidReach(bs->ms);
-	//		//empty the goal stack
-	//		trap_BotEmptyGoalStack(bs->gs);
-	//		//go fight
-	//		AIEnter_Battle_Fight(bs, "seek ltg: found enemy");
-	//		return qfalse;
-	//	}
-	//}
+
+	//no enemy
+	bs->enemy = -1;
+
+	if (bs->killedenemy_time > FloatTime() - 2) {
+		if (random() < bs->thinktime * 1) {
+			//trap_EA_Gesture(bs->client);
+			bs->input.actionflags |= ACTION_GESTURE;
+		}
+	}
+
+	//if there is an enemy
+	if (BotFindEnemy(bs, -1)) {
+		if (BotWantsToRetreat(bs)) {
+			//keep the current long term goal and retreat
+			AIEnter_Battle_Retreat(bs, "seek ltg: found enemy");
+			return qfalse;
+		}
+		else {
+			//trap_BotResetLastAvoidReach(bs->ms);
+			//empty the goal stack
+			BotEmptyGoalStack(bs->gs);
+			
+			//go fight
+			AIEnter_Battle_Fight(bs, "seek ltg: found enemy");
+			return qfalse;
+		}
+	}
 //	//
 //	BotTeamGoals(bs, qfalse);
 //	//get the current long term goal

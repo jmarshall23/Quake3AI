@@ -25,6 +25,46 @@ vec4_t color_next_waypoint = { 1.0f, 0.0f, 0.0f, 1.0f };
 #define DISTANCEFACTOR_SWIM			1		//should be 0.66, swim speed = 150
 #define DISTANCEFACTOR_WALK			0.33f	//walk speed = 300
 
+#define MAX_USERMOVE				400
+
+/*
+=======================
+BotMoveInDirection
+=======================
+*/
+// jmarshall - this doesn't match the original behavior, but basically we get a random point on the navmesh, close to the origin,
+//			   and make that the new move to waypoint. The issue is, because this called gets called almost every frame during battle,
+//			   it will cause performance issues. I need to take a look and figure out the best way forward for this function.
+int BotMoveInDirection(bot_state_t *bs, vec3_t dir, float speed, int type) {
+	gentity_t* ent = &g_entities[bs->client];
+	bot_input_t* bi = &bs->input;
+	vec3_t newMoveToGoal;
+	trace_t trace;
+
+	// Run a trace to see if we can just move to the requested location.
+	newMoveToGoal[0] = ent->r.currentOrigin[0] + (dir[0] * 25.0f);
+	newMoveToGoal[1] = ent->r.currentOrigin[1] + (dir[1] * 25.0f);
+	newMoveToGoal[2] = ent->r.currentOrigin[2] + (dir[2] * 25.0f);
+
+	trap_Trace(&trace, ent->r.currentOrigin, NULL, NULL, newMoveToGoal, 0, CONTENTS_SOLID);
+
+	// If we can't directly move to the requested location, find a random point on the navmesh close to us, and just move there.
+	// Again this doesn't match the original behavior. 
+	if (trace.fraction < 0.9f)
+	{
+		trap_Nav_GetRandomPointNearPosition(ent->r.currentOrigin, newMoveToGoal, 50.0f);
+	}
+
+	VectorSubtract(newMoveToGoal, ent->r.currentOrigin, bi->dir);
+	VectorNormalize(bi->dir);
+	bi->dir[2] = 0;
+
+	bi->speed = speed; // 200 = walk, 400 = run.
+
+	return 0;
+}
+// jmarshall end
+
 /*
 =======================
 BotDrawRoute

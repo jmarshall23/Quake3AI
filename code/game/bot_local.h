@@ -654,10 +654,15 @@ void BotMoveToGoal(bot_state_t* bs, bot_goal_t* goal);
 
 typedef enum {
 	NULLMOVEFLAG = -1,
-	PRONE,
-	CROUCH,
-	WALK,
-	RUN,
-	SPRINT,
-	STRAFEJUMP
+	MOVE_PRONE,
+	MOVE_CROUCH,
+	MOVE_WALK,
+	MOVE_RUN2,
+	MOVE_SPRINT,
+	MOVE_JUMP,
 } botMoveFlags_t;
+
+int BotWantsToRetreat(bot_state_t* bs);
+int BotWantsToChase(bot_state_t* bs);
+
+int BotMoveInDirection(bot_state_t* bs, vec3_t dir, float speed, int type);

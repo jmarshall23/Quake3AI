@@ -443,6 +443,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS;GLOBALRANK</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="BotAI\BotAI.c" />
+    <ClCompile Include="BotAI\BotAI_battle.c" />
     <ClCompile Include="BotAI\BotAI_deathmatch.c" />
     <ClCompile Include="BotAI\BotAI_ltg.c" />
     <ClCompile Include="bot_char.c" />

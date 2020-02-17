@@ -230,6 +230,7 @@ typedef enum {
 	G_FS_SEEK,
 
 	G_SV_CLIENTTHINK,
+	G_BOT_CLIENTCOMMAND,
 
 	// Nav Mesh
 	G_NAV_LOADMESH,
