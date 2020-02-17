@@ -633,6 +633,10 @@ int AINode_Battle_Chase(bot_state_t* bs)
 	VectorSet(goal.mins, -8, -8, -8);
 	VectorSet(goal.maxs, 8, 8, 8);
 
+// jmarshall - goal origin is last visible position
+	VectorCopy(bs->last_enemy_visible_position, goal.origin);
+// jmarshall end
+
 	//if the last seen enemy spot is reached the enemy could not be found
 	if (BotTouchingGoal(bs->origin, &goal))
 		bs->chase_time = 0;

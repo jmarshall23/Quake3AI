@@ -381,6 +381,16 @@ void BotDeathmatchAI(bot_state_t* bs, float thinktime) {
 	//BotResetNodeSwitches();
 	////execute AI nodes
 	for (int i = 0; i < MAX_NODESWITCHES; i++) {
+// jmarshall - keep the last visible position
+		if (bs->enemy != -1)
+		{
+			if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy)) {
+				gentity_t* ent = &g_entities[bs->enemy];
+				VectorCopy(ent->r.currentOrigin, bs->last_enemy_visible_position);
+			}
+		}
+// jmarshall end
+
 		if (bs->ainode(bs)) 
 			break;
 	}

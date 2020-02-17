@@ -546,6 +546,8 @@ typedef struct bot_state_s
 	vec3_t		very_short_term_origin;
 
 	int			stuck_time;
+
+	vec3_t		last_enemy_visible_position;
 // jmarshall end
 
 	bot_input_t input;
