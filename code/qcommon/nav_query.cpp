@@ -86,6 +86,9 @@ int Nav_GetPathBetweenPoints(vec3_t p1, vec3_t p2, vec3_t *waypoints) {
 		vec3_t polyBoundsCenter;
 		GetCenterOfBounds(polyBoundsMins, polyBoundsMaxs, polyBoundsCenter);
 
+		polyBoundsCenter[0] += FRandRange(-25.0f, 25.0f);
+		polyBoundsCenter[1] += FRandRange(-25.0f, 25.0f);
+
 		navMeshGlobals.navMeshFile->navQuery->closestPointOnPoly(path[i], polyBoundsCenter, origin, &ignored);
 		NavToQuakeCoords(origin, waypoints[i]);
 	}
