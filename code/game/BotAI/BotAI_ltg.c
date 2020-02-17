@@ -935,6 +935,11 @@ AINode_Respawn
 */
 int AINode_Respawn(bot_state_t* bs) {
 	bs->input.actionflags |= ACTION_RESPAWN;
+
+	if(!BotIsDead(bs))
+	{
+		bs->ainode = NULL;
+	}
 	return qtrue;
 }
 
