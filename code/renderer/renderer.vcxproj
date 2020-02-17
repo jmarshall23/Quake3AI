@@ -1800,6 +1800,7 @@
     <ClInclude Include="..\win32\glw_win.h" />
     <ClInclude Include="..\win32\win_local.h" />
     <ClInclude Include="qgl.h" />
+    <ClInclude Include="simplex.h" />
     <ClInclude Include="tr_local.h" />
     <ClInclude Include="tr_public.h" />
   </ItemGroup>

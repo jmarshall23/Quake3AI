@@ -1084,6 +1084,7 @@ int PC_CheckTokenString2(int handle, char* string);
 
 // jmarshall
 void Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime);
+void Debug_DrawDebugText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest);
 // jmarshall end
 
 extern huffman_t clientHuffTables;

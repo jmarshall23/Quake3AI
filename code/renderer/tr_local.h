@@ -1170,6 +1170,7 @@ void	GL_Cull( int cullType );
 
 // jmarshall
 void RE_AddDebugBoxCommand(vec4_t color, box_t* box, int lifetime);
+void RE_AddDebugText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest);
 // jmarshall end
 
 void	RE_StretchRaw (int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty);
@@ -1577,6 +1578,20 @@ typedef struct debugLine_s {
 } debugLine_t;
 // jmarshall end
 
+// jmarshall
+#define MAX_DEBUG_TEXT			512
+
+typedef struct debugText_s {
+	char		text[128];
+	vec3_t		origin;
+	float		scale;
+	vec4_t		color;
+	int			align;
+	int			lifeTime;
+	qboolean	depthTest;
+} debugText_t;
+// jmarshall end
+
 // all of the information needed by the back end must be
 // contained in a backEndData_t.  This entire structure is
 // duplicated so the front and back end can run in parallel
@@ -1588,8 +1603,11 @@ typedef struct {
 	srfPoly_t	*polys;//[MAX_POLYS];
 	polyVert_t	*polyVerts;//[MAX_POLYVERTS];
 // jmarshall
-	int			numDebugLines;
 	debugLine_t		debugLines[MAX_DEBUG_LINES];
+	int			numDebugLines;
+
+	debugText_t		debugText[MAX_DEBUG_TEXT];
+	int			numDebugText;
 // jmarshall end
 	renderCommandList_t	commands;
 } backEndData_t;

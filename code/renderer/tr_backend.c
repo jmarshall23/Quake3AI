@@ -21,10 +21,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "tr_local.h"
 
+// jmarshall
+#include "simplex.h"
+// jmarshall end
+
 backEndData_t	*backEndData[SMP_FRAMES];
 backEndState_t	backEnd;
 
 void RB_ShowDebugLines(void);
+void RB_ShowDebugText(void);
 
 static float	s_flipMatrix[16] = {
 	// convert from our coordinate system (looking down X)
@@ -660,6 +665,7 @@ void RB_RenderDrawSurfList( drawSurf_t *drawSurfs, int numDrawSurfs ) {
 // jmarshall
 	if(backEnd.refdef.renderDebug) {
 		RB_ShowDebugLines();
+		RB_ShowDebugText();
 	}
 // jmarshall end
 #if 0
@@ -1034,6 +1040,198 @@ void RB_SimpleWorldSetup(void) {
 	//	backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1);
 }
 
+// jmarshall
+
+/*
+================
+RB_DrawTextLength
+
+  returns the length of the given text
+================
+*/
+float RB_DrawTextLength(const char* text, float scale, int len) {
+	int i, num, index, charIndex;
+	float spacing, textLen = 0.0f;
+
+	if (text && *text) {
+		if (!len) {
+			len = strlen(text);
+		}
+		for (i = 0; i < len; i++) {
+			charIndex = text[i] - 32;
+			if (charIndex < 0 || charIndex > NUM_SIMPLEX_CHARS) {
+				continue;
+			}
+			num = simplex[charIndex][0] * 2;
+			spacing = simplex[charIndex][1];
+			index = 2;
+
+			while (index - 2 < num) {
+				if (simplex[charIndex][index] < 0) {
+					index++;
+					continue;
+				}
+				index += 2;
+				if (simplex[charIndex][index] < 0) {
+					index++;
+					continue;
+				}
+			}
+			textLen += spacing * scale;
+		}
+	}
+	return textLen;
+}
+
+/*
+================
+RB_DrawText
+
+  oriented on the viewaxis
+  align can be 0-left, 1-center (default), 2-right
+================
+*/
+static void RB_DrawText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align) {
+	int i, j, len, num, index, charIndex, line;
+	float textLen, spacing;
+	vec3_t org, p1, p2;
+
+	if (text && *text) {
+		qglBegin(GL_LINES);
+		qglColor3fv(color);
+
+		if (text[0] == '\n') {
+			line = 1;
+		}
+		else {
+			line = 0;
+		}
+
+		len = strlen(text);
+		for (i = 0; i < len; i++) {
+
+			if (i == 0 || text[i] == '\n') {
+				org[0] = origin[0] - backEnd.or.axis[2][0] * (line * 36.0f * scale);
+				org[0] = origin[1] - backEnd.or.axis[2][1] * (line * 36.0f * scale);
+				org[0] = origin[2] - backEnd.or.axis[2][2] * (line * 36.0f * scale);
+				if (align != 0) {
+					for (j = 1; i + j <= len; j++) {
+						if (i + j == len || text[i + j] == '\n') {
+							textLen = RB_DrawTextLength(text + i, scale, j);
+							break;
+						}
+					}
+					if (align == 2) {
+						// right
+						org[0] += backEnd.or.axis[1][0] * textLen;
+						org[1] += backEnd.or.axis[1][1] * textLen;
+						org[2] += backEnd.or.axis[1][2] * textLen;
+					}
+					else {
+						// center
+						org[0] += backEnd.or.axis[1][0] * (textLen * 0.5f);
+						org[1] += backEnd.or.axis[1][1] * (textLen * 0.5f);
+						org[2] += backEnd.or.axis[1][2] * (textLen * 0.5f);
+					}
+				}
+				line++;
+			}
+
+			charIndex = text[i] - 32;
+			if (charIndex < 0 || charIndex > NUM_SIMPLEX_CHARS) {
+				continue;
+			}
+			num = simplex[charIndex][0] * 2;
+			spacing = simplex[charIndex][1];
+			index = 2;
+
+			while (index - 2 < num) {
+				if (simplex[charIndex][index] < 0) {
+					index++;
+					continue;
+				}
+				p1[0] = org[0] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][0] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][0];
+				p1[1] = org[1] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][1] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][1];
+				p1[2] = org[2] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][2] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][2];
+				index += 2;
+				if (simplex[charIndex][index] < 0) {
+					index++;
+					continue;
+				}
+				p2[0] = org[0] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][0] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][0];
+				p2[1] = org[1] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][1] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][1];
+				p2[2] = org[2] + scale * simplex[charIndex][index] * -backEnd.or.axis[1][2] + scale * simplex[charIndex][index + 1] * backEnd.or.axis[2][2];
+
+				qglVertex3fv(p1);
+				qglVertex3fv(p2);
+			}
+			org[0] -= backEnd.or.axis[1][0] * (spacing * scale);
+			org[1] -= backEnd.or.axis[1][1] * (spacing * scale);
+			org[2] -= backEnd.or.axis[1][2] * (spacing * scale);
+		}
+
+		qglEnd();
+	}
+}
+
+/*
+================
+RB_ShowDebugText
+================
+*/
+void RB_ShowDebugText(void) {
+	int			i;
+	int			width;
+	debugText_t* text;
+
+	if (backEndData[0]->numDebugText <= 0) {
+		return;
+	}
+
+	// all lines are expressed in world coordinates
+	RB_SimpleWorldSetup();
+
+	qglDisable(GL_TEXTURE_2D);
+
+	width = 4; // r_debugLineWidth.GetInteger();
+	if (width < 1) {
+		width = 1;
+	}
+	else if (width > 10) {
+		width = 10;
+	}
+
+	// draw lines
+	GL_State(GLS_POLYMODE_LINE);
+	qglLineWidth(width);
+
+	//if (!r_debugLineDepthTest.GetBool()) {
+		qglDisable(GL_DEPTH_TEST);
+	//}
+
+	text = backEndData[0]->debugText;
+	for (i = 0; i < backEndData[0]->numDebugText; i++, text++) {
+		if (!text->depthTest) {
+			RB_DrawText(text->text, text->origin, text->scale, text->color, text->align);
+		}
+	}
+
+	//if (!r_debugLineDepthTest.GetBool()) {
+		qglEnable(GL_DEPTH_TEST);
+	//}
+
+	text = backEndData[0]->debugText;
+	for (i = 0; i < backEndData[0]->numDebugText; i++, text++) {
+		if (text->depthTest) {
+			RB_DrawText(text->text, text->origin, text->scale, text->color, text->align);
+		}
+	}
+
+	qglLineWidth(1);
+	GL_State(GLS_DEFAULT);
+	qglEnable(GL_TEXTURE_2D);
+}
+// jmarshall end
 
 /*
 ================

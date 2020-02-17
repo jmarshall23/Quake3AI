@@ -386,6 +386,9 @@
     <ClInclude Include="..\jpeg-6\jversion.h">
       <Filter>jpeg\Header Files No. 1</Filter>
     </ClInclude>
+    <ClInclude Include="simplex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\ft2\ahangles.h">

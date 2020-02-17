@@ -79,6 +79,7 @@ typedef struct {
 
 // jmarshall
 	void	(*AddDebugBoxCommand)(vec4_t color, box_t* box, int lifetime);
+	void	(*AddDebugText)(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest);
 // jmarshall end
 
 	void	(*BeginFrame)( stereoFrame_t stereoFrame );

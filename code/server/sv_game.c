@@ -480,6 +480,10 @@ int SV_GameSystemCalls( int *args ) {
 	case G_DEBUG_DRAWBOX:
 		Debug_DrawDebugBox(VMA(1), VMA(2), args[3]);
 		return 0;
+
+	case G_DEBUG_DRAWTEXT:
+		Debug_DrawDebugText(VMA(1), VMA(2), VMF(3), VMA(4), args[5], args[6], args[7]);
+		return 0;
 // jmarshall end
 
 // jmarshall

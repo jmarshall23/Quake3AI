@@ -54,6 +54,7 @@ void R_ToggleSmpFrame( void ) {
 	backEndData[tr.smpFrame]->commands.used = 0;
 // jmarshall
 	backEndData[tr.smpFrame]->numDebugLines = 0;
+	backEndData[tr.smpFrame]->numDebugText = 0;
 // jmarshall end
 
 	r_firstSceneDrawSurf = 0;

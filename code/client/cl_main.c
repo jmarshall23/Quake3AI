@@ -112,6 +112,15 @@ void Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime) {
 }
 
 /*
+======================
+Debug_DrawDebugText
+======================
+*/
+void Debug_DrawDebugText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest) {
+	re.AddDebugText(text, origin, scale, color, align, lifetime, depthTest);
+}
+
+/*
 ===============
 CL_CDDialog
 

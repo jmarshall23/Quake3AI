@@ -285,6 +285,10 @@ void trap_Debug_DrawDebugBox(vec4_t color, box_t* box, int lifetime) {
 	syscall(G_DEBUG_DRAWBOX, color, box, lifetime);
 }
 
+void trap_Debug_DrawDebugText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest) {
+	syscall(G_DEBUG_DRAWTEXT, text, origin, scale, color, align, lifetime, depthTest);
+}
+
 void trap_BotClientCommand(int client, char* command) {
 	syscall(G_BOT_CLIENTCOMMAND, client, command);
 }

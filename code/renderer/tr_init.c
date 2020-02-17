@@ -1214,6 +1214,7 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	re.inPVS = R_inPVS;
 // jmarshall
 	re.AddDebugBoxCommand = RE_AddDebugBoxCommand;
+	re.AddDebugText = RE_AddDebugText;
 // jmarshall end
 
 	return &re;

@@ -250,6 +250,7 @@ typedef enum {
 
 	// Debug Render
 	G_DEBUG_DRAWBOX,
+	G_DEBUG_DRAWTEXT,
 } gameImport_t;
 
 

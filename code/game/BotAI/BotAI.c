@@ -920,7 +920,7 @@ int BotFindEnemy(bot_state_t* bs, int curenemy) {
 			vectoangles(dir, angles);
 			
 			//if the bot isn't in the fov of the enemy
-			if (!InFieldOfVision(entinfo->r.currentAngles, 90, angles)) {
+			if (!InFieldOfVision(bs->viewangles, 90, angles)) {
 				//update some stuff for this enemy
 				BotUpdateBattleInventory(bs, i);
 

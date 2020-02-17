@@ -269,6 +269,28 @@ void RE_AddDebugBoxCommand(vec4_t color, box_t *box, int lifetime) {
 		RB_AddDebugLine(color, v[i], v[4 + i], lifetime, qfalse);
 	}
 }
+
+/*
+================
+RE_AddDebugText
+================
+*/
+void RE_AddDebugText(const char* text, const vec3_t origin, float scale, const vec4_t color, const int align, const int lifetime, const qboolean depthTest) {
+	debugText_t* debugText;
+
+	if (backEndData[tr.smpFrame]->numDebugText < MAX_DEBUG_TEXT) {
+		debugText = &backEndData[tr.smpFrame]->debugText[backEndData[tr.smpFrame]->numDebugText++];
+		strcpy(debugText->text, text);
+		VectorCopy(origin, debugText->origin);
+		debugText->scale = scale;
+		VectorCopy(color, debugText->color);
+		//debugText->viewAxis = viewAxis;
+		debugText->align = align;
+		//debugText->lifeTime = rb_debugTextTime + lifetime;
+		debugText->depthTest = depthTest;
+	}
+}
+
 // jmarshall end
 
 /*
