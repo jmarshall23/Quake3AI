@@ -563,12 +563,12 @@ void BotAimAtEnemy(bot_state_t* bs) {
 		for (i = 0; i < 3; i++) dir[i] += 0.3 * crandom() * (1 - aim_accuracy);
 	}
 	//set the ideal view angles
-	vectoangles(dir, bs->ideal_viewangles);
+	vectoangles(dir, bs->viewangles);
 	//take the weapon spread into account for lower skilled bots
-	bs->ideal_viewangles[PITCH] += 6 * wi.vspread * crandom() * (1 - aim_accuracy);
-	bs->ideal_viewangles[PITCH] = AngleMod(bs->ideal_viewangles[PITCH]);
-	bs->ideal_viewangles[YAW] += 6 * wi.hspread * crandom() * (1 - aim_accuracy);
-	bs->ideal_viewangles[YAW] = AngleMod(bs->ideal_viewangles[YAW]);
+	bs->viewangles[PITCH] += 6 * wi.vspread * crandom() * (1 - aim_accuracy);
+	bs->viewangles[PITCH] = AngleMod(bs->viewangles[PITCH]);
+	bs->viewangles[YAW] += 6 * wi.hspread * crandom() * (1 - aim_accuracy);
+	bs->viewangles[YAW] = AngleMod(bs->viewangles[YAW]);
 // jmarshall - add bot_challenge.
 	//if the bots should be really challenging
 	//if (bot_challenge.integer) {
@@ -580,6 +580,7 @@ void BotAimAtEnemy(bot_state_t* bs) {
 	//		trap_EA_View(bs->client, bs->viewangles);
 	//	}
 	//}
+	//vectoangles(bi->dir, bi->viewangles);
 // jmarshall end
 }
 
