@@ -597,7 +597,7 @@ int AINode_Battle_Chase(bot_state_t* bs)
 	}
 
 	//if the enemy is visible
-	if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy)) {
+	if (BotEntityVisibleTest(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy, qfalse)) {
 		AIEnter_Battle_Fight(bs, "battle chase");
 		return qfalse;
 	}

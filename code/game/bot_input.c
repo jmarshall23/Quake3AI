@@ -169,7 +169,6 @@ void BotChangeViewAngles(bot_state_t* bs, float thinktime) {
 	if (bs->viewangles[PITCH] > 180) bs->viewangles[PITCH] -= 360;
 	//elementary action: view
 	//trap_EA_View(bs->client, bs->viewangles);
-	VectorCopy(bs->viewangles, bs->input.viewangles);
 }
 
 /*
@@ -201,6 +200,8 @@ void BotUpdateInput(bot_state_t* bs, int time, int elapsed_time) {
 	//}
 	
 	//convert the bot input to a usercmd
+	VectorCopy(bs->viewangles, bs->input.viewangles);
+
 	BotInputToUserCommand(&bs->input, &bs->lastucmd, bs->cur_ps.delta_angles, time);
 	
 	//subtract the delta angles

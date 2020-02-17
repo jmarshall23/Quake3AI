@@ -298,7 +298,7 @@ void BotAimAtEnemy(bot_state_t* bs) {
 #endif
 		//aim at the obelisk
 		VectorSubtract(target, bs->eye, dir);
-		vectoangles(dir, bs->ideal_viewangles);
+		vectoangles(dir, bs->viewangles);
 		//set the aim target before trying to attack
 		VectorCopy(target, bs->aimtarget);
 		return;
@@ -690,12 +690,14 @@ qboolean EntityIsShooting(gentity_t *ent) {
 
 /*
 ==================
-BotEntityVisible
+BotEntityVisibleTest
 
 returns visibility in the range [0, 1] taking fog and water surfaces into account
 ==================
 */
-float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent) {
+// jmarshall - added heighttest
+float BotEntityVisibleTest(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent, qboolean allowHeightTest) {
+// jmarshall end
 	int i, contents_mask, passent, hitent, infog, inwater, otherinfog, pc;
 	float squaredfogdist, waterfactor, vis, bestvis;
 	trace_t trace;
@@ -747,6 +749,12 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 
 		//trace from start to end
 		trap_Trace(&trace, start, NULL, NULL, end, passent, contents_mask);
+// jmarshall
+		if(trace.fraction < 0.9f && allowHeightTest) {
+			end[2] += 50.0f;
+			trap_Trace(&trace, start, NULL, NULL, end, passent, contents_mask);
+		}
+// jmarshall end
 		
 		//if water was hit
 		waterfactor = 1.0;
@@ -806,6 +814,12 @@ float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int
 	return bestvis;
 }
 
+// jmarshall
+float BotEntityVisible(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent) {
+	return BotEntityVisibleTest(viewer, eye, viewangles, fov, ent, qtrue);
+}
+
+// jmarshall end
 
 /*
 ==================

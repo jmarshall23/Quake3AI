@@ -185,7 +185,7 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 	bi->dir[2] = 0;
 
 	bi->speed = 200; // 200 = walk, 400 = run.
-	vectoangles(bi->dir, bi->viewangles);
+	vectoangles(bi->dir, bs->viewangles);
 }
 
 /*

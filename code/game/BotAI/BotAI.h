@@ -19,6 +19,7 @@ void BotAimAtEnemy(bot_state_t* bs);
 void BotCheckAttack(bot_state_t* bs);
 int BotNearbyGoal(bot_state_t* bs, int tfl, bot_goal_t* ltg, float range);
 void BotUpdateInventory(bot_state_t* bs);
+float BotEntityVisibleTest(int viewer, vec3_t eye, vec3_t viewangles, float fov, int ent, qboolean allowHeightTest);
 
 //
 // BotAI_deathmatch.c
