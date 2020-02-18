@@ -12,6 +12,36 @@
 #define MAX_WEIGHT_FILES			128
 weightconfig_t* weightFileList[MAX_WEIGHT_FILES];
 
+#define MAX_FUZZY_OPERATORS			8192
+fuzzyseperator_t fuzzyseperators[MAX_FUZZY_OPERATORS];
+
+/*
+========================
+InitFuzzyWeights
+========================
+*/
+void InitFuzzyWeights(void) {
+	memset(&fuzzyseperators[0], 0, sizeof(fuzzyseperators));
+}
+
+/*
+========================
+AllocFuzzyWeight
+========================
+*/
+fuzzyseperator_t *AllocFuzzyWeight(void) {
+	for(int i = 0; i < MAX_FUZZY_OPERATORS; i++) {
+		if(fuzzyseperators[i].inUse == qfalse) {			
+			memset(&fuzzyseperators[i], 0, sizeof(fuzzyseperator_t));
+			fuzzyseperators[i].inUse = qtrue;
+			return &fuzzyseperators[i];
+		}
+	}
+
+	G_Error("AllocFuzzyWeight: Not enough fuzzy weights\n");
+	return NULL;
+}
+
 /*
 ========================
 ReadValue
@@ -21,7 +51,7 @@ int ReadValue(int source, float* value)
 {
 	pc_token_t token;
 
-	if (!trap_PC_ReadToken(source, &token)) 
+	if (!trap_PC_ExpectAnyToken(source, &token))
 		return qfalse;
 
 	if (!strcmp(token.string, "-"))
@@ -104,7 +134,7 @@ void FreeFuzzySeperators_r(fuzzyseperator_t* fs)
 	if (fs->next) 
 		FreeFuzzySeperators_r(fs->next);
 
-	//FreeMemory(fs); // jmarshall: todo
+	fs->inUse = qfalse;
 }
 
 /*
@@ -168,14 +198,14 @@ fuzzyseperator_t* ReadFuzzySeperators_r(int source)
 	if (!trap_PC_ExpectTokenString(source, "{")) 
 		return NULL;
 
-	if (!trap_PC_ReadToken(source, &token)) 
+	if (!trap_PC_ExpectAnyToken(source, &token))
 		return NULL;
 	do
 	{
 		def = !strcmp(token.string, "default");
 		if (def || !strcmp(token.string, "case"))
 		{
-			fs = (fuzzyseperator_t*)G_AllocClearedMemory(sizeof(fuzzyseperator_t));
+			fs = AllocFuzzyWeight();
 			fs->index = index;
 			if (lastfs) lastfs->next = fs;
 			else firstfs = fs;
@@ -268,7 +298,7 @@ fuzzyseperator_t* ReadFuzzySeperators_r(int source)
 	if (!founddefault)
 	{
 		G_Printf("switch without default\n");
-		fs = (fuzzyseperator_t*)G_AllocClearedMemory(sizeof(fuzzyseperator_t));
+		fs = AllocFuzzyWeight();
 		fs->index = index;
 		fs->value = MAX_INVENTORYVALUE;
 		fs->weight = 0;
@@ -388,7 +418,7 @@ weightconfig_t* ReadWeightConfig(char* filename)
 			} //end if
 			else if (!strcmp(token.string, "return"))
 			{
-				fs = (fuzzyseperator_t*)G_AllocClearedMemory(sizeof(fuzzyseperator_t));
+				fs = (fuzzyseperator_t*)AllocFuzzyWeight();
 				fs->index = 0;
 				fs->value = MAX_INVENTORYVALUE;
 				fs->next = NULL;

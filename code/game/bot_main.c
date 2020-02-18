@@ -12,6 +12,63 @@ int local_time = 0;
 float floattime;
 
 /*
+==============
+BotResetState
+
+called when a bot enters the intermission or observer mode and
+when the level is changed
+==============
+*/
+void BotResetState(bot_state_t* bs) {
+	int client, entitynum, inuse;
+	int movestate, goalstate, chatstate, weaponstate;
+	bot_settings_t settings;
+	int character;
+	playerState_t ps;							//current player state
+	float entergame_time;
+
+	//save some things that should not be reset here
+	memcpy(&settings, &bs->settings, sizeof(bot_settings_t));
+	memcpy(&ps, &bs->cur_ps, sizeof(playerState_t));
+	inuse = bs->inuse;
+	client = bs->client;
+	entitynum = bs->entitynum;
+	character = bs->character;
+	movestate = bs->ms;
+	goalstate = bs->gs;
+	chatstate = bs->cs;
+	weaponstate = bs->ws;
+	entergame_time = bs->entergame_time;
+	//free checkpoints and patrol points
+	//BotFreeWaypoints(bs->checkpoints);
+	//BotFreeWaypoints(bs->patrolpoints);
+	//reset the whole state
+	memset(bs, 0, sizeof(bot_state_t));
+	//copy back some state stuff that should not be reset
+	bs->ms = movestate;
+	bs->gs = goalstate;
+	bs->cs = chatstate;
+	bs->ws = weaponstate;
+	memcpy(&bs->cur_ps, &ps, sizeof(playerState_t));
+	memcpy(&bs->settings, &settings, sizeof(bot_settings_t));
+	bs->inuse = inuse;
+	bs->client = client;
+	bs->entitynum = entitynum;
+	bs->character = character;
+	bs->entergame_time = entergame_time;
+	//reset several states
+	//if (bs->ms) 
+	//	trap_BotResetMoveState(bs->ms);
+	if (bs->gs) 
+		BotResetGoalState(bs->gs);
+	if (bs->ws) 
+		BotResetWeaponState(bs->ws);
+	//if (bs->gs) trap_BotResetAvoidGoals(bs->gs);
+	//if (bs->ms) trap_BotResetAvoidReach(bs->ms);
+}
+
+
+/*
 ==================
 BotIsDead
 ==================
@@ -358,7 +415,7 @@ int BotAISetupClient(int client, struct bot_settings_s* settings, qboolean resta
 	//
 	////if interbreeding start with a mutation
 	//if (bot_interbreed) {
-	//	trap_BotMutateGoalFuzzyLogic(bs->gs, 1);
+		BotMutateGoalFuzzyLogic(bs->gs, 1);
 	//}
 	//
 	//// if we kept the bot client
@@ -378,6 +435,7 @@ BotAISetup
 */
 int BotAISetup(int restart) {
 	InitCharacteristicSystem();
+	InitFuzzyWeights();
 	return 1;
 }
 
@@ -407,4 +465,10 @@ void BotAIPostSpawn(void) {
 	BotSetupGoalAI();
 	BotSetupWeaponAI();
 	BotInitLevelItems();
+
+	for (int i = 0; i < MAX_CLIENTS; i++) {
+		if (botstates[i] && botstates[i]->inuse) {
+			BotResetState(botstates[i]);
+		}
+	}
 }

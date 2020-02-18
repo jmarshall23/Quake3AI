@@ -111,6 +111,7 @@ void BotShutdownGoalAI(void);
 //fuzzy seperator
 typedef struct fuzzyseperator_s
 {
+	qboolean inUse;
 	int index;
 	int value;
 	int type;
@@ -670,3 +671,4 @@ int BotWantsToChase(bot_state_t* bs);
 int BotMoveInDirection(bot_state_t* bs, vec3_t dir, float speed, int type);
 
 void InitCharacteristicSystem(void);
+void InitFuzzyWeights(void);

@@ -839,7 +839,15 @@ int			trap_PC_ExpectTokenType(int handle, int type, int subtype, pc_token_t* pc_
 int			trap_PC_ReadStructure(int handle, structdef_t* def, char* structure);
 int			trap_PC_CheckTokenString(int handle, char* string);
 
-static int			trap_PC_ExpectAnyToken(int handle, pc_token_t* pc_token) { return trap_PC_ReadToken(handle, pc_token); }
+static int			trap_PC_ExpectAnyToken(int handle, pc_token_t* pc_token) { 
+	int ret = trap_PC_ReadToken(handle, pc_token); 
+	if(ret == 0) {
+		G_Error("Missing token in file!\n");
+		return 0;
+	}
+
+	return ret;
+}
 
 // jmarshall
 qhandle_t trap_Nav_LoadMesh(const char* bspFileName);
