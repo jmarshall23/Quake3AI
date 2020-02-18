@@ -170,9 +170,9 @@ int BotAI(int client, float thinktime) {
 	BotAI_SelectWeapon(bs, bs->weaponnum);
 
 	//subtract the delta angles
-	for (j = 0; j < 3; j++) {
-		bs->viewangles[j] = AngleMod(bs->viewangles[j] - SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
-	}
+	//for (j = 0; j < 3; j++) {
+	//	bs->viewangles[j] = AngleMod(bs->viewangles[j] - SHORT2ANGLE(bs->cur_ps.delta_angles[j]));
+	//}
 	//everything was ok
 	return qtrue;
 }
