@@ -364,6 +364,9 @@ void BotDeathmatchAI(bot_state_t* bs, float thinktime) {
 		//do team AI
 	//	BotTeamAI(bs);
 	//}
+
+	gentity_t* entinfo = &g_entities[bs->client];
+	VectorCopy(entinfo->s.angles, bs->viewangles);
 	
 	// if the bot has no ai node
 	if (!bs->ainode) {

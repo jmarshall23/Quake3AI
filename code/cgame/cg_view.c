@@ -468,76 +468,60 @@ Fixed fov at intermissions, otherwise account for fov variable and zooms.
 */
 #define	WAVE_AMPLITUDE	1
 #define	WAVE_FREQUENCY	0.4
-
+// jmarshall: modified this bit of code for widescreen, 
+//			  code lifted from https://gist.githubusercontent.com/DanielGibson/5595590/raw/0403259a947575924e02ae191aff478532b0d3ad/gistfile1.cpp
 static int CG_CalcFov( void ) {
 	float	x;
-	float	phase;
-	float	v;
-	int		contents;
-	float	fov_x, fov_y;
-	float	zoomFov;
-	float	f;
-	int		inwater;
+	float	y;
+	float	ratio_x;
+	float	ratio_y;
+	float	fov_y;
+	float	fov_x;
 
-	if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
-		// if in intermission, use a fixed value
-		fov_x = 90;
-	} else {
-		// user selectable
-		if ( cgs.dmflags & DF_FIXED_FOV ) {
-			// dmflag to prevent wide fov for all clients
-			fov_x = 90;
-		} else {
-			fov_x = cg_fov.value;
-			if ( fov_x < 1 ) {
-				fov_x = 1;
-			} else if ( fov_x > 160 ) {
-				fov_x = 160;
-			}
-		}
+	float	base_fov = cg_fov.value;
 
-		// account for zooms
-		zoomFov = cg_zoomFov.value;
-		if ( zoomFov < 1 ) {
-			zoomFov = 1;
-		} else if ( zoomFov > 160 ) {
-			zoomFov = 160;
-		}
+	// first, calculate the vertical fov based on a 640x480 view
+	// XXX: will be positive because tan() is positive if the given value is positive as asserted above
+	x = 640.0f / tan(base_fov / 360.0f * M_PI);
+	y = atan2(480.0f, x); // XXX: == arctan(480/x) with x > 0 => will be > 0
+	fov_y = y * 360.0f / M_PI;
 
-		if ( cg.zoomed ) {
-			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-			if ( f > 1.0 ) {
-				fov_x = zoomFov;
-			} else {
-				fov_x = fov_x + f * ( zoomFov - fov_x );
-			}
-		} else {
-			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-			if ( f > 1.0 ) {
-				fov_x = fov_x;
-			} else {
-				fov_x = zoomFov + f * ( fov_x - zoomFov );
-			}
-		}
+	// FIXME: somehow, this is happening occasionally
+	assert(fov_y > 0); // XXX: this *really* shouldn't be able to happen
+	if (fov_y <= 0) {
+		CG_Error("idGameLocal::CalcFov: bad result");
 	}
 
-	x = cg.refdef.width / tan( fov_x / 360 * M_PI );
-	fov_y = atan2( cg.refdef.height, x );
-	fov_y = fov_y * 360 / M_PI;
+	ratio_x = 16.0f;
+	ratio_y = 9.0f;
+
+	assert(ratio_x > 0 && ratio_y > 0);
+
+	y = ratio_y / tan(fov_y / 360.0f * M_PI); // XXX: will be > 0, because ratio_y > 0 and fov_y > 0
+	// XXX: atan2(ratio_x, y) == arctan(ratio_x / y) => will be > 0 because ratio_x and y are > 0
+	fov_x = atan2(ratio_x, y) * 360.0f / M_PI; // XXX: thus fov_x will be > 0
+
+	if (fov_x < base_fov) {
+		fov_x = base_fov;
+		x = ratio_x / tan(fov_x / 360.0f * M_PI); // XXX: will be > 0 because everything is > 0
+		fov_y = atan2(ratio_y, x) * 360.0f / M_PI; // XXX: as x and ratio_y are > 0, this should be > 0
+	}
+
+	// FIXME: somehow, this is happening occasionally
+	assert((fov_x > 0) && (fov_y > 0)); // XXX: so this can't happen :-P
+	if ((fov_y <= 0) || (fov_x <= 0)) {
+		CG_Error("idGameLocal::CalcFov: bad result");
+	}
 
 	// warp if underwater
-	contents = CG_PointContents( cg.refdef.vieworg, -1 );
+	int contents = CG_PointContents( cg.refdef.vieworg, -1 );
+	qboolean inwater;
 	if ( contents & ( CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA ) ){
-		phase = cg.time / 1000.0 * WAVE_FREQUENCY * M_PI * 2;
-		v = WAVE_AMPLITUDE * sin( phase );
-		fov_x += v;
-		fov_y -= v;
 		inwater = qtrue;
 	}
 	else {
 		inwater = qfalse;
 	}
-
 
 	// set it
 	cg.refdef.fov_x = fov_x;

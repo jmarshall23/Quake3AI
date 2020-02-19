@@ -1483,6 +1483,10 @@ int CIN_PlayCinematic( const char *arg, int x, int y, int w, int h, int systemBi
 	char	name[MAX_OSPATH];
 	int		i;
 
+// jmarshall
+	return -1; // Temp disable cinematics
+// jmarshall end
+
 	if (strstr(arg, "/") == NULL && strstr(arg, "\\") == NULL) {
 		Com_sprintf (name, sizeof(name), "video/%s", arg);
 	} else {
