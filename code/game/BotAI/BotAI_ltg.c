@@ -78,13 +78,18 @@ int BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal) {
 	}
 
 	// Check to see that we can get to our goal, if not get a new goal.
-	if (bs->numMovementWaypoints > 0)
+	if (bs->numMovementWaypoints > 0 && (bs->currentWaypoint >= bs->numMovementWaypoints - 1))
 	{
 		trace_t tr;
 		gentity_t* ent = &g_entities[bs->client];
-		trap_Trace(&tr, ent->r.currentOrigin, NULL, NULL, bs->movement_waypoints[bs->currentWaypoint], bs->client, CONTENTS_SOLID);
+		vec3_t waypoint;
 
-		if(tr.fraction  < 0.9f)
+		VectorCopy(bs->movement_waypoints[bs->currentWaypoint], waypoint);
+		waypoint[2] += 5.0f;
+
+		trap_Trace(&tr, ent->r.currentOrigin, NULL, NULL, waypoint, bs->client, CONTENTS_SOLID);
+
+		if(tr.fraction  == 0.0f)
 		{
 			BotChooseWeapon(bs);
 			bs->ltg_time = 0;
