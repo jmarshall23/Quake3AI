@@ -662,6 +662,54 @@ int    LoadFile(const char *filename, void **bufferptr)
 }
 
 
+void ExtractFileName(const char* path, char* dest)
+{
+	const char* src;
+
+	src = path + strlen(path) - 1;
+
+	//
+	// back up until a \ or the start
+	//
+	while (src != path && *(src - 1) != '/'
+		&& *(src - 1) != '\\')
+		src--;
+
+	while (*src)
+	{
+		*dest++ = *src++;
+	}
+	*dest = 0;
+}
+
+/*
+==============
+LoadFileNoCrash
+
+returns -1 length if not present
+==============
+*/
+int    LoadFileNoCrash(const char* filename, void** bufferptr)
+{
+	FILE* f;
+	int    length;
+	void* buffer;
+
+	f = fopen(filename, "rb");
+	if (!f)
+		return -1;
+	length = Q_filelength(f);
+	buffer = malloc(length + 1);
+	memset(buffer, 0, length + 1);
+	((char*)buffer)[length] = 0;
+	SafeRead(f, buffer, length);
+	fclose(f);
+
+	*bufferptr = buffer;
+	return length;
+}
+
+
 /*
 ==============
 LoadFileBlock

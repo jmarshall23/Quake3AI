@@ -78,6 +78,8 @@ void	SafeRead(FILE *f, void *buffer, int count);
 void	SafeWrite(FILE *f, const void *buffer, int count);
 
 int		LoadFile(const char *filename, void **bufferptr);
+void ExtractFileName(const char* path, char* dest);
+int    LoadFileNoCrash(const char* filename, void** bufferptr);
 int   LoadFileBlock(const char *filename, void **bufferptr);
 int		TryLoadFile(const char *filename, void **bufferptr);
 void	SaveFile(const char *filename, const void *buffer, int count);

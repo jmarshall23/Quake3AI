@@ -1,0 +1,735 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4fe14b0a-d48a-42aa-8a67-74f5280be6f8}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\QE4 Files">
+      <UniqueIdentifier>{80d891ab-944a-47de-9282-1512634670f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Brush Primitives">
+      <UniqueIdentifier>{d82fb5b1-3107-4219-9459-8d9e8a54132c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\interfaces">
+      <UniqueIdentifier>{dd96f1b4-f571-433a-90a4-9f4492be58a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{2f75c6b7-b7ca-4429-a5a4-c4306fa416ee}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\interface headers">
+      <UniqueIdentifier>{83702062-c066-4210-9ab5-ff42f2cd4467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\internal interface headers">
+      <UniqueIdentifier>{9ea7dfcf-e305-4b9c-9fe9-ef756657d24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{fb10c0d6-a793-40cf-a63e-c51eb5e25df2}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Source Files\jpeg">
+      <UniqueIdentifier>{71658dc3-4224-4178-ba8e-2ba217775ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tool_lib">
+      <UniqueIdentifier>{56c29173-6e5c-421d-893f-67bc1eb00c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Splines">
+      <UniqueIdentifier>{6aaa5a74-24fe-4b9c-9536-78622bffac85}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BrushScript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BSInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cameratargetdlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CamWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CapDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cbrushstub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandsDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogTextures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogThick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dlgcamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityListDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FindTextureDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LstToolBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NameDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewProjDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchDensityDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlugIn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlugInManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PMESH.CPP">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrefsDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qgl_win.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="radbsp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RADEditWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Radiant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RotateDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScaleDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfaceDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TexEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TexWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Undo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveOpen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Winding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XYWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bmp.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="brush.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csg.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drag.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eclass.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lbmlib.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mathlib.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mru.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="points.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qe3.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="select.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vertsel.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="win_dlg.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="win_ent.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="win_main.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="win_qe3.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="z.cpp">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="brush_primit.cpp">
+      <Filter>Source Files\Brush Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="GLInterface.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IEpairs.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IShaders.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Messaging.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="PluginEntities.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectedFace.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="SurfacePlugin.cpp">
+      <Filter>Source Files\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="precompiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jcomapi.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdapimin.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdapistd.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdatasrc.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdcoefct.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdcolor.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jddctmgr.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdhuff.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdinput.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmainct.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmarker.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmaster.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdpostct.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdsample.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdtrans.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jerror.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jfdctflt.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jidctflt.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jmemmgr.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jmemnobs.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jpgload.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jutils.cpp">
+      <Filter>Source Files\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\aselib.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\bspfile.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\cmdlib.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\mutex.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\threads.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\pakstuff.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tool_lib\unzip.cpp">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\math_angles.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\math_matrix.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\math_quaternion.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\math_vector.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\q_parse.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\q_shared.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\splines.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+    <ClCompile Include="splines\util_str.cpp">
+      <Filter>Source Files\Splines</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Radiant.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="terrain.h">
+      <Filter>Source Files\QE4 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BSInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cameratargetdlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CamWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CapDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildFrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandsDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogTextures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogThick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgcamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityListDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FindTextureDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LstToolBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NameDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewProjDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatchDensityDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatchDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlugIn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlugInManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrefsDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qe3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QEDEFS.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qerplugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QERTYPES.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QFILES.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RADEditWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Radiant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RadiantDoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RadiantView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RotateDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SELECT.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SurfaceDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveOpen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XYWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IEpairs.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="igl.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="IMessaging.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="IPluginEntities.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ISelectedFace.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="IShaders.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="isurfaceplugin.h">
+      <Filter>Header Files\interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EpairsWrapper.h">
+      <Filter>Header Files\internal interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Messaging.h">
+      <Filter>Header Files\internal interface headers</Filter>
+    </ClInclude>
+    <ClInclude Include="precompiled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jchuff.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jconfig.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jdct.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jdhuff.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jerror.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jinclude.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jmemsys.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jmorecfg.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jpegint.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jversion.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jpeglib.h">
+      <Filter>Source Files\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\aselib.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\bspfile.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\cmdlib.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\l3dslib.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\mutex.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\polyset.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\threads.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\trilib.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\pakstuff.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tool_lib\unzip.h">
+      <Filter>Source Files\tool_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\math_angles.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\math_matrix.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\math_quaternion.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\math_vector.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\q_shared.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\splines.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\util_list.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+    <ClInclude Include="splines\util_str.h">
+      <Filter>Source Files\Splines</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bevel.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bmp00002.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\bmp00003.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\endcap.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ibevel.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\iendcap.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\logo_sm3dfx.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\q.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="q.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Radiant.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\RadiantDoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\shaderbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\shaderdoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="RES\shaderframe.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\toolbar2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\viewdefa.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\viewoppo.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Radiant.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\external\jpeg6\jpeg6.vcproj">
+      <Filter>Source Files\jpeg</Filter>
+    </None>
+    <None Include="..\external\jpeg6\README">
+      <Filter>Source Files\jpeg</Filter>
+    </None>
+  </ItemGroup>
+</Project>
