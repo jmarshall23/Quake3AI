@@ -419,18 +419,20 @@ void BotAimAtEnemy(bot_state_t* bs) {
 					//if the weapon is ready to fire
 					bs->cur_ps.weaponstate == WEAPON_READY) {
 					//aas_clientmove_t move;
-					//vec3_t origin;
+					vec3_t origin;
 					//
-					//VectorSubtract(entinfo.origin, bs->origin, dir);
+					VectorSubtract(entinfo->r.currentOrigin, bs->origin, dir);
+					
 					////distance towards the enemy
 					//dist = VectorLength(dir);
 					////direction the enemy is moving in
-					//VectorSubtract(entinfo.origin, entinfo.lastvisorigin, dir);
+					VectorSubtract(entinfo->r.currentOrigin, bs->last_enemy_visible_position, dir);
 					////
-					//VectorScale(dir, 1 / entinfo.update_time, dir);
+					//VectorScale(dir, 1 / entinfo->update_time, dir);
 					////
-					//VectorCopy(entinfo.origin, origin);
+					//VectorCopy(entinfo->origin, origin);
 					//origin[2] += 1;
+
 					////
 					//VectorClear(cmdmove);
 					////AAS_ClearShownDebugLines();
@@ -442,7 +444,7 @@ void BotAimAtEnemy(bot_state_t* bs) {
 					//BotAI_Print(PRT_MESSAGE, "%1.1f predicted speed = %f, frames = %f\n", FloatTime(), VectorLength(dir), dist * 10 / wi.speed);
 					
 					bot_goal_t goal;
-					VectorCopy(entinfo->r.currentOrigin, goal.origin);
+					VectorMA(entinfo->r.currentOrigin, 30, dir, goal.origin);
 					BotMoveToGoal(bs, &goal);
 				}
 				//if not that skilled do linear prediction
@@ -452,7 +454,7 @@ void BotAimAtEnemy(bot_state_t* bs) {
 					////distance towards the enemy
 					//dist = VectorLength(dir);
 					////direction the enemy is moving in
-					////VectorSubtract(entinfo.origin, entinfo.lastvisorigin, dir);
+					VectorSubtract(entinfo->r.currentOrigin, bs->last_enemy_visible_position, dir);
 					//dir[2] = 0;
 					////
 					//speed = VectorNormalize(dir) / entinfo.update_time;
@@ -460,7 +462,7 @@ void BotAimAtEnemy(bot_state_t* bs) {
 					////best spot to aim at
 					//VectorMA(entinfo.origin, (dist / wi.speed) * speed, dir, bestorigin);
 					bot_goal_t goal;
-					VectorCopy(entinfo->r.currentOrigin, goal.origin);
+					VectorMA(entinfo->r.currentOrigin, 30, dir, goal.origin);
 					BotMoveToGoal(bs, &goal);
 // jmarshall end
 				}

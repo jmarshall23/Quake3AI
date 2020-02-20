@@ -104,13 +104,12 @@ int BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal) {
 		//choose a new goal
 		//BotAI_Print(PRT_MESSAGE, "%6.1f client %d: BotChooseLTGItem\n", FloatTime(), bs->client);
 		if (BotChooseLTGItem(bs->gs, bs->origin, bs->inventory, tfl)) {
-			/*
 			char buf[128];
 			//get the goal at the top of the stack
-			trap_BotGetTopGoal(bs->gs, goal);
-			trap_BotGoalName(goal->number, buf, sizeof(buf));
-			BotAI_Print(PRT_MESSAGE, "%1.1f: new long term goal %s\n", FloatTime(), buf);
-			*/
+			BotGetTopGoal(bs->gs, goal);
+			BotGoalName(goal->number, buf, sizeof(buf));
+			G_Printf("%1.1f: new long term goal %s\n", FloatTime(), buf);
+
 			bs->ltg_time = FloatTime() + 20;
 		}
 		else {//the bot gets sorta stuck with all the avoid timings, shouldn't happen though
