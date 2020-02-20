@@ -21,7 +21,6 @@ qboolean	com_eof;
 qboolean		archive;
 char			archivedir[1024];
 
-
 /*
 ===================
 ExpandWildcards
@@ -859,6 +858,7 @@ void ExtractFileExtension(const char *path, char *dest)
 	strcpy(dest, src);
 }
 
+#ifndef Q3MAP
 int ParseHex(const char* hex);
 
 int ParseNum(const char *str)
@@ -869,6 +869,7 @@ int ParseNum(const char *str)
 		return ParseHex(str + 2);
 	return atol(str);
 }
+#endif
 
 
 

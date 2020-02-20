@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\tool_lib\aselib.cpp" />
+    <ClCompile Include="brush.cpp" />
+    <ClCompile Include="brush_primit.cpp" />
+    <ClCompile Include="bsp.cpp" />
+    <ClCompile Include="facebsp.cpp" />
+    <ClCompile Include="fog.cpp" />
+    <ClCompile Include="gldraw.cpp" />
+    <ClCompile Include="glfile.cpp" />
+    <ClCompile Include="..\tool_lib\imagelib.cpp" />
+    <ClCompile Include="leakfile.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="light_trace.cpp" />
+    <ClCompile Include="lightmaps.cpp" />
+    <ClCompile Include="lightv.cpp" />
+    <ClCompile Include="map.cpp" />
+    <ClCompile Include="..\tool_lib\mathlib.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="misc_model.cpp" />
+    <ClCompile Include="..\tool_lib\mutex.cpp" />
+    <ClCompile Include="patch.cpp" />
+    <ClCompile Include="..\tool_lib\polylib.cpp" />
+    <ClCompile Include="portals.cpp" />
+    <ClCompile Include="prtfile.cpp" />
+    <ClCompile Include="..\tool_lib\scriplib.cpp" />
+    <ClCompile Include="shaders.cpp" />
+    <ClCompile Include="..\external\jpeg6\jcomapi.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdapimin.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdapistd.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdatasrc.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdcoefct.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdcolor.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jddctmgr.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdhuff.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdinput.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmainct.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmarker.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdmaster.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdpostct.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdsample.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jdtrans.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jerror.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jfdctflt.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jidctflt.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jmemmgr.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jmemnobs.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jpgload.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\jpeg6\jutils.cpp">
+      <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="soundv.cpp" />
+    <ClCompile Include="surface.cpp" />
+    <ClCompile Include="terrain.cpp" />
+    <ClCompile Include="..\tool_lib\threads.cpp" />
+    <ClCompile Include="tjunction.cpp" />
+    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="vis.cpp" />
+    <ClCompile Include="visflow.cpp" />
+    <ClCompile Include="writebsp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="light.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="qbsp.h" />
+    <ClInclude Include="shaders.h" />
+    <ClInclude Include="vis.h" />
+    <ClInclude Include="..\external\jpeg6\jchuff.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jconfig.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jdct.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jdhuff.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jerror.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jinclude.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jmemsys.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jmorecfg.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jpegint.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jversion.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\jpeg6\jpeglib.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="jpeg">
+      <UniqueIdentifier>{8201013c-55d2-48f0-be7d-8cace8003393}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\external\jpeg6\jpeg6.vcproj">
+      <Filter>jpeg</Filter>
+    </None>
+    <None Include="..\external\jpeg6\README">
+      <Filter>jpeg</Filter>
+    </None>
+  </ItemGroup>
+</Project>
