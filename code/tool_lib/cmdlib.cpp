@@ -602,8 +602,10 @@ FILE *SafeOpenRead(const char *filename)
 
 	f = fopen(filename, "rb");
 
+#ifndef RADIANT
 	if (!f)
 		Error("Error opening %s: %s", filename, strerror(errno));
+#endif
 
 	return f;
 }
@@ -651,6 +653,10 @@ int    LoadFile(const char *filename, void **bufferptr)
 	void    *buffer;
 
 	f = SafeOpenRead(filename);
+#ifdef RADIANT
+	if (f <= 0)
+		return  -1;
+#endif
 	length = Q_filelength(f);
 	buffer = malloc(length + 1);
 	((char *)buffer)[length] = 0;

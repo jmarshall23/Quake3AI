@@ -1,10 +1,10 @@
 {
 "brush_primit" "0"
-"basepath" "__QERPATH..\main"
+"basepath" "__QERPATH..\baseq3"
 "rshcmd" ""
-"remotebasepath" "__QERPATH..\msin"
+"remotebasepath" "__QERPATH..\baseq3"
 "entitypath" "__QERPATH\*.def"
-"texturepath" "__QERPATH..\main\textures"
+"texturepath" "__QERPATH..\baseq3\textures"
 "autosave" "c:\autosave.map"
 "bsp_Relight" "! __QERPATH\q3map -onlyents $ && ! __QERPATH\q3map -light $"
 "bsp_Relight_Extra" "! __QERPATH\q3map -onlyents $ && ! __QERPATH\q3map -light -extra $"
