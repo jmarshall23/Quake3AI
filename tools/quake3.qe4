@@ -2,6 +2,7 @@
 "brush_primit" "0"
 "basepath" "__QERPATH..\baseq3"
 "rshcmd" ""
+"mapspath2" "__QERPATH..\main"
 "remotebasepath" "__QERPATH..\baseq3"
 "entitypath" "__QERPATH\*.def"
 "texturepath" "__QERPATH..\baseq3\textures"

@@ -208,7 +208,8 @@ const char *g_pPathFixups[]=
   "entitypath",
   "texturepath",
   "autosave",
-  "mapspath"
+  "mapspath",
+  "mapspath2",
 };
 
 const int g_nPathFixupCount = sizeof(g_pPathFixups) / sizeof(const char*);

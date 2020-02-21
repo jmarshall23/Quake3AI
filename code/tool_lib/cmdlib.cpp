@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <direct.h>
 #include <windows.h>
+#include <string>
 
 
 #define	BASEDIRNAME	"quake"		// assumed to have a 2 or 3 following
@@ -590,10 +591,16 @@ FILE *SafeOpenWrite(const char *filename)
 
 	f = fopen(filename, "wb");
 
-	if (!f)
-		Error("Error opening %s: %s", filename, strerror(errno));
-
 	return f;
+}
+
+
+bool replace(std::string& str, const std::string& from, const std::string& to) {
+	size_t start_pos = str.find(from);
+	if (start_pos == std::string::npos)
+		return false;
+	str.replace(start_pos, from.length(), to);
+	return true;
 }
 
 FILE *SafeOpenRead(const char *filename)
@@ -601,11 +608,12 @@ FILE *SafeOpenRead(const char *filename)
 	FILE	*f;
 
 	f = fopen(filename, "rb");
-
-#ifndef RADIANT
-	if (!f)
-		Error("Error opening %s: %s", filename, strerror(errno));
-#endif
+	if(f == NULL)
+	{
+		std::string newPath = filename;
+		replace(newPath, "main", "baseq3");
+		f = fopen(newPath.c_str(), "rb");
+	}
 
 	return f;
 }
@@ -653,12 +661,11 @@ int    LoadFile(const char *filename, void **bufferptr)
 	void    *buffer;
 
 	f = SafeOpenRead(filename);
-#ifdef RADIANT
 	if (f <= 0)
 		return  -1;
-#endif
+
 	length = Q_filelength(f);
-	buffer = malloc(length + 1);
+	buffer = malloc(length * 2 + 1);
 	((char *)buffer)[length] = 0;
 	SafeRead(f, buffer, length);
 	fclose(f);

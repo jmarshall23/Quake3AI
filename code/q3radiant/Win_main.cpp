@@ -81,22 +81,23 @@ void QE_ExpandBspString (char *bspaction, char *out, char *mapname, bool useTemp
 	{
 		ExtractFileName (mapname, base);
 	}
-
-  if (useTemps) {
-    CString str;
-    CString strExt = "map";
-    if ( strstr(mapname, ".reg") ) {
-      strExt = "reg";
-    }
-    str.Format("%s/maps/%i.%s", ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), ::GetTickCount(), strExt);
-    CopyFile(mapname, str, FALSE);
-	  sprintf (src, "-tempname %s %s/maps/%s", str, ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), base);
-  } else {
-	  sprintf (src, "%s/maps/%s", ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), base);
-  }
+// jmarshall
+ // if (useTemps) {
+ //   CString str;
+ //   CString strExt = "map";
+ //   if ( strstr(mapname, ".reg") ) {
+ //     strExt = "reg";
+ //   }
+ //   str.Format("%s/maps/%i.%s", ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), ::GetTickCount(), strExt);
+ //   CopyFile(mapname, str, FALSE);
+//	  sprintf (src, "-tempname %s %s/maps/%s", str, ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), base);
+ // } else {
+//	  sprintf (src, "%s/maps/%s", ValueForKey(g_qeglobals.d_project_entity, "remotebasepath"), base);
+ // }
+    sprintf(src, "%s/maps/%s", ValueForKey(g_qeglobals.d_project_entity, "mapspath2"), base);
 	strcpy (rsh, ValueForKey(g_qeglobals.d_project_entity, "rshcmd"));
-
-  QE_ConvertDOSToUnixName(src, src);
+// jmarshall end
+  QE_ConvertDOSToUnixName(base, base);
 
 	in = ValueForKey( g_qeglobals.d_project_entity, bspaction );
 	while (*in)
