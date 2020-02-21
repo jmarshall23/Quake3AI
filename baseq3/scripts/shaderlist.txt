@@ -1,0 +1,25 @@
+// this file lists all the separate shader files
+base_button
+base_light
+base_trim
+base_floor
+base_wall
+base_object
+base_support
+common
+//eerie
+gfx
+gothic_floor
+liquid
+menu
+models
+sky
+organics
+gothic_block
+gothic_light
+sfx
+gothic_trim
+gothic_light
+ctf
+skin
+museum
