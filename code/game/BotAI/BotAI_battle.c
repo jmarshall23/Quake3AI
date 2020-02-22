@@ -634,6 +634,19 @@ int AINode_Battle_Chase(bot_state_t* bs)
 	VectorSet(goal.maxs, 8, 8, 8);
 
 // jmarshall - goal origin is last visible position
+	{
+		// Do a trace between the last_enemy_visible_position and the goal origin, 
+		// if for some reason we don't have line of sight to it, switch to LTG.
+		trace_t trace;
+
+		trap_Trace(&trace, bs->last_enemy_visible_position, NULL, NULL, g_entities[bs->client].r.currentOrigin, 0, CONTENTS_SOLID);
+
+		if (trace.fraction <= 0.9f)
+		{
+			AIEnter_Seek_LTG(bs, "can't see last enemy position");
+			return qfalse;
+		}
+	}
 	VectorCopy(bs->last_enemy_visible_position, goal.origin);
 // jmarshall end
 
