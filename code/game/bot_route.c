@@ -118,6 +118,32 @@ qboolean BotFindRouteToGoal(bot_state_t* bs, bot_goal_t *goal) {
 
 /*
 =======================
+BotNearGoal
+=======================
+*/
+qboolean BotNearGoal(vec3_t p1, vec3_t p2)
+{
+	vec3_t p1_z, p2_z;
+
+	p1_z[0] = p1[0];
+	p1_z[1] = p1[1];
+	p1_z[2] = 0;
+
+	p2_z[0] = p2[0];
+	p2_z[1] = p2[1];
+	p2_z[2] = 0;
+
+	float distToGoal = VectorDistanceSquared(p1_z, p2_z);
+	distToGoal = sqrt(distToGoal);
+	if (distToGoal <= 50) {
+		return qtrue;
+	}
+
+	return qfalse;
+}
+
+/*
+=======================
 BotMoveToGoal
 =======================
 */
@@ -138,47 +164,23 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 		bs->stuck_time = 0;
 	}
 
-	if(bs->stuck_time > 30) {
-		if (VectorLength(bs->very_short_term_origin) <= 0)
-		{
-			trap_Nav_GetRandomPointNearPosition(ent->r.currentOrigin, bs->very_short_term_origin, 50.0f);			
-		}
 
-		float distToGoal = VectorDistanceSquared(move_goal, ent->r.currentOrigin);
-		distToGoal = sqrt(distToGoal);
-		if(distToGoal > 60.0f) {
-			VectorClear(bs->very_short_term_origin);
-		}
-		else
-		{
-			if (distToGoal <= 10) {
-				VectorClear(bs->very_short_term_origin);
-			}
-		}
+	VectorClear(bs->very_short_term_origin);
+	VectorCopy(ent->r.currentOrigin, bs->last_origin);
 
-		VectorCopy(bs->very_short_term_origin, move_goal);
+	if (!BotFindRouteToGoal(bs, goal))
+		return;
+
+	if (BotNearGoal(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin)) {
+		bs->currentWaypoint++;
 	}
-	else 
-	{
-		VectorClear(bs->very_short_term_origin);
-		VectorCopy(ent->r.currentOrigin, bs->last_origin);
 
-		if (!BotFindRouteToGoal(bs, goal))
-			return;
+	BotDrawRoute(bs);
 
-		float distToGoal = VectorDistanceSquared(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin);
-		distToGoal = sqrt(distToGoal);
-		if (distToGoal <= 50) {
-			bs->currentWaypoint++;
-		}
+	if (bs->currentWaypoint >= bs->numMovementWaypoints)
+		return;
 
-		BotDrawRoute(bs);
-
-		if (bs->currentWaypoint >= bs->numMovementWaypoints)
-			return;
-
-		VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
-	}
+	VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
 
 	VectorSubtract(move_goal, ent->r.currentOrigin, bi->dir);
 	VectorNormalize(bi->dir);
