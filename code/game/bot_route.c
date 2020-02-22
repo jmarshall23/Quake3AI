@@ -171,8 +171,11 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 	if (!BotFindRouteToGoal(bs, goal))
 		return;
 
-	if (BotNearGoal(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin)) {
-		bs->currentWaypoint++;
+	if (bs->currentWaypoint < bs->numMovementWaypoints)
+	{
+		if (BotNearGoal(bs->movement_waypoints[bs->currentWaypoint], ent->r.currentOrigin)) {
+			bs->currentWaypoint++;
+		}
 	}
 
 	BotDrawRoute(bs);
