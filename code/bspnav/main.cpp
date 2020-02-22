@@ -225,6 +225,84 @@ void WriteNavFile(const char* name, rcPolyMesh* mesh, rcPolyMeshDetail* detailMe
 	};
 }
 
+// begin third party
+// http://graphics.cs.brown.edu/games/quake/quake3.html
+class Bezier {
+public:
+	int                 level;
+	std::vector<drawVert_t>       vertex;
+	std::vector<unsigned int>       indexes;
+	std::vector<int>        trianglesPerRow;
+	std::vector<unsigned int*>      rowIndexes;
+
+	drawVert_t                 controls[9];
+
+	void tessellate(int L) {
+		level = L;
+
+		// The number of vertices along a side is 1 + num edges
+		const int L1 = L + 1;
+
+		vertex.resize(L1 * L1);
+
+		// Compute the vertices
+		int i;
+
+		for (i = 0; i <= L; ++i) {
+			double a = (double)i / L;
+			double b = 1 - a;
+
+			vertex[i].xyz[0] = controls[0].xyz[0] * (b * b) + controls[3].xyz[0] * (2 * b * a) + controls[6].xyz[0] * (a * a);
+			vertex[i].xyz[1] = controls[0].xyz[1] * (b * b) + controls[3].xyz[1] * (2 * b * a) + controls[6].xyz[1] * (a * a);
+			vertex[i].xyz[2] = controls[0].xyz[2] * (b * b) + controls[3].xyz[2] * (2 * b * a) + controls[6].xyz[2] * (a * a);
+		}
+
+		for (i = 1; i <= L; ++i) {
+			double a = (double)i / L;
+			double b = 1.0 - a;
+
+			drawVert_t temp[3];
+
+			int j;
+			for (j = 0; j < 3; ++j) {
+				int k = 3 * j;
+				temp[j].xyz[0] = controls[k + 0].xyz[0] * (b * b) + controls[k + 1].xyz[0] * (2 * b * a) + controls[k + 2].xyz[0] * (a * a);
+				temp[j].xyz[1] = controls[k + 0].xyz[1] * (b * b) + controls[k + 1].xyz[1] * (2 * b * a) + controls[k + 2].xyz[1] * (a * a);
+				temp[j].xyz[2] = controls[k + 0].xyz[2] * (b * b) + controls[k + 1].xyz[2] * (2 * b * a) + controls[k + 2].xyz[2] * (a * a);
+			}
+
+			for (j = 0; j <= L; ++j) {
+				double a = (double)j / L;
+				double b = 1.0 - a;
+
+				vertex[i * L1 + j].xyz[0] = temp[0].xyz[0] * (b * b) + temp[1].xyz[0] * (2 * b * a) + temp[2].xyz[0] * (a * a);
+				vertex[i * L1 + j].xyz[1] = temp[0].xyz[1] * (b * b) + temp[1].xyz[1] * (2 * b * a) + temp[2].xyz[1] * (a * a);
+				vertex[i * L1 + j].xyz[2] = temp[0].xyz[2] * (b * b) + temp[1].xyz[2] * (2 * b * a) + temp[2].xyz[2] * (a * a);
+			}
+		}
+
+
+		// Compute the indices
+		int row;
+		indexes.resize(L * (L + 1) * 2);
+
+		for (row = 0; row < L; ++row) {
+			for (int col = 0; col <= L; ++col) {
+				indexes[(row * (L + 1) + col) * 2 + 1] = row * L1 + col;
+				indexes[(row * (L + 1) + col) * 2] = (row + 1) * L1 + col;
+			}
+		}
+
+		trianglesPerRow.resize(L);
+		rowIndexes.resize(L);
+		for (row = 0; row < L; ++row) {
+			trianglesPerRow[row] = 2 * L1;
+			rowIndexes[row] = &indexes[row * 2 * L1];
+		}
+	}
+};
+// end third party
+
 /*
 ============
 BuildMapGeometry
@@ -234,16 +312,62 @@ void BuildMapGeometry(void) {
 	for (int i = 0; i < numDrawSurfaces; i++)
 	{
 		dsurface_t* surface = &drawSurfaces[i];
+		dshader_t* shader = &dshaders[surface->shaderNum];
 
-		if (surface->surfaceType == MST_PATCH || surface->surfaceType == MST_FLARE)
+		if (surface->surfaceType == MST_FLARE)
 		{
 			continue;
 		}
 
-		for (int d = 0; d < surface->numIndexes; d++)
+		if(surface->surfaceType == MST_PATCH)
 		{
-			int vertexId = surface->firstVert + drawIndexes[surface->firstIndex + d];
-			mapGeometry.push_back(drawVerts[vertexId]);
+			Bezier bezier;
+			
+			// https://www.gamedev.net/forums/topic/663969-quake-3-bsp-rendering-questions-on-bezier-patches/
+			// The amount of increments we need to make for each dimension, so we have the (potentially) shared points between patches
+			int stepWidth = (surface->patchWidth - 1) / 2;
+			int stepHeight = (surface->patchHeight - 1) / 2;
+			
+			int numControlPoints = 0;
+
+			for (int i = 0; i < surface->patchWidth; i += stepWidth)
+			{
+				for (int j = 0; j < surface->patchHeight; j += stepHeight)
+				{
+					int vertexId = surface->firstVert + j * surface->patchWidth + i;
+					bezier.controls[numControlPoints].xyz[0] = drawVerts[vertexId].xyz[0];
+					bezier.controls[numControlPoints].xyz[1] = drawVerts[vertexId].xyz[1];
+					bezier.controls[numControlPoints].xyz[2] = drawVerts[vertexId].xyz[2];
+
+					numControlPoints++;
+				}
+			}
+
+			bezier.tessellate(5);
+			
+			for(int d = 0; d < bezier.indexes.size() - 2; d++)
+			{
+				if(d & 1)
+				{
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d]]);
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d+1]]);
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d+2]]);
+				}
+				else
+				{
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d]]);
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d + 2]]);
+					mapGeometry.push_back(bezier.vertex[bezier.indexes[d + 1]]);
+				}
+			}
+		}
+		else
+		{
+			for (int d = 0; d < surface->numIndexes; d++)
+			{
+				int vertexId = surface->firstVert + drawIndexes[surface->firstIndex + d];
+				mapGeometry.push_back(drawVerts[vertexId]);
+			}
 		}
 	}
 
