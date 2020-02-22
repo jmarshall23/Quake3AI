@@ -164,6 +164,13 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 		bs->stuck_time = 0;
 	}
 
+	if(bs->stuck_time > 10)
+	{
+		bs->stuck_time = 0;
+		bs->currentMoveGoal[0] = 0;
+		bs->currentMoveGoal[1] = 0;
+		bs->currentMoveGoal[2] = 0;
+	}
 
 	VectorClear(bs->very_short_term_origin);
 	VectorCopy(ent->r.currentOrigin, bs->last_origin);
