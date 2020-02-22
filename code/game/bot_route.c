@@ -177,9 +177,6 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 
 	BotDrawRoute(bs);
 
-	if (bs->currentWaypoint >= bs->numMovementWaypoints)
-		return;
-
 	VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
 
 	VectorSubtract(move_goal, ent->r.currentOrigin, bi->dir);
