@@ -89,7 +89,7 @@ int BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal) {
 
 		trap_Trace(&tr, ent->r.currentOrigin, NULL, NULL, waypoint, bs->client, CONTENTS_SOLID);
 
-		if(tr.fraction  <= 0.1f)
+		if(tr.fraction  <= 0.7f)
 		{
 			BotChooseWeapon(bs);
 			bs->ltg_time = 0;
