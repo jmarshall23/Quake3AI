@@ -173,8 +173,9 @@ void BotCheckAttack(bot_state_t* bs) {
 	//check fire throttle characteristic
 	if (bs->firethrottlewait_time > FloatTime()) 
 		return;
-
-	firethrottle = Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1);
+// jmarshall - this wasn't original behaivor, but multiplying it by 40 feels better for gameplay
+	firethrottle = Characteristic_BFloat(bs->character, CHARACTERISTIC_FIRETHROTTLE, 0, 1) * 40.0f;
+// jmarshall end
 	if (bs->firethrottleshoot_time < FloatTime()) {
 		if (random() > firethrottle) {
 			bs->firethrottlewait_time = FloatTime() + firethrottle;
@@ -420,13 +421,17 @@ void BotAimAtEnemy(bot_state_t* bs) {
 					bs->cur_ps.weaponstate == WEAPON_READY) {
 					//aas_clientmove_t move;
 					vec3_t origin;
+					vec3_t last_enemy_visible_position;
+					VectorCopy(last_enemy_visible_position, bs->last_enemy_visible_position);
+					last_enemy_visible_position[2] += 20.0f;
+
 					//
 					VectorSubtract(entinfo->r.currentOrigin, bs->origin, dir);
 					
 					////distance towards the enemy
 					//dist = VectorLength(dir);
 					////direction the enemy is moving in
-					VectorSubtract(entinfo->r.currentOrigin, bs->last_enemy_visible_position, dir);
+					VectorSubtract(entinfo->r.currentOrigin, last_enemy_visible_position, dir);
 					////
 					//VectorScale(dir, 1 / entinfo->update_time, dir);
 					////
@@ -450,11 +455,15 @@ void BotAimAtEnemy(bot_state_t* bs) {
 				//if not that skilled do linear prediction
 				else if (aim_skill > 0.4) {
 // jmarshall - fix linear prediction.
+					vec3_t last_enemy_visible_position;
+					VectorCopy(last_enemy_visible_position, bs->last_enemy_visible_position);
+					last_enemy_visible_position[2] += 20.0f;
+
 					//VectorSubtract(entinfo->r.currentOrigin, bs->origin, dir);
 					////distance towards the enemy
 					//dist = VectorLength(dir);
 					////direction the enemy is moving in
-					VectorSubtract(entinfo->r.currentOrigin, bs->last_enemy_visible_position, dir);
+					VectorSubtract(entinfo->r.currentOrigin, last_enemy_visible_position, dir);
 					//dir[2] = 0;
 					////
 					//speed = VectorNormalize(dir) / entinfo.update_time;
