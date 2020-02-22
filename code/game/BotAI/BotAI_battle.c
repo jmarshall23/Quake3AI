@@ -788,6 +788,13 @@ int AINode_Battle_Retreat(bot_state_t* bs) {
 		G_Printf("found new better enemy\n");
 	}
 
+// jmarshall: if we are retreating try to jump around, become harder to hit. 
+	if (FRandRange(0.0, 4.0) <= 2.0)
+	{
+		bs->input.actionflags |= ACTION_JUMP;
+	}
+// jmarshall end
+
 	//
 	//bs->tfl = TFL_DEFAULT;
 	//if (bot_grapple.integer) bs->tfl |= TFL_GRAPPLEHOOK;
