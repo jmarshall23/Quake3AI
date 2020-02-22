@@ -17,7 +17,7 @@ std::vector<drawVert_t> mapGeometry;
 const float m_cellSize = 2.0f;
 const float m_cellHeight = 5.0f;
 const float m_agentHeight = 2.0f;
-const float m_agentRadius = 20.6f;
+const float m_agentRadius = 30.6f;
 const float m_agentMaxClimb = 20.9f;
 const float m_agentMaxSlope = 45.0f;
 const float m_regionMinSize = 8.0f;
