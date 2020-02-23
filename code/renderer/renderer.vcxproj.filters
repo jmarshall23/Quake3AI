@@ -312,6 +312,9 @@
     <ClCompile Include="..\ft2\ttsbit.c">
       <Filter>FreeType2</Filter>
     </ClCompile>
+    <ClCompile Include="tr_decals.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\qcommon\cm_public.h">

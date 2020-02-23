@@ -84,6 +84,9 @@ typedef struct {
 	void (*AddCoronaToScene)(const vec3_t org, float r, float g, float b, float scale, int id, int flags);
 // jmarshall end
 
+	void (*ProjectDecal)(qhandle_t hShader, int numPoints, vec3_t* points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime);
+	void (*ClearDecals)(void);
+
 	void	(*BeginFrame)( stereoFrame_t stereoFrame );
 
 	// if the pointers are not NULL, timing info will be returned

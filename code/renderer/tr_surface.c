@@ -1199,6 +1199,36 @@ void RB_SurfaceDisplayList( srfDisplayList_t *surf ) {
 void RB_SurfaceSkip( void *surf ) {
 }
 
+// ydnar: decal surfaces
+void RB_SurfaceDecal(srfDecal_t* srf) {
+	int i;
+	int numv;
+
+	RB_CHECKOVERFLOW(srf->numVerts, 3 * (srf->numVerts - 2));
+
+	// fan triangles into the tess array
+	numv = tess.numVertexes;
+	for (i = 0; i < srf->numVerts; i++)
+	{
+		VectorCopy(srf->verts[i].xyz, tess.xyz[numv]);
+		tess.texCoords[numv][0][0] = srf->verts[i].st[0];
+		tess.texCoords[numv][0][1] = srf->verts[i].st[1];
+		*(int*)&tess.vertexColors[numv] = *(int*)srf->verts[i].modulate;
+
+		numv++;
+	}
+
+	/* generate fan indexes into the tess array */
+	for (i = 0; i < srf->numVerts - 2; i++)
+	{
+		tess.indexes[tess.numIndexes + 0] = tess.numVertexes;
+		tess.indexes[tess.numIndexes + 1] = tess.numVertexes + i + 1;
+		tess.indexes[tess.numIndexes + 2] = tess.numVertexes + i + 2;
+		tess.numIndexes += 3;
+	}
+
+	tess.numVertexes = numv;
+}
 
 void (*rb_surfaceTable[SF_NUM_SURFACE_TYPES])( void *) = {
 	(void(*)(void*))RB_SurfaceBad,			// SF_BAD, 
@@ -1211,5 +1241,6 @@ void (*rb_surfaceTable[SF_NUM_SURFACE_TYPES])( void *) = {
 	(void(*)(void*))RB_SurfaceAnim,			// SF_MD4,
 	(void(*)(void*))RB_SurfaceFlare,		// SF_FLARE,
 	(void(*)(void*))RB_SurfaceEntity,		// SF_ENTITY
-	(void(*)(void*))RB_SurfaceDisplayList	// SF_DISPLAY_LIST
+	(void(*)(void*))RB_SurfaceDisplayList,	// SF_DISPLAY_LIST
+	(void(*) (void*))RB_SurfaceDecal,        // SF_DECAL
 };

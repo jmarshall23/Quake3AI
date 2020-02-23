@@ -436,6 +436,21 @@ typedef struct shaderState_s {
   shader_t *shader;
 } shaderState_t;
 
+typedef struct decalProjector_s
+{
+	shader_t* shader;
+	byte color[4];
+	int fadeStartTime, fadeEndTime;
+	vec3_t mins, maxs;
+	vec3_t center;
+	float radius, radius2;
+	qboolean omnidirectional;
+	int numPlanes;                  // either 5 or 6, for quad or triangle projectors
+	vec4_t planes[6];
+	vec4_t texMat[3][2];
+}
+decalProjector_t;
+
 
 // trRefdef_t holds everything that comes in refdef_t,
 // as well as the locally generated scene information
@@ -470,6 +485,13 @@ typedef struct {
 
 	int			numDrawSurfs;
 	struct drawSurf_s	*drawSurfs;
+
+	int decalBits;                  // ydnar: optimization
+	int numDecalProjectors;
+	decalProjector_t* decalProjectors;
+
+	int numDecals;
+	struct srfDecal_s* decals;
 
 // jmarshall
 	int num_coronas;
@@ -519,9 +541,9 @@ typedef struct {
 	int			viewportX, viewportY, viewportWidth, viewportHeight;
 	float		fovX, fovY;
 	float		projectionMatrix[16];
-	cplane_t	frustum[4];
-	vec3_t		visBounds[2];
-	float		zFar;
+	cplane_t frustum[5];            // ydnar: added farplane
+	vec3_t visBounds[2];
+	float zFar;
 } viewParms_t;
 
 
@@ -546,6 +568,7 @@ typedef enum {
 	SF_FLARE,
 	SF_ENTITY,				// beams, rails, lightning, etc that can be determined by entity
 	SF_DISPLAY_LIST,
+	SF_DECAL,               // ydnar: decal surfaces
 
 	SF_NUM_SURFACE_TYPES,
 	SF_MAX = 0x7fffffff			// ensures that sizeof( surfaceType_t ) == sizeof( int )
@@ -571,6 +594,34 @@ typedef struct srfPoly_s {
 	polyVert_t		*verts;
 } srfPoly_t;
 
+// ydnar: decals
+#define MAX_DECAL_VERTS         10  // worst case is triangle clipped by 6 planes
+#define MAX_WORLD_DECALS        1024
+#define MAX_ENTITY_DECALS       128
+typedef struct srfDecal_s
+{
+	surfaceType_t surfaceType;
+	int numVerts;
+	polyVert_t verts[MAX_DECAL_VERTS];
+}
+srfDecal_t;
+
+// ydnar: normal map drawsurfaces must match this header
+typedef struct srfGeneric_s
+{
+	surfaceType_t surfaceType;
+
+	// culling information
+	vec3_t bounds[2];
+	vec3_t origin;
+	float radius;
+	cplane_t plane;
+
+	// dynamic lighting information
+	int dlightBits[SMP_FRAMES];
+}
+srfGeneric_t;
+
 typedef struct srfDisplayList_s {
 	surfaceType_t	surfaceType;
 	int				listNum;
@@ -585,10 +636,16 @@ typedef struct srfFlare_s {
 } srfFlare_t;
 
 typedef struct srfGridMesh_s {
-	surfaceType_t	surfaceType;
+	surfaceType_t surfaceType;
+
+	// culling information
+	vec3_t bounds[2];
+	vec3_t origin;
+	float radius;
+	cplane_t plane;
 
 	// dynamic lighting information
-	int				dlightBits[SMP_FRAMES];
+	int dlightBits[SMP_FRAMES];
 
 	// culling information
 	vec3_t			meshBounds[2];
@@ -614,11 +671,17 @@ typedef struct srfGridMesh_s {
 
 #define	VERTEXSIZE	8
 typedef struct {
-	surfaceType_t	surfaceType;
-	cplane_t	plane;
+	surfaceType_t surfaceType;
+
+	// culling information
+	vec3_t bounds[2];
+	vec3_t origin;
+	float radius;
+	cplane_t plane;
 
 	// dynamic lighting information
-	int			dlightBits[SMP_FRAMES];
+	int dlightBits[SMP_FRAMES];
+
 
 	// triangle definitions (no normals at points)
 	int			numPoints;
@@ -631,16 +694,20 @@ typedef struct {
 
 // misc_models in maps are turned into direct geometry by q3map
 typedef struct {
-	surfaceType_t	surfaceType;
+	surfaceType_t surfaceType;
+
+	// culling information
+	vec3_t bounds[2];
+	vec3_t origin;
+	float radius;
+	cplane_t plane;
 
 	// dynamic lighting information
-	int				dlightBits[SMP_FRAMES];
+	int dlightBits[SMP_FRAMES];
 
 	// culling information (FIXME: use this!)
-	vec3_t			bounds[2];
 	vec3_t			localOrigin;
-	float			radius;
-
+	
 	// triangle definitions
 	int				numIndexes;
 	int				*indexes;
@@ -677,7 +744,17 @@ typedef struct msurface_s {
 	surfaceType_t		*data;			// any of srf*_t
 } msurface_t;
 
-
+// ydnar: bsp model decal surfaces
+typedef struct decal_s
+{
+	msurface_t* parent;
+	shader_t* shader;
+	float fadeStartTime, fadeEndTime;
+	int fogIndex;
+	int numVerts;
+	polyVert_t verts[MAX_DECAL_VERTS];
+}
+decal_t;
 
 #define	CONTENTS_NODE		-1
 typedef struct mnode_s {
@@ -685,6 +762,7 @@ typedef struct mnode_s {
 	int			contents;		// -1 for nodes, to differentiate from leafs
 	int			visframe;		// node needs to be traversed if current
 	vec3_t		mins, maxs;		// for bounding box culling
+	vec3_t surfMins, surfMaxs;      // ydnar: bounding box including surfaces
 	struct mnode_s	*parent;
 
 	// node specific
@@ -703,6 +781,14 @@ typedef struct {
 	vec3_t		bounds[2];		// for culling
 	msurface_t	*firstSurface;
 	int			numSurfaces;
+
+	qboolean	visible[SMP_FRAMES];
+	int			entityNum[SMP_FRAMES];
+
+	orientation_t orientation[SMP_FRAMES];
+
+	// ydnar: decals
+	decal_t* decals;
 } bmodel_t;
 
 typedef struct {
@@ -714,6 +800,7 @@ typedef struct {
 	int			numShaders;
 	dshader_t	*shaders;
 
+	int			numBModels;
 	bmodel_t	*bmodels;
 
 	int			numplanes;
@@ -975,6 +1062,8 @@ typedef struct {
 	float					sawToothTable[FUNCTABLE_SIZE];
 	float					inverseSawToothTable[FUNCTABLE_SIZE];
 	float					fogTable[FOG_TABLE_SIZE];
+
+	bmodel_t*				currentBModel;
 } trGlobals_t;
 
 extern backEndState_t	backEnd;
@@ -1419,6 +1508,28 @@ MARKERS, POLYGON PROJECTION ON WORLD POLYGONS
 int R_MarkFragments( int numPoints, const vec3_t *points, const vec3_t projection,
 				   int maxPoints, vec3_t pointBuffer, int maxFragments, markFragment_t *fragmentBuffer );
 
+/*
+============================================================
+
+DECALS - ydnar
+
+============================================================
+*/
+
+void RE_ProjectDecal(qhandle_t hShader, int numPoints, vec3_t* points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime);
+void RE_ClearDecals(void);
+
+void R_AddModelShadow(refEntity_t* ent);
+
+void R_TransformDecalProjector(decalProjector_t* in, vec3_t axis[3], vec3_t origin, decalProjector_t* out);
+qboolean R_TestDecalBoundingBox(decalProjector_t* dp, vec3_t mins, vec3_t maxs);
+qboolean R_TestDecalBoundingSphere(decalProjector_t* dp, vec3_t center, float radius2);
+
+void R_ProjectDecalOntoSurface(decalProjector_t* dp, msurface_t* surf, bmodel_t* bmodel);
+
+void R_AddDecalSurface(decal_t* decal);
+void R_AddDecalSurfaces(bmodel_t* bmodel);
+void R_CullDecalProjectors(void);
 
 /*
 ============================================================
@@ -1604,6 +1715,12 @@ typedef struct debugText_s {
 } debugText_t;
 // jmarshall end
 
+// ydnar: max decal projectors per frame, each can generate lots of polys
+#define MAX_DECAL_PROJECTORS    32  // uses bitmasks, don't increase
+#define DECAL_PROJECTOR_MASK    ( MAX_DECAL_PROJECTORS - 1 )
+#define MAX_DECALS              1024
+#define DECAL_MASK              ( MAX_DECALS - 1 )
+
 // all of the information needed by the back end must be
 // contained in a backEndData_t.  This entire structure is
 // duplicated so the front and back end can run in parallel
@@ -1614,6 +1731,10 @@ typedef struct {
 	trRefEntity_t	entities[MAX_ENTITIES];
 	srfPoly_t	*polys;//[MAX_POLYS];
 	polyVert_t	*polyVerts;//[MAX_POLYVERTS];
+
+	decalProjector_t decalProjectors[MAX_DECAL_PROJECTORS];
+	srfDecal_t decals[MAX_DECALS];
+
 // jmarshall
 	corona_t coronas[MAX_CORONAS];          //----(SA)
 

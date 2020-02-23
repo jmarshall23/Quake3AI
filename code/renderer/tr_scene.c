@@ -40,6 +40,11 @@ int			r_firstScenePoly;
 
 int			r_numpolyverts;
 
+// ydnar: decals
+int			r_firstSceneDecalProjector;
+int			r_numDecalProjectors;
+int			r_firstSceneDecal;
+int			r_numDecals;
 
 /*
 ====================
@@ -79,6 +84,12 @@ void R_ToggleSmpFrame( void ) {
 	r_firstScenePoly = 0;
 
 	r_numpolyverts = 0;
+
+	// ydnar: decals
+	r_numDecalProjectors = 0;
+	r_firstSceneDecalProjector = 0;
+	r_numDecals = 0;
+	r_firstSceneDecal = 0;
 }
 
 
@@ -407,6 +418,12 @@ void RE_RenderScene( const refdef_t *fd ) {
 
 	tr.refdef.numPolys = r_numpolys - r_firstScenePoly;
 	tr.refdef.polys = &backEndData[tr.smpFrame]->polys[r_firstScenePoly];
+
+	tr.refdef.numDecalProjectors = r_numDecalProjectors - r_firstSceneDecalProjector;
+	tr.refdef.decalProjectors = &backEndData[tr.smpFrame]->decalProjectors[r_firstSceneDecalProjector];
+
+	tr.refdef.numDecals = r_numDecals - r_firstSceneDecal;
+	tr.refdef.decals = &backEndData[tr.smpFrame]->decals[r_firstSceneDecal];
 
 	// turn off dynamic lighting globally by clearing all the
 	// dlights if it needs to be disabled or if vertex lighting is enabled

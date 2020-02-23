@@ -41,6 +41,7 @@ refimport_t	ri;
 // point at this for their sorting surface
 surfaceType_t	entitySurface = SF_ENTITY;
 
+
 /*
 =================
 R_CullLocalBox
@@ -48,110 +49,106 @@ R_CullLocalBox
 Returns CULL_IN, CULL_CLIP, or CULL_OUT
 =================
 */
-int R_CullLocalBox (vec3_t bounds[2]) {
-	int		i, j;
-	vec3_t	transformed[8];
-	float	dists[8];
-	vec3_t	v;
-	cplane_t	*frust;
-	int			anyBack;
-	int			front, back;
+int R_CullLocalBox(vec3_t bounds[2]) {
+	int i, j;
+	vec3_t transformed[8];
+	float dists[8];
+	vec3_t v;
+	cplane_t* frust;
+	int anyBack;
+	int front, back;
 
-	if ( r_nocull->integer ) {
+	if (r_nocull->integer) {
 		return CULL_CLIP;
 	}
 
 	// transform into world space
-	for (i = 0 ; i < 8 ; i++) {
-		v[0] = bounds[i&1][0];
-		v[1] = bounds[(i>>1)&1][1];
-		v[2] = bounds[(i>>2)&1][2];
+	for (i = 0; i < 8; i++) {
+		v[0] = bounds[i & 1][0];
+		v[1] = bounds[(i >> 1) & 1][1];
+		v[2] = bounds[(i >> 2) & 1][2];
 
-		VectorCopy( tr.or.origin, transformed[i] );
-		VectorMA( transformed[i], v[0], tr.or.axis[0], transformed[i] );
-		VectorMA( transformed[i], v[1], tr.or.axis[1], transformed[i] );
-		VectorMA( transformed[i], v[2], tr.or.axis[2], transformed[i] );
+		VectorCopy(tr.or.origin, transformed[i]);
+		VectorMA(transformed[i], v[0], tr.or.axis[0], transformed[i]);
+		VectorMA(transformed[i], v[1], tr.or.axis[1], transformed[i]);
+		VectorMA(transformed[i], v[2], tr.or.axis[2], transformed[i]);
 	}
 
 	// check against frustum planes
 	anyBack = 0;
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0; i < 5; i++) {
 		frust = &tr.viewParms.frustum[i];
 
 		front = back = 0;
-		for (j = 0 ; j < 8 ; j++) {
+		for (j = 0; j < 8; j++) {
 			dists[j] = DotProduct(transformed[j], frust->normal);
-			if ( dists[j] > frust->dist ) {
+			if (dists[j] > frust->dist) {
 				front = 1;
-				if ( back ) {
-					break;		// a point is in front
+				if (back) {
+					break;      // a point is in front
 				}
-			} else {
+			}
+			else {
 				back = 1;
 			}
 		}
-		if ( !front ) {
+		if (!front) {
 			// all points were behind one of the planes
 			return CULL_OUT;
 		}
 		anyBack |= back;
 	}
 
-	if ( !anyBack ) {
-		return CULL_IN;		// completely inside frustum
+	if (!anyBack) {
+		return CULL_IN;     // completely inside frustum
 	}
 
-	return CULL_CLIP;		// partially clipped
+	return CULL_CLIP;       // partially clipped
 }
 
 /*
 ** R_CullLocalPointAndRadius
 */
-int R_CullLocalPointAndRadius( vec3_t pt, float radius )
-{
+int R_CullLocalPointAndRadius(vec3_t pt, float radius) {
 	vec3_t transformed;
 
-	R_LocalPointToWorld( pt, transformed );
+	R_LocalPointToWorld(pt, transformed);
 
-	return R_CullPointAndRadius( transformed, radius );
+	return R_CullPointAndRadius(transformed, radius);
 }
 
 /*
 ** R_CullPointAndRadius
 */
-int R_CullPointAndRadius( vec3_t pt, float radius )
-{
-	int		i;
-	float	dist;
-	cplane_t	*frust;
+int R_CullPointAndRadius(vec3_t pt, float radius) {
+	int i;
+	float dist;
+	cplane_t* frust;
 	qboolean mightBeClipped = qfalse;
 
-	if ( r_nocull->integer ) {
+	if (r_nocull->integer) {
 		return CULL_CLIP;
 	}
 
 	// check against frustum planes
-	for (i = 0 ; i < 4 ; i++) 
+	for (i = 0; i < 5; i++)
 	{
 		frust = &tr.viewParms.frustum[i];
 
-		dist = DotProduct( pt, frust->normal) - frust->dist;
-		if ( dist < -radius )
-		{
+		dist = DotProduct(pt, frust->normal) - frust->dist;
+		if (dist < -radius) {
 			return CULL_OUT;
 		}
-		else if ( dist <= radius ) 
-		{
+		else if (dist <= radius) {
 			mightBeClipped = qtrue;
 		}
 	}
 
-	if ( mightBeClipped )
-	{
+	if (mightBeClipped) {
 		return CULL_CLIP;
 	}
 
-	return CULL_IN;		// completely inside frustum
+	return CULL_IN;     // completely inside frustum
 }
 
 
@@ -491,6 +488,7 @@ void R_SetupProjection( void ) {
 	tr.viewParms.projectionMatrix[15] = 0;
 }
 
+
 /*
 =================
 R_SetupFrustum
@@ -498,36 +496,43 @@ R_SetupFrustum
 Setup that culling frustum planes for the current view
 =================
 */
-void R_SetupFrustum (void) {
-	int		i;
-	float	xs, xc;
-	float	ang;
+void R_SetupFrustum(void) {
+	int i;
+	float xs, xc;
+	float ang;
 
 	ang = tr.viewParms.fovX / 180 * M_PI * 0.5f;
-	xs = sin( ang );
-	xc = cos( ang );
+	xs = sin(ang);
+	xc = cos(ang);
 
-	VectorScale( tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[0].normal );
-	VectorMA( tr.viewParms.frustum[0].normal, xc, tr.viewParms.or.axis[1], tr.viewParms.frustum[0].normal );
+	VectorScale(tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[0].normal);
+	VectorMA(tr.viewParms.frustum[0].normal, xc, tr.viewParms.or.axis[1], tr.viewParms.frustum[0].normal);
 
-	VectorScale( tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[1].normal );
-	VectorMA( tr.viewParms.frustum[1].normal, -xc, tr.viewParms.or.axis[1], tr.viewParms.frustum[1].normal );
+	VectorScale(tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[1].normal);
+	VectorMA(tr.viewParms.frustum[1].normal, -xc, tr.viewParms.or.axis[1], tr.viewParms.frustum[1].normal);
 
 	ang = tr.viewParms.fovY / 180 * M_PI * 0.5f;
-	xs = sin( ang );
-	xc = cos( ang );
+	xs = sin(ang);
+	xc = cos(ang);
 
-	VectorScale( tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[2].normal );
-	VectorMA( tr.viewParms.frustum[2].normal, xc, tr.viewParms.or.axis[2], tr.viewParms.frustum[2].normal );
+	VectorScale(tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[2].normal);
+	VectorMA(tr.viewParms.frustum[2].normal, xc, tr.viewParms.or.axis[2], tr.viewParms.frustum[2].normal);
 
-	VectorScale( tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[3].normal );
-	VectorMA( tr.viewParms.frustum[3].normal, -xc, tr.viewParms.or.axis[2], tr.viewParms.frustum[3].normal );
+	VectorScale(tr.viewParms.or.axis[0], xs, tr.viewParms.frustum[3].normal);
+	VectorMA(tr.viewParms.frustum[3].normal, -xc, tr.viewParms.or.axis[2], tr.viewParms.frustum[3].normal);
 
-	for (i=0 ; i<4 ; i++) {
+	for (i = 0; i < 4; i++)
+	{
 		tr.viewParms.frustum[i].type = PLANE_NON_AXIAL;
-		tr.viewParms.frustum[i].dist = DotProduct (tr.viewParms.or.origin, tr.viewParms.frustum[i].normal);
-		SetPlaneSignbits( &tr.viewParms.frustum[i] );
+		tr.viewParms.frustum[i].dist = DotProduct(tr.viewParms.or.origin, tr.viewParms.frustum[i].normal);
+		SetPlaneSignbits(&tr.viewParms.frustum[i]);
 	}
+
+	// ydnar: farplane (testing! use farplane for real)
+	VectorScale(tr.viewParms.or.axis[0], -1, tr.viewParms.frustum[4].normal);
+	tr.viewParms.frustum[4].dist = DotProduct(tr.viewParms.or.origin, tr.viewParms.frustum[4].normal) - tr.viewParms.zFar;
+	tr.viewParms.frustum[4].type = PLANE_NON_AXIAL;
+	SetPlaneSignbits(&tr.viewParms.frustum[4]);
 }
 
 
@@ -1377,6 +1382,8 @@ R_GenerateDrawSurfs
 ====================
 */
 void R_GenerateDrawSurfs( void ) {
+	R_CullDecalProjectors();
+
 	R_AddWorldSurfaces ();
 
 	R_AddPolygonSurfaces();
@@ -1387,6 +1394,7 @@ void R_GenerateDrawSurfs( void ) {
 	// added, because they use the projection
 	// matrix for lod calculation
 	R_SetupProjection ();
+	R_SetupFrustum();
 
 	R_AddEntitySurfaces ();
 }
@@ -1470,8 +1478,6 @@ void R_RenderView (viewParms_t *parms) {
 
 	// set viewParms.world
 	R_RotateForViewer ();
-
-	R_SetupFrustum ();
 
 	R_GenerateDrawSurfs();
 

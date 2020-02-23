@@ -41,6 +41,41 @@ int			c_gridVerts;
 
 //===============================================================================
 
+
+/*
+SphereFromBounds() - ydnar
+creates a bounding sphere from a bounding box
+*/
+
+static void SphereFromBounds(vec3_t mins, vec3_t maxs, vec3_t origin, float* radius) {
+	vec3_t temp;
+
+	VectorAdd(mins, maxs, origin);
+	VectorScale(origin, 0.5, origin);
+	VectorSubtract(maxs, origin, temp);
+	*radius = VectorLength(temp);
+}
+
+
+
+/*
+FinishGenericSurface() - ydnar
+handles final surface classification
+*/
+
+static void FinishGenericSurface(dsurface_t* ds, srfGeneric_t* gen, vec3_t pt) {
+	// set bounding sphere
+	SphereFromBounds(gen->bounds[0], gen->bounds[1], gen->origin, &gen->radius);
+
+	// take the plane normal from the lightmap vector and classify it
+	gen->plane.normal[0] = LittleFloat(ds->lightmapVecs[2][0]);
+	gen->plane.normal[1] = LittleFloat(ds->lightmapVecs[2][1]);
+	gen->plane.normal[2] = LittleFloat(ds->lightmapVecs[2][2]);
+	gen->plane.dist = DotProduct(pt, gen->plane.normal);
+	SetPlaneSignbits(&gen->plane);
+	gen->plane.type = PlaneTypeForNormal(gen->plane.normal);
+}
+
 static void HSVtoRGB( float h, float s, float v, float rgb[3] )
 {
 	int i;
@@ -339,6 +374,7 @@ static void ParseFace( dsurface_t *ds, drawVert_t *verts, msurface_t *surf, int 
 	cv->ofsIndices = ofsIndexes;
 
 	verts += LittleLong( ds->firstVert );
+	ClearBounds(cv->bounds[0], cv->bounds[1]);
 	for ( i = 0 ; i < numPoints ; i++ ) {
 		for ( j = 0 ; j < 3 ; j++ ) {
 			cv->points[i][j] = LittleFloat( verts[i].xyz[j] );
@@ -347,6 +383,8 @@ static void ParseFace( dsurface_t *ds, drawVert_t *verts, msurface_t *surf, int 
 			cv->points[i][3+j] = LittleFloat( verts[i].st[j] );
 			cv->points[i][5+j] = LittleFloat( verts[i].lightmap[j] );
 		}
+		AddPointToBounds(cv->points[i], cv->bounds[0], cv->bounds[1]);
+
 		R_ColorShiftLightingBytes( verts[i].color, (byte *)&cv->points[i][7] );
 	}
 
@@ -364,6 +402,7 @@ static void ParseFace( dsurface_t *ds, drawVert_t *verts, msurface_t *surf, int 
 	cv->plane.type = PlaneTypeForNormal( cv->plane.normal );
 
 	surf->data = (surfaceType_t *)cv;
+	FinishGenericSurface(ds, (srfGeneric_t*)cv, cv->points[0]);
 }
 
 
@@ -414,12 +453,18 @@ static void ParseMesh ( dsurface_t *ds, drawVert_t *verts, msurface_t *surf ) {
 			points[i].st[j] = LittleFloat( verts[i].st[j] );
 			points[i].lightmap[j] = LittleFloat( verts[i].lightmap[j] );
 		}
+
 		R_ColorShiftLightingBytes( verts[i].color, points[i].color );
 	}
 
 	// pre-tesseleate
 	grid = R_SubdividePatchToGrid( width, height, points );
 	surf->data = (surfaceType_t *)grid;
+
+	ClearBounds(grid->bounds[0], grid->bounds[1]);
+	for (i = 0; i < numPoints; i++) {
+		AddPointToBounds(points[i].xyz, grid->bounds[0], grid->bounds[1]);
+	}
 
 	// copy the level of detail origin, which is the center
 	// of the group of all curves that must subdivide the same
@@ -432,6 +477,8 @@ static void ParseMesh ( dsurface_t *ds, drawVert_t *verts, msurface_t *surf ) {
 	VectorScale( bounds[1], 0.5f, grid->lodOrigin );
 	VectorSubtract( bounds[0], grid->lodOrigin, tmpVec );
 	grid->lodRadius = VectorLength( tmpVec );
+
+	FinishGenericSurface(ds, (srfGeneric_t*)grid, grid->verts[0].xyz);
 }
 
 /*
@@ -491,6 +538,8 @@ static void ParseTriSurf( dsurface_t *ds, drawVert_t *verts, msurface_t *surf, i
 			ri.Error( ERR_DROP, "Bad index in triangle surface" );
 		}
 	}
+
+	FinishGenericSurface(ds, (srfGeneric_t*)tri, tri->verts[0].xyz);
 }
 
 /*
@@ -1310,6 +1359,8 @@ static	void R_LoadSubmodels( lump_t *l ) {
 		ri.Error (ERR_DROP, "LoadMap: funny lump size in %s",s_worldData.name);
 	count = l->filelen / sizeof(*in);
 
+	s_worldData.numBModels = count;
+
 	s_worldData.bmodels = out = ri.Hunk_Alloc( count * sizeof(*out), h_low );
 
 	for ( i=0 ; i<count ; i++, in++, out++ ) {
@@ -1330,6 +1381,11 @@ static	void R_LoadSubmodels( lump_t *l ) {
 
 		out->firstSurface = s_worldData.surfaces + LittleLong( in->firstSurface );
 		out->numSurfaces = LittleLong( in->numSurfaces );
+
+		// ydnar: allocate decal memory
+		j = (i == 0 ? MAX_WORLD_DECALS : MAX_ENTITY_DECALS);
+		out->decals = ri.Hunk_Alloc(j * sizeof(*out->decals), h_low);
+		memset(out->decals, 0, j * sizeof(*out->decals));
 	}
 }
 
@@ -1342,13 +1398,50 @@ static	void R_LoadSubmodels( lump_t *l ) {
 R_SetParent
 =================
 */
-static	void R_SetParent (mnode_t *node, mnode_t *parent)
-{
+
+static void R_SetParent(mnode_t* node, mnode_t* parent) {
+	//  set parent
 	node->parent = parent;
-	if (node->contents != -1)
+
+	// handle leaf nodes
+	if (node->contents != -1) {
+		// add node surfaces to bounds
+		if (node->nummarksurfaces > 0) {
+			int c;
+			msurface_t** mark;
+			srfGeneric_t* gen;
+
+
+			// add node surfaces to bounds
+			mark = node->firstmarksurface;
+			c = node->nummarksurfaces;
+			while (c--)
+			{
+				gen = (srfGeneric_t*)(**mark).data;
+				if (gen->surfaceType != SF_FACE &&
+					gen->surfaceType != SF_GRID &&
+					gen->surfaceType != SF_TRIANGLES) {
+					continue;
+				}
+				AddPointToBounds(gen->bounds[0], node->surfMins, node->surfMaxs);
+				AddPointToBounds(gen->bounds[1], node->surfMins, node->surfMaxs);
+				mark++;
+			}
+		}
+
+		// go back
 		return;
-	R_SetParent (node->children[0], node);
-	R_SetParent (node->children[1], node);
+	}
+
+	// recurse to child nodes
+	R_SetParent(node->children[0], node);
+	R_SetParent(node->children[1], node);
+
+	// ydnar: surface bounds
+	AddPointToBounds(node->children[0]->surfMins, node->surfMins, node->surfMaxs);
+	AddPointToBounds(node->children[0]->surfMins, node->surfMins, node->surfMaxs);
+	AddPointToBounds(node->children[1]->surfMins, node->surfMins, node->surfMaxs);
+	AddPointToBounds(node->children[1]->surfMaxs, node->surfMins, node->surfMaxs);
 }
 
 /*
@@ -1385,6 +1478,10 @@ static	void R_LoadNodesAndLeafs (lump_t *nodeLump, lump_t *leafLump) {
 			out->mins[j] = LittleLong (in->mins[j]);
 			out->maxs[j] = LittleLong (in->maxs[j]);
 		}
+
+		// ydnar: surface bounds
+		VectorCopy(out->mins, out->surfMins);
+		VectorCopy(out->maxs, out->surfMaxs);
 	
 		p = LittleLong(in->planeNum);
 		out->plane = s_worldData.planes + p;
@@ -1410,6 +1507,9 @@ static	void R_LoadNodesAndLeafs (lump_t *nodeLump, lump_t *leafLump) {
 			out->mins[j] = LittleLong (inLeaf->mins[j]);
 			out->maxs[j] = LittleLong (inLeaf->maxs[j]);
 		}
+
+		// ydnar: surface bounds
+		ClearBounds(out->surfMins, out->surfMaxs);
 
 		out->cluster = LittleLong(inLeaf->cluster);
 		out->area = LittleLong(inLeaf->area);
