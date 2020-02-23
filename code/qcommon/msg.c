@@ -823,6 +823,10 @@ netField_t	entityStateFields[] =
 { NETF(origin2[1]), 0 },
 { NETF(modelindex2), 8 },
 { NETF(angles[0]), 0 },
+// jmarshall
+{ NETF(dl_intensity), 0 },
+{ NETF(density), 0 },
+// jmarshall end
 { NETF(time), 32 },
 { NETF(apos.trTime), 32 },
 { NETF(apos.trDuration), 32 },

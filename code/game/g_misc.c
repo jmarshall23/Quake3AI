@@ -336,6 +336,62 @@ void SP_shooter_grenade( gentity_t *ent ) {
 	InitShooter( ent, WP_GRENADE_LAUNCHER);
 }
 
+// jmarshall
+/*QUAKED corona (0 1 0) (-4 -4 -4) (4 4 4) START_OFF
+Use color picker to set color or key "color".  values are 0.0-1.0 for each color (rgb).
+"scale" will designate a multiplier to the default size.  (so 2.0 is 2xdefault size, 0.5 is half)
+*/
+
+/*
+==============
+use_corona
+	so level designers can toggle them on/off
+==============
+*/
+void use_corona(gentity_t* ent, gentity_t* other, gentity_t* activator) {
+	if (ent->r.linked) {
+		trap_UnlinkEntity(ent);
+	}
+	else
+	{
+		//ent->active = 0;
+		trap_LinkEntity(ent);
+	}
+}
+
+
+/*
+==============
+SP_corona
+==============
+*/
+void SP_corona(gentity_t* ent) {
+	float scale;
+
+	ent->s.eType = ET_CORONA;
+
+	if (ent->dl_color[0] <= 0 &&                // if it's black or has no color assigned
+		ent->dl_color[1] <= 0 &&
+		ent->dl_color[2] <= 0) {
+		ent->dl_color[0] = ent->dl_color[1] = ent->dl_color[2] = 1; // set white
+
+	}
+	ent->dl_color[0] = ent->dl_color[0] * 255;
+	ent->dl_color[1] = ent->dl_color[1] * 255;
+	ent->dl_color[2] = ent->dl_color[2] * 255;
+
+	ent->s.dl_intensity = (int)ent->dl_color[0] | ((int)ent->dl_color[1] << 8) | ((int)ent->dl_color[2] << 16);
+
+	G_SpawnFloat("scale", "1", &scale);
+	ent->s.density = (int)(scale * 255);
+
+	ent->use = use_corona;
+
+	if (!(ent->spawnflags & 1)) {
+		trap_LinkEntity(ent);
+	}
+}
+// jmarshall end
 
 #ifdef MISSIONPACK
 static void PortalDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {

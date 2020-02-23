@@ -23,7 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __TR_TYPES_H
 #define __TR_TYPES_H
 
-
+// jmarshall
+#define MAX_CORONAS     32          //----(SA)	not really a reason to limit this other than trying to keep a reasonable count
+// jmarshall end
 #define	MAX_DLIGHTS		32			// can't be increased, because bit flags are used on surfaces
 #define	MAX_ENTITIES	1023		// can't be increased without changing drawsurf bit packing
 

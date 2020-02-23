@@ -227,7 +227,7 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 		}
 	}
 
-	//BotDrawRoute(bs);
+	BotDrawRoute(bs);
 
 	VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
 

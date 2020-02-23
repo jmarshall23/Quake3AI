@@ -505,6 +505,68 @@ static void CG_Missile( centity_t *cent ) {
 	CG_AddRefEntityWithPowerups( &ent, s1, TEAM_FREE );
 }
 
+// jmarshall
+/*
+==============
+CG_Corona
+==============
+*/
+static void CG_Corona(centity_t* cent) {
+	trace_t tr;
+	int r, g, b;
+	int dli;
+	int flags = 0;
+	qboolean behind = qfalse,
+		toofar = qfalse;
+
+	float dot, dist;
+	vec3_t dir;
+
+	if (cg_coronas.integer == 0) {   // if set to '0' no coronas
+		return;
+	}
+
+	dli = cent->currentState.dl_intensity;
+	r = dli & 255;
+	g = (dli >> 8) & 255;
+	b = (dli >> 16) & 255;
+
+	// only coronas that are in your PVS are being added
+
+	VectorSubtract(cg.refdef.vieworg, cent->lerpOrigin, dir);
+
+	dist = VectorNormalize2(dir, dir);
+	if (dist > cg_coronafardist.integer) {   // performance variable cg_coronafardist will keep down super long traces
+		toofar = qtrue;
+	}
+
+	dot = DotProduct(dir, cg.refdef.viewaxis[0]);
+	if (dot >= -0.6) {     // assumes ~90 deg fov	(SA) changed value to 0.6 (screen corner at 90 fov)
+		behind = qtrue;     // use the dot to at least do trivial removal of those behind you.
+	}
+	// yeah, I could calc side planes to clip against, but would that be worth it? (much better than dumb dot>= thing?)
+
+//	CG_Printf("dot: %f\n", dot);
+
+	if (cg_coronas.integer == 2) {   // if set to '2' trace everything
+		behind = qfalse;
+		toofar = qfalse;
+	}
+
+
+	if (!behind && !toofar) {
+		CG_Trace(&tr, cg.refdef.vieworg, NULL, NULL, cent->lerpOrigin, -1, MASK_SOLID | CONTENTS_BODY); // added blockage by players.  not sure how this is going to be since this is their bb, not their model (too much blockage)
+
+		if (tr.fraction == 1) {
+			flags = 1;
+		}
+
+		trap_R_AddCoronaToScene(cent->lerpOrigin, (float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)cent->currentState.density / 255.0f, cent->currentState.number, flags);
+	}
+}
+// jmarshall end
+
+
 /*
 ===============
 CG_Grapple
@@ -973,6 +1035,11 @@ static void CG_AddCEntity( centity_t *cent ) {
 	case ET_SPEAKER:
 		CG_Speaker( cent );
 		break;
+// jmarshall
+	case ET_CORONA:
+		CG_Corona(cent);
+		break;
+// jmarshall end
 	case ET_GRAPPLE:
 		CG_Grapple( cent );
 		break;

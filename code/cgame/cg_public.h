@@ -164,6 +164,9 @@ typedef enum {
 	CG_R_INPVS,
 	// 1.32
 	CG_FS_SEEK,
+// jmarshall
+	CG_R_ADDCORONATOSCENE,
+// jmarshall end
 
 /*
 	CG_LOADCAMERA,

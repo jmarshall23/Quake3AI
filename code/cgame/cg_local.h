@@ -1184,6 +1184,11 @@ extern  vmCvar_t		cg_recordSPDemoName;
 extern	vmCvar_t		cg_obeliskRespawnDelay;
 #endif
 
+// jmarshall
+extern vmCvar_t cg_coronafardist;
+extern vmCvar_t cg_coronas;
+// jmarshall end
+
 //
 // cg_main.c
 //
@@ -1583,6 +1588,10 @@ void		trap_R_ModelBounds( clipHandle_t model, vec3_t mins, vec3_t maxs );
 int			trap_R_LerpTag( orientation_t *tag, clipHandle_t mod, int startFrame, int endFrame, 
 					   float frac, const char *tagName );
 void		trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
+
+// jmarshall
+void    trap_R_AddCoronaToScene(const vec3_t org, float r, float g, float b, float scale, int id, int flags);
+// jmarshall end
 
 // The glconfig_t will not change during the life of a cgame.
 // If it needs to change, the entire cgame will be restarted, because

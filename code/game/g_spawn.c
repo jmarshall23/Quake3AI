@@ -98,6 +98,9 @@ typedef struct
 field_t fields[] = {
 	{"classname", FOFS(classname), F_LSTRING},
 	{"origin", FOFS(s.origin), F_VECTOR},
+// jmarshall
+	{"color", FOFS(dl_color), F_VECTOR},
+// jmarshall end
 	{"model", FOFS(model), F_LSTRING},
 	{"model2", FOFS(model2), F_LSTRING},
 	{"spawnflags", FOFS(spawnflags), F_INT},
@@ -199,6 +202,10 @@ void SP_team_neutralobelisk( gentity_t *ent );
 #endif
 void SP_item_botroam( gentity_t *ent ) {};
 
+// jmarshall
+void SP_corona(gentity_t* ent);
+// jmarshall end
+
 spawn_t	spawns[] = {
 	// info entities don't do anything at all, but provide positional
 	// information for things controlled by other processes
@@ -249,6 +256,10 @@ spawn_t	spawns[] = {
 
 	{"light", SP_light},
 	{"path_corner", SP_path_corner},
+
+// jmarshall
+	{"corona", SP_corona},
+// jmarshall end
 
 	{"misc_teleporter_dest", SP_misc_teleporter_dest},
 	{"misc_model", SP_misc_model},

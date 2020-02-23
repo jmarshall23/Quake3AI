@@ -1348,6 +1348,10 @@ typedef struct entityState_s {
 	int		torsoAnim;		// mask off ANIM_TOGGLEBIT
 
 	int		generic1;
+// jmarshall
+	int		dl_intensity;
+	int		density;
+// jmarshall end
 } entityState_t;
 
 typedef enum {

@@ -184,6 +184,9 @@ struct gentity_s {
 	int			notsingle;
 	int			notbot;
 
+// jmarshall
+	vec4_t		dl_color;
+// jmarshall end
 };
 
 

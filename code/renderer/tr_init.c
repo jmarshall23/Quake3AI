@@ -950,7 +950,7 @@ void R_Register( void )
 	r_lightmap = ri.Cvar_Get ("r_lightmap", "0", 0 );
 	r_portalOnly = ri.Cvar_Get ("r_portalOnly", "0", CVAR_CHEAT );
 
-	r_flareSize = ri.Cvar_Get ("r_flareSize", "40", CVAR_CHEAT);
+	r_flareSize = ri.Cvar_Get ("r_flareSize", "20", CVAR_CHEAT);
 	r_flareFade = ri.Cvar_Get ("r_flareFade", "7", CVAR_CHEAT);
 
 	r_showSmp = ri.Cvar_Get ("r_showSmp", "0", CVAR_CHEAT);
@@ -1205,6 +1205,7 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 // jmarshall
 	re.AddDebugBoxCommand = RE_AddDebugBoxCommand;
 	re.AddDebugText = RE_AddDebugText;
+	re.AddCoronaToScene = RE_AddCoronaToScene;
 // jmarshall end
 
 	return &re;

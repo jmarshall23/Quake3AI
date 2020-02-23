@@ -14,6 +14,8 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 "count" override quantity or duration on most items.
 */
 
+/*QUAKED corona (1 0 0) (-8 -8 -8) (8 8 8) suspended
+*/
 
 /*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */

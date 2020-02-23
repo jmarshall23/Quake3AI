@@ -416,6 +416,18 @@ typedef struct shader_s {
 	struct	shader_s	*next;
 } shader_t;
 
+// jmarshall
+typedef struct corona_s {
+	vec3_t origin;
+	vec3_t color;               // range from 0.0 to 1.0, should be color normalized
+	vec3_t transformed;         // origin in local coordinate system
+	float scale;                // uses r_flaresize as the baseline (1.0)
+	int id;
+	int flags;                  // '1' is 'visible'
+								// still send the corona request, even if not visible, for proper fading
+} corona_t;
+// jmarshall end
+
 typedef struct shaderState_s {
   char shaderName[MAX_QPATH];     // name of shader this state belongs to
   char name[MAX_STATE_NAME];      // name of this state
@@ -459,6 +471,10 @@ typedef struct {
 	int			numDrawSurfs;
 	struct drawSurf_s	*drawSurfs;
 
+// jmarshall
+	int num_coronas;
+	struct corona_s* coronas;
+// jmarshall end
 
 } trRefdef_t;
 
@@ -1427,6 +1443,9 @@ void RE_AddPolyToScene( qhandle_t hShader , int numVerts, const polyVert_t *vert
 void RE_AddLightToScene( const vec3_t org, float intensity, float r, float g, float b );
 void RE_AddAdditiveLightToScene( const vec3_t org, float intensity, float r, float g, float b );
 void RE_RenderScene( const refdef_t *fd );
+// jmarshall
+void RE_AddCoronaToScene(const vec3_t org, float r, float g, float b, float scale, int id, int flags);
+// jmarshall end
 
 /*
 =============================================================
@@ -1603,6 +1622,8 @@ typedef struct {
 	srfPoly_t	*polys;//[MAX_POLYS];
 	polyVert_t	*polyVerts;//[MAX_POLYVERTS];
 // jmarshall
+	corona_t coronas[MAX_CORONAS];          //----(SA)
+
 	debugLine_t		debugLines[MAX_DEBUG_LINES];
 	int			numDebugLines;
 

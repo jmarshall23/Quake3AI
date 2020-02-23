@@ -197,6 +197,11 @@ vmCvar_t	cg_recordSPDemoName;
 vmCvar_t	cg_obeliskRespawnDelay;
 #endif
 
+// jmarshall
+vmCvar_t cg_coronafardist;
+vmCvar_t cg_coronas;
+// jmarshall end
+
 typedef struct {
 	vmCvar_t	*vmCvar;
 	char		*cvarName;
@@ -264,6 +269,10 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  },
 	{ &cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  },
 	{ &cg_predictItems, "cg_predictItems", "1", CVAR_ARCHIVE },
+// jmarshall
+	{ &cg_coronafardist, "cg_coronafardist", "1536", CVAR_ARCHIVE },
+	{ &cg_coronas, "cg_coronas", "1", CVAR_ARCHIVE },
+// jmarshall end
 #ifdef MISSIONPACK
 	{ &cg_deferPlayers, "cg_deferPlayers", "0", CVAR_ARCHIVE },
 #else

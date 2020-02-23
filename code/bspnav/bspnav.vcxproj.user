@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommand>D:\projects\Quake3\tools\bspnav.exe</LocalDebuggerCommand>
-    <LocalDebuggerCommandArguments>D:\projects\Quake3\main\maps\q3dm1.bsp</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>D:\projects\Quake3\main\maps\q3tourney2.bsp</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
