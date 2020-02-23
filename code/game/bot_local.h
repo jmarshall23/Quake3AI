@@ -549,6 +549,7 @@ typedef struct bot_state_s
 	int			stuck_time;
 
 	vec3_t		last_enemy_visible_position;
+	vec3_t		random_move_position;
 // jmarshall end
 
 	bot_input_t input;
@@ -669,6 +670,7 @@ int BotWantsToRetreat(bot_state_t* bs);
 int BotWantsToChase(bot_state_t* bs);
 
 int BotMoveInDirection(bot_state_t* bs, vec3_t dir, float speed, int type);
+int BotMoveInRandomDirection(bot_state_t* bs);
 
 void InitCharacteristicSystem(void);
 void InitFuzzyWeights(void);

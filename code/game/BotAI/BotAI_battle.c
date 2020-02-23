@@ -680,7 +680,16 @@ int AINode_Battle_Chase(bot_state_t* bs)
 
 	//move towards the goal
 	//trap_BotMoveToGoal(&moveresult, bs->ms, &goal, bs->tfl);
-	BotMoveToGoal(bs, &goal);
+
+	if (FRandRange(0.0f, 4.0f) <= 2.0f)
+	{
+		BotMoveToGoal(bs, &goal);
+	}
+	else
+	{
+		BotMoveInRandomDirection(bs);
+	}
+
 
 	//if the movement failed
 	//if (moveresult.failure) {
@@ -893,7 +902,14 @@ int AINode_Battle_Retreat(bot_state_t* bs) {
 	//BotSetupForMovement(bs);
 	//move towards the goal
 	//trap_BotMoveToGoal(&moveresult, bs->ms, &goal, bs->tfl);
-	BotMoveToGoal(bs, &goal);
+	if(FRandRange(0.0f, 4.0f) <= 2.0f)
+	{		
+		BotMoveToGoal(bs, &goal);
+	}
+	else
+	{
+		BotMoveInRandomDirection(bs);
+	}
 
 	//if the movement failed
 	//if (moveresult.failure) {

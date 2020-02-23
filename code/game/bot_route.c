@@ -29,6 +29,48 @@ vec4_t color_next_waypoint = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 /*
 =======================
+BotGetRandomPointNearPosition
+=======================
+*/
+void BotGetRandomPointNearPosition(vec3_t point, vec3_t randomPoint, float radius) {
+	int index = 0;
+	#define MAX_RANDOM_NAVCHECKS		20
+
+	while(index < MAX_RANDOM_NAVCHECKS)
+	{
+		trace_t trace;
+		trap_Nav_GetRandomPointNearPosition(point, randomPoint, radius);
+
+		trap_Trace(&trace, point, NULL, NULL, randomPoint, 0, CONTENTS_SOLID);
+
+		if (trace.fraction > 0.2f)
+			return;
+
+		index++;
+	}
+}
+
+/*
+=======================
+BotMoveInRandomDirection
+=======================
+*/
+int BotMoveInRandomDirection(bot_state_t *bs) {
+	gentity_t* ent = &g_entities[bs->client];
+	
+	float dist = VectorDistanceSquared(ent->r.currentOrigin, bs->random_move_position);
+	dist = sqrt(dist);
+	if (dist > 25) {
+		BotGetRandomPointNearPosition(ent->r.currentOrigin, bs->random_move_position, 50.0f);
+	}
+
+	VectorSubtract(bs->random_move_position, ent->r.currentOrigin, bs->input.dir);
+	VectorNormalize(bs->input.dir);
+	bs->input.dir[2] = 0;
+}
+
+/*
+=======================
 BotMoveInDirection
 =======================
 */
@@ -52,7 +94,7 @@ int BotMoveInDirection(bot_state_t *bs, vec3_t dir, float speed, int type) {
 	// Again this doesn't match the original behavior. 
 	if (trace.fraction < 0.9f)
 	{
-		trap_Nav_GetRandomPointNearPosition(ent->r.currentOrigin, newMoveToGoal, 50.0f);
+		BotMoveInRandomDirection(bs);
 	}
 
 	VectorSubtract(newMoveToGoal, ent->r.currentOrigin, bi->dir);
@@ -185,7 +227,7 @@ void BotMoveToGoal(bot_state_t *bs, bot_goal_t *goal) {
 		}
 	}
 
-	BotDrawRoute(bs);
+	//BotDrawRoute(bs);
 
 	VectorCopy(bs->movement_waypoints[bs->currentWaypoint], move_goal);
 
