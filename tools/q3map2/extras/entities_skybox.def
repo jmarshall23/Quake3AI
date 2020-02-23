@@ -1,0 +1,10 @@
+/*QUAKED _skybox (0.77 0.88 1.0) (-4 -4 -4) (4 4 4)
+-------- KEYS --------
+"angle" : rotation angle of the sky surfaces.
+"angles" : Individual control of PITCH, YAW, and ROLL (default 0 0 0).
+"_scale" : scaling factor (default 64), good values are between 50 and 300, depending on the map.
+-------- SPAWNFLAGS --------
+(none)
+-------- NOTES --------
+Compiler-only entity that specifies a the origin of a skybox (a wholly contained, seperate area of the map), similar to some games' portal skies. When compiled with Q3Map2, the skybox surfaces will be visible from any place where sky is normally visible. It will cast shadows on the normal parts of the map, and can be used with cloud layers and other effects.
+*/

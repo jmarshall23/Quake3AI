@@ -1,0 +1,88 @@
+Lightmapped terrain: The quick and dirty Q3Map2 how-to.
+Revision 2: 2002-11-30
+
+Note: lightmapped terrain is a hack, and as such, has limitations. Shader effects such as environment mapping might be a little flaky because of the borked vertex normal on lightmapped terrain faces. This is necessary to enable lightmaps on nonplanar geometry.
+
+
+Before you make ANY terrain with Q3Map2, your terrain shaders (typically textures/common/terrain and terrain2) must have the "q3map_terrain" keyword. Terrain is handled completely differently than from previous versions of Q3Map, and as such, it doesn't have any built-in shader name mangling for terrain entities.
+
+
+The terrain shader MUST BE LISTED IN SHADERLIST.TXT or this will NOT WORK.
+
+
+Use the following crib sheet to convert a typical terrain shader into lightmapped terrain:
+
+
+// old-style vertex lit terrain shader
+
+textures/terrain/hillside_0
+{
+	q3map_forcesunlight
+	q3map_novertexshadows
+	surfaceparm nolightmap
+	
+	{
+		map textures/terrain/hillside_0.tga
+		tcMod scale 0.05 0.05
+		rgbGen vertex
+	}
+}
+
+
+
+// update 2002-11-30, base terrain shader (Q3Map 2.3.x)
+
+textures/terrain/hillside_base
+{
+	// required
+	q3map_tcGen ivector ( 256 0 0 ) ( 0 256 0 )	// project texture every 256 units in X and Y
+	q3map_lightmapaxis z						// project lightmap on z axis (up/down)
+	
+	// optional
+	q3map_lightmapmergable						// merges all terrain into one seamless lightmap (no seams)
+	q3map_lightmapsamplesize 32					// sets lightmap sample size to 2x normal to save mem			
+}
+
+
+
+// lightmapped terrain shader
+
+textures/terrain/hillside_0
+{
+	q3map_baseshader textures/terrain/hillside_base	// instructs q3map2 to use this shader as a template
+	
+	{
+		map textures/terrain/hillside_0.tga
+	}
+	{
+		map $lightmap
+		blendFunc GL_DST_COLOR GL_ZERO
+	}
+}
+
+
+
+
+// lightmapped terrain shader for blending between two layers
+
+textures/terrain/hillside_0to1
+{
+	q3map_baseshader textures/terrain/hillside_base
+	
+	{
+		map textures/terrain/hillside_0.tga
+	}
+	{
+		map textures/terrain/hillside_1.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		alphaGen vertex
+	}
+	{
+		map $lightmap
+		blendFunc GL_DST_COLOR GL_ZERO
+	}
+}
+
+
+
+
