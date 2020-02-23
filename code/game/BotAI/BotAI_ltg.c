@@ -97,7 +97,7 @@ int BotGetItemLongTermGoal(bot_state_t* bs, int tfl, bot_goal_t* goal) {
 	}
 
 	//if it is time to find a new long term goal
-	if (bs->ltg_time < FloatTime()) {
+	if (bs->ltg_time == 0) {
 		//pop the current goal from the stack
 		BotPopGoal(bs->gs);
 		//BotAI_Print(PRT_MESSAGE, "%s: choosing new ltg\n", ClientName(bs->client, netname, sizeof(netname)));
