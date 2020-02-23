@@ -148,12 +148,12 @@ int		max_polys;
 cvar_t	*r_maxpolyverts;
 int		max_polyverts;
 
-void ( APIENTRY * qglMultiTexCoord2fARB )( GLenum texture, GLfloat s, GLfloat t );
-void ( APIENTRY * qglActiveTextureARB )( GLenum texture );
-void ( APIENTRY * qglClientActiveTextureARB )( GLenum texture );
+void ( APIENTRY * glMultiTexCoord2fARB )( GLenum texture, GLfloat s, GLfloat t );
+void ( APIENTRY * glActiveTextureARB )( GLenum texture );
+void ( APIENTRY * glClientActiveTextureARB )( GLenum texture );
 
-void ( APIENTRY * qglLockArraysEXT)( GLint, GLint);
-void ( APIENTRY * qglUnlockArraysEXT) ( void );
+void ( APIENTRY * glLockArraysEXT)( GLint, GLint);
+void ( APIENTRY * glUnlockArraysEXT) ( void );
 
 static void AssertCvarRange( cvar_t *cv, float minVal, float maxVal, qboolean shouldBeIntegral )
 {
@@ -213,7 +213,7 @@ static void InitOpenGL( void )
 		Q_strlwr( renderer_buffer );
 
 		// OpenGL driver constants
-		qglGetIntegerv( GL_MAX_TEXTURE_SIZE, &temp );
+		glGetIntegerv( GL_MAX_TEXTURE_SIZE, &temp );
 		glConfig.maxTextureSize = temp;
 
 		// stubbed or broken drivers may have reported 0...
@@ -242,7 +242,7 @@ void GL_CheckErrors( void ) {
     int		err;
     char	s[64];
 
-    err = qglGetError();
+    err = glGetError();
     if ( err == GL_NO_ERROR ) {
         return;
     }
@@ -374,7 +374,7 @@ void RB_TakeScreenshot( int x, int y, int width, int height, char *fileName ) {
 	buffer[15] = height >> 8;
 	buffer[16] = 24;	// pixel size
 
-	qglReadPixels( x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer+18 ); 
+	glReadPixels( x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer+18 ); 
 
 	// swap rgb to bgr
 	c = 18 + width * height * 3;
@@ -404,7 +404,7 @@ void RB_TakeScreenshotJPEG( int x, int y, int width, int height, char *fileName 
 
 	buffer = ri.Hunk_AllocateTempMemory(glConfig.vidWidth*glConfig.vidHeight*4);
 
-	qglReadPixels( x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer ); 
+	glReadPixels( x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer ); 
 
 	// gamma correct
 	if ( ( tr.overbrightBits > 0 ) && glConfig.deviceSupportsGamma ) {
@@ -538,7 +538,7 @@ void R_LevelShot( void ) {
 	buffer[14] = 128;
 	buffer[16] = 24;	// pixel size
 
-	qglReadPixels( 0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGB, GL_UNSIGNED_BYTE, source ); 
+	glReadPixels( 0, 0, glConfig.vidWidth, glConfig.vidHeight, GL_RGB, GL_UNSIGNED_BYTE, source ); 
 
 	// resample from source
 	xScale = glConfig.vidWidth / 512.0f;
@@ -699,44 +699,44 @@ void R_ScreenShotJPEG_f (void) {
 */
 void GL_SetDefaultState( void )
 {
-	qglClearDepth( 1.0f );
+	glClearDepth( 1.0f );
 
-	qglCullFace(GL_FRONT);
+	glCullFace(GL_FRONT);
 
-	qglColor4f (1,1,1,1);
+	glColor4f (1,1,1,1);
 
 	// initialize downstream texture unit if we're running
 	// in a multitexture environment
-	if ( qglActiveTextureARB ) {
+	if ( glActiveTextureARB ) {
 		GL_SelectTexture( 1 );
 		GL_TextureMode( r_textureMode->string );
 		GL_TexEnv( GL_MODULATE );
-		qglDisable( GL_TEXTURE_2D );
+		glDisable( GL_TEXTURE_2D );
 		GL_SelectTexture( 0 );
 	}
 
-	qglEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 	GL_TextureMode( r_textureMode->string );
 	GL_TexEnv( GL_MODULATE );
 
-	qglShadeModel( GL_SMOOTH );
-	qglDepthFunc( GL_LEQUAL );
+	glShadeModel( GL_SMOOTH );
+	glDepthFunc( GL_LEQUAL );
 
 	// the vertex array is always enabled, but the color and texture
 	// arrays are enabled and disabled around the compiled vertex array call
-	qglEnableClientState (GL_VERTEX_ARRAY);
+	glEnableClientState (GL_VERTEX_ARRAY);
 
 	//
 	// make sure our GL state vector is set correctly
 	//
 	glState.glStateBits = GLS_DEPTHTEST_DISABLE | GLS_DEPTHMASK_TRUE;
 
-	qglPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-	qglDepthMask( GL_TRUE );
-	qglDisable( GL_DEPTH_TEST );
-	qglEnable( GL_SCISSOR_TEST );
-	qglDisable( GL_CULL_FACE );
-	qglDisable( GL_BLEND );
+	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	glDepthMask( GL_TRUE );
+	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_SCISSOR_TEST );
+	glDisable( GL_CULL_FACE );
+	glDisable( GL_BLEND );
 }
 
 
@@ -793,7 +793,7 @@ void GfxInfo_f( void )
 		ri.Printf( PRINT_ALL, "rendering primitives: " );
 		primitives = r_primitives->integer;
 		if ( primitives == 0 ) {
-			if ( qglLockArraysEXT ) {
+			if ( glLockArraysEXT ) {
 				primitives = 2;
 			} else {
 				primitives = 1;
@@ -813,8 +813,8 @@ void GfxInfo_f( void )
 	ri.Printf( PRINT_ALL, "texturemode: %s\n", r_textureMode->string );
 	ri.Printf( PRINT_ALL, "picmip: %d\n", r_picmip->integer );
 	ri.Printf( PRINT_ALL, "texture bits: %d\n", r_texturebits->integer );
-	ri.Printf( PRINT_ALL, "multitexture: %s\n", enablestrings[qglActiveTextureARB != 0] );
-	ri.Printf( PRINT_ALL, "compiled vertex arrays: %s\n", enablestrings[qglLockArraysEXT != 0 ] );
+	ri.Printf( PRINT_ALL, "multitexture: %s\n", enablestrings[glActiveTextureARB != 0] );
+	ri.Printf( PRINT_ALL, "compiled vertex arrays: %s\n", enablestrings[glLockArraysEXT != 0 ] );
 	ri.Printf( PRINT_ALL, "texenv add: %s\n", enablestrings[glConfig.textureEnvAddAvailable != 0] );
 	ri.Printf( PRINT_ALL, "compressed textures: %s\n", enablestrings[glConfig.textureCompression!=TC_NONE] );
 	if ( r_vertexLight->integer || glConfig.hardwareType == GLHW_PERMEDIA2 )
@@ -1087,7 +1087,7 @@ void R_Init( void ) {
 	R_InitFreeType();
 
 
-	err = qglGetError();
+	err = glGetError();
 	if ( err != GL_NO_ERROR )
 		ri.Printf (PRINT_ALL, "glGetError() = 0x%x\n", err);
 

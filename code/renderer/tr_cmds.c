@@ -392,11 +392,11 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 		else
 		{
 			R_SyncRenderThread();
-			qglEnable( GL_STENCIL_TEST );
-			qglStencilMask( ~0U );
-			qglClearStencil( 0U );
-			qglStencilFunc( GL_ALWAYS, 0U, ~0U );
-			qglStencilOp( GL_KEEP, GL_INCR, GL_INCR );
+			glEnable( GL_STENCIL_TEST );
+			glStencilMask( ~0U );
+			glClearStencil( 0U );
+			glStencilFunc( GL_ALWAYS, 0U, ~0U );
+			glStencilOp( GL_KEEP, GL_INCR, GL_INCR );
 		}
 		r_measureOverdraw->modified = qfalse;
 	}
@@ -405,7 +405,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 		// this is only reached if it was on and is now off
 		if ( r_measureOverdraw->modified ) {
 			R_SyncRenderThread();
-			qglDisable( GL_STENCIL_TEST );
+			glDisable( GL_STENCIL_TEST );
 		}
 		r_measureOverdraw->modified = qfalse;
 	}
@@ -434,7 +434,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
         int	err;
 
 		R_SyncRenderThread();
-        if ( ( err = qglGetError() ) != GL_NO_ERROR ) {
+        if ( ( err = glGetError() ) != GL_NO_ERROR ) {
             ri.Error( ERR_FATAL, "RE_BeginFrame() - glGetError() failed (0x%x)!\n", err );
         }
     }

@@ -1403,23 +1403,23 @@ void R_DebugPolygon( int color, int numPoints, float *points ) {
 
 	// draw solid shade
 
-	qglColor3f( color&1, (color>>1)&1, (color>>2)&1 );
-	qglBegin( GL_POLYGON );
+	glColor3f( color&1, (color>>1)&1, (color>>2)&1 );
+	glBegin( GL_POLYGON );
 	for ( i = 0 ; i < numPoints ; i++ ) {
-		qglVertex3fv( points + i * 3 );
+		glVertex3fv( points + i * 3 );
 	}
-	qglEnd();
+	glEnd();
 
 	// draw wireframe outline
 	GL_State( GLS_POLYMODE_LINE | GLS_DEPTHMASK_TRUE | GLS_SRCBLEND_ONE | GLS_DSTBLEND_ONE );
-	qglDepthRange( 0, 0 );
-	qglColor3f( 1, 1, 1 );
-	qglBegin( GL_POLYGON );
+	glDepthRange( 0, 0 );
+	glColor3f( 1, 1, 1 );
+	glBegin( GL_POLYGON );
 	for ( i = 0 ; i < numPoints ; i++ ) {
-		qglVertex3fv( points + i * 3 );
+		glVertex3fv( points + i * 3 );
 	}
-	qglEnd();
-	qglDepthRange( 0, 1 );
+	glEnd();
+	glDepthRange( 0, 1 );
 }
 
 /*

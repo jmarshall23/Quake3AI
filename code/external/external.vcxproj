@@ -26,6 +26,7 @@
     <ClCompile Include="detour\Source\DetourNavMeshBuilder.cpp" />
     <ClCompile Include="detour\Source\DetourNavMeshQuery.cpp" />
     <ClCompile Include="detour\Source\DetourNode.cpp" />
+    <ClCompile Include="glew\glew.c" />
     <ClCompile Include="recast\Source\Recast.cpp" />
     <ClCompile Include="recast\Source\RecastAlloc.cpp" />
     <ClCompile Include="recast\Source\RecastArea.cpp" />
@@ -48,6 +49,10 @@
     <ClInclude Include="detour\Include\DetourNavMeshQuery.h" />
     <ClInclude Include="detour\Include\DetourNode.h" />
     <ClInclude Include="detour\Include\DetourStatus.h" />
+    <ClInclude Include="glew\eglew.h" />
+    <ClInclude Include="glew\glew.h" />
+    <ClInclude Include="glew\glxew.h" />
+    <ClInclude Include="glew\wglew.h" />
     <ClInclude Include="recast\Include\Recast.h" />
     <ClInclude Include="recast\Include\RecastAlloc.h" />
     <ClInclude Include="recast\Include\RecastAssert.h" />

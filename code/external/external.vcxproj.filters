@@ -7,6 +7,9 @@
     <Filter Include="recast">
       <UniqueIdentifier>{3cc57a82-9829-44f8-8d93-85f0a3333816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="glew">
+      <UniqueIdentifier>{5e392e43-d2bd-4dc7-bb78-15fac640bb06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="detour\Source\DetourAlloc.cpp">
@@ -63,6 +66,9 @@
     <ClCompile Include="recast\Source\RecastRegion.cpp">
       <Filter>recast</Filter>
     </ClCompile>
+    <ClCompile Include="glew\glew.c">
+      <Filter>glew</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="detour\Include\DetourAlloc.h">
@@ -100,6 +106,18 @@
     </ClInclude>
     <ClInclude Include="recast\Include\RecastAssert.h">
       <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\eglew.h">
+      <Filter>glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\glew.h">
+      <Filter>glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\glxew.h">
+      <Filter>glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\wglew.h">
+      <Filter>glew</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

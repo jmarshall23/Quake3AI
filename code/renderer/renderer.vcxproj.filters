@@ -102,13 +102,7 @@
     <ClCompile Include="tr_world.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\win32\win_gamma.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\win32\win_glimp.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\win32\win_qgl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\jpeg-6\jcapimin.c">

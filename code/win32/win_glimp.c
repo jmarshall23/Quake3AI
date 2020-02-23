@@ -40,9 +40,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "resource.h"
 #include "glw_win.h"
 #include "win_local.h"
-
-extern void WG_CheckHardwareGamma( void );
-extern void WG_RestoreGamma( void );
+#include "../external/glew/wglew.h"
 
 typedef enum {
 	RSERR_OK,
@@ -66,13 +64,6 @@ static rserr_t	GLW_SetMode( const char *drivername,
 							 qboolean cdsFullscreen );
 
 static qboolean s_classRegistered = qfalse;
-
-//
-// function declaration
-//
-void	 QGL_EnableLogging( qboolean enable );
-qboolean QGL_Init( const char *dllname );
-void     QGL_Shutdown( void );
 
 //
 // variable declarations
@@ -127,14 +118,7 @@ static int GLW_ChoosePFD( HDC hDC, PIXELFORMATDESCRIPTOR *pPFD )
 	ri.Printf( PRINT_ALL, "...GLW_ChoosePFD( %d, %d, %d )\n", ( int ) pPFD->cColorBits, ( int ) pPFD->cDepthBits, ( int ) pPFD->cStencilBits );
 
 	// count number of PFDs
-	if ( glConfig.driverType > GLDRV_ICD )
-	{
-		maxPFD = qwglDescribePixelFormat( hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &pfds[0] );
-	}
-	else
-	{
-		maxPFD = DescribePixelFormat( hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &pfds[0] );
-	}
+	maxPFD = DescribePixelFormat(hDC, 1, sizeof(PIXELFORMATDESCRIPTOR), &pfds[0]);
 	if ( maxPFD > MAX_PFDS )
 	{
 		ri.Printf( PRINT_WARNING, "...numPFDs > MAX_PFDS (%d > %d)\n", maxPFD, MAX_PFDS );
@@ -146,14 +130,7 @@ static int GLW_ChoosePFD( HDC hDC, PIXELFORMATDESCRIPTOR *pPFD )
 	// grab information
 	for ( i = 1; i <= maxPFD; i++ )
 	{
-		if ( glConfig.driverType > GLDRV_ICD )
-		{
-			qwglDescribePixelFormat( hDC, i, sizeof( PIXELFORMATDESCRIPTOR ), &pfds[i] );
-		}
-		else
-		{
-			DescribePixelFormat( hDC, i, sizeof( PIXELFORMATDESCRIPTOR ), &pfds[i] );
-		}
+		DescribePixelFormat(hDC, i, sizeof(PIXELFORMATDESCRIPTOR), &pfds[i]);
 	}
 
 	// look for a best match
@@ -386,24 +363,11 @@ static int GLW_MakeContext( PIXELFORMATDESCRIPTOR *pPFD )
 		}
 		ri.Printf( PRINT_ALL, "...PIXELFORMAT %d selected\n", pixelformat );
 
-		if ( glConfig.driverType > GLDRV_ICD )
+		DescribePixelFormat(glw_state.hDC, pixelformat, sizeof(*pPFD), pPFD);
+		if (SetPixelFormat(glw_state.hDC, pixelformat, pPFD) == FALSE)
 		{
-			qwglDescribePixelFormat( glw_state.hDC, pixelformat, sizeof( *pPFD ), pPFD );
-			if ( qwglSetPixelFormat( glw_state.hDC, pixelformat, pPFD ) == FALSE )
-			{
-				ri.Printf ( PRINT_ALL, "...qwglSetPixelFormat failed\n");
-				return TRY_PFD_FAIL_SOFT;
-			}
-		}
-		else
-		{
-			DescribePixelFormat( glw_state.hDC, pixelformat, sizeof( *pPFD ), pPFD );
-
-			if ( SetPixelFormat( glw_state.hDC, pixelformat, pPFD ) == FALSE )
-			{
-				ri.Printf (PRINT_ALL, "...SetPixelFormat failed\n", glw_state.hDC );
-				return TRY_PFD_FAIL_SOFT;
-			}
+			ri.Printf(PRINT_ALL, "...SetPixelFormat failed\n", glw_state.hDC);
+			return TRY_PFD_FAIL_SOFT;
 		}
 
 		glw_state.pixelFormatSet = qtrue;
@@ -415,7 +379,7 @@ static int GLW_MakeContext( PIXELFORMATDESCRIPTOR *pPFD )
 	if ( !glw_state.hGLRC )
 	{
 		ri.Printf( PRINT_ALL, "...creating GL context: " );
-		if ( ( glw_state.hGLRC = qwglCreateContext( glw_state.hDC ) ) == 0 )
+		if ( ( glw_state.hGLRC = wglCreateContext( glw_state.hDC ) ) == 0 )
 		{
 			ri.Printf (PRINT_ALL, "failed\n");
 
@@ -424,9 +388,9 @@ static int GLW_MakeContext( PIXELFORMATDESCRIPTOR *pPFD )
 		ri.Printf( PRINT_ALL, "succeeded\n" );
 
 		ri.Printf( PRINT_ALL, "...making context current: " );
-		if ( !qwglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) )
+		if ( !wglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) )
 		{
-			qwglDeleteContext( glw_state.hGLRC );
+			wglDeleteContext( glw_state.hGLRC );
 			glw_state.hGLRC = NULL;
 			ri.Printf (PRINT_ALL, "failed\n");
 			return TRY_PFD_FAIL_HARD;
@@ -968,6 +932,10 @@ static void GLW_InitExtensions( void )
 
 	ri.Printf( PRINT_ALL, "Initializing OpenGL extensions\n" );
 
+	if(glewInit() != GLEW_OK) {
+		ri.Error(ERR_FATAL, "Failed to initialize glew!");
+	}
+
 	// GL_S3_s3tc
 	glConfig.textureCompression = TC_NONE;
 	if ( strstr( glConfig.extensions_string, "GL_S3_s3tc" ) )
@@ -1008,33 +976,14 @@ static void GLW_InitExtensions( void )
 		ri.Printf( PRINT_ALL, "...GL_EXT_texture_env_add not found\n" );
 	}
 
-	// WGL_EXT_swap_control
-	qwglSwapIntervalEXT = ( BOOL (WINAPI *)(int)) qwglGetProcAddress( "wglSwapIntervalEXT" );
-	if ( qwglSwapIntervalEXT )
-	{
-		ri.Printf( PRINT_ALL, "...using WGL_EXT_swap_control\n" );
-		r_swapInterval->modified = qtrue;	// force a set next frame
-	}
-	else
-	{
-		ri.Printf( PRINT_ALL, "...WGL_EXT_swap_control not found\n" );
-	}
-
 	// GL_ARB_multitexture
-	qglMultiTexCoord2fARB = NULL;
-	qglActiveTextureARB = NULL;
-	qglClientActiveTextureARB = NULL;
 	if ( strstr( glConfig.extensions_string, "GL_ARB_multitexture" )  )
 	{
 		if ( r_ext_multitexture->integer )
 		{
-			qglMultiTexCoord2fARB = ( PFNGLMULTITEXCOORD2FARBPROC ) qwglGetProcAddress( "glMultiTexCoord2fARB" );
-			qglActiveTextureARB = ( PFNGLACTIVETEXTUREARBPROC ) qwglGetProcAddress( "glActiveTextureARB" );
-			qglClientActiveTextureARB = ( PFNGLCLIENTACTIVETEXTUREARBPROC ) qwglGetProcAddress( "glClientActiveTextureARB" );
-
-			if ( qglActiveTextureARB )
+			if ( glActiveTextureARB )
 			{
-				qglGetIntegerv( GL_MAX_ACTIVE_TEXTURES_ARB, &glConfig.maxActiveTextures );
+				glGetIntegerv( GL_MAX_ACTIVE_TEXTURES_ARB, &glConfig.maxActiveTextures );
 
 				if ( glConfig.maxActiveTextures > 1 )
 				{
@@ -1042,9 +991,6 @@ static void GLW_InitExtensions( void )
 				}
 				else
 				{
-					qglMultiTexCoord2fARB = NULL;
-					qglActiveTextureARB = NULL;
-					qglClientActiveTextureARB = NULL;
 					ri.Printf( PRINT_ALL, "...not using GL_ARB_multitexture, < 2 texture units\n" );
 				}
 			}
@@ -1060,18 +1006,11 @@ static void GLW_InitExtensions( void )
 	}
 
 	// GL_EXT_compiled_vertex_array
-	qglLockArraysEXT = NULL;
-	qglUnlockArraysEXT = NULL;
 	if ( strstr( glConfig.extensions_string, "GL_EXT_compiled_vertex_array" ) && ( glConfig.hardwareType != GLHW_RIVA128 ) )
 	{
 		if ( r_ext_compiled_vertex_array->integer )
 		{
 			ri.Printf( PRINT_ALL, "...using GL_EXT_compiled_vertex_array\n" );
-			qglLockArraysEXT = ( void ( APIENTRY * )( int, int ) ) qwglGetProcAddress( "glLockArraysEXT" );
-			qglUnlockArraysEXT = ( void ( APIENTRY * )( void ) ) qwglGetProcAddress( "glUnlockArraysEXT" );
-			if (!qglLockArraysEXT || !qglUnlockArraysEXT) {
-				ri.Error (ERR_FATAL, "bad getprocaddress");
-			}
 		}
 		else
 		{
@@ -1081,37 +1020,6 @@ static void GLW_InitExtensions( void )
 	else
 	{
 		ri.Printf( PRINT_ALL, "...GL_EXT_compiled_vertex_array not found\n" );
-	}
-
-	// WGL_3DFX_gamma_control
-	qwglGetDeviceGammaRamp3DFX = NULL;
-	qwglSetDeviceGammaRamp3DFX = NULL;
-
-	if ( strstr( glConfig.extensions_string, "WGL_3DFX_gamma_control" ) )
-	{
-		if ( !r_ignorehwgamma->integer && r_ext_gamma_control->integer )
-		{
-			qwglGetDeviceGammaRamp3DFX = ( BOOL ( WINAPI * )( HDC, LPVOID ) ) qwglGetProcAddress( "wglGetDeviceGammaRamp3DFX" );
-			qwglSetDeviceGammaRamp3DFX = ( BOOL ( WINAPI * )( HDC, LPVOID ) ) qwglGetProcAddress( "wglSetDeviceGammaRamp3DFX" );
-
-			if ( qwglGetDeviceGammaRamp3DFX && qwglSetDeviceGammaRamp3DFX )
-			{
-				ri.Printf( PRINT_ALL, "...using WGL_3DFX_gamma_control\n" );
-			}
-			else
-			{
-				qwglGetDeviceGammaRamp3DFX = NULL;
-				qwglSetDeviceGammaRamp3DFX = NULL;
-			}
-		}
-		else
-		{
-			ri.Printf( PRINT_ALL, "...ignoring WGL_3DFX_gamma_control\n" );
-		}
-	}
-	else
-	{
-		ri.Printf( PRINT_ALL, "...WGL_3DFX_gamma_control not found\n" );
 	}
 }
 
@@ -1197,7 +1105,7 @@ static qboolean GLW_LoadOpenGL( const char *drivername )
 	//
 	// load the driver and bind our function pointers to it
 	// 
-	if ( QGL_Init( buffer ) ) 
+	//if ( QGL_Init( buffer ) ) 
 	{
 		cdsFullscreen = r_fullscreen->integer;
 
@@ -1233,7 +1141,7 @@ static qboolean GLW_LoadOpenGL( const char *drivername )
 	}
 fail:
 
-	QGL_Shutdown();
+//	QGL_Shutdown();
 
 	return qfalse;
 }
@@ -1249,32 +1157,18 @@ void GLimp_EndFrame (void)
 	if ( r_swapInterval->modified ) {
 		r_swapInterval->modified = qfalse;
 
-		if ( !glConfig.stereoEnabled ) {	// why?
-			if ( qwglSwapIntervalEXT ) {
-				qwglSwapIntervalEXT( r_swapInterval->integer );
-			}
-		}
+		wglSwapIntervalEXT(r_swapInterval->integer);
 	}
 
 
 	// don't flip if drawing to front buffer
 	if ( Q_stricmp( r_drawBuffer->string, "GL_FRONT" ) != 0 )
 	{
-		if ( glConfig.driverType > GLDRV_ICD )
-		{
-			if ( !qwglSwapBuffers( glw_state.hDC ) )
-			{
-				ri.Error( ERR_FATAL, "GLimp_EndFrame() - SwapBuffers() failed!\n" );
-			}
-		}
-		else
-		{
-			SwapBuffers( glw_state.hDC );
-		}
+		SwapBuffers(glw_state.hDC);
 	}
 
 	// check logging
-	QGL_EnableLogging( r_logFile->integer );
+	//QGL_EnableLogging( r_logFile->integer );
 }
 
 static void GLW_StartOpenGL( void )
@@ -1377,10 +1271,10 @@ void GLimp_Init( void )
 	GLW_StartOpenGL();
 
 	// get our config strings
-	Q_strncpyz( glConfig.vendor_string, qglGetString (GL_VENDOR), sizeof( glConfig.vendor_string ) );
-	Q_strncpyz( glConfig.renderer_string, qglGetString (GL_RENDERER), sizeof( glConfig.renderer_string ) );
-	Q_strncpyz( glConfig.version_string, qglGetString (GL_VERSION), sizeof( glConfig.version_string ) );
-	Q_strncpyz( glConfig.extensions_string, qglGetString (GL_EXTENSIONS), sizeof( glConfig.extensions_string ) );
+	Q_strncpyz( glConfig.vendor_string, glGetString (GL_VENDOR), sizeof( glConfig.vendor_string ) );
+	Q_strncpyz( glConfig.renderer_string, glGetString (GL_RENDERER), sizeof( glConfig.renderer_string ) );
+	Q_strncpyz( glConfig.version_string, glGetString (GL_VERSION), sizeof( glConfig.version_string ) );
+	Q_strncpyz( glConfig.extensions_string, glGetString (GL_EXTENSIONS), sizeof( glConfig.extensions_string ) );
 
 	//
 	// chipset specific configuration
@@ -1458,7 +1352,6 @@ void GLimp_Init( void )
 	ri.Cvar_Set( "r_lastValidRenderer", glConfig.renderer_string );
 
 	GLW_InitExtensions();
-	WG_CheckHardwareGamma();
 }
 
 /*
@@ -1473,20 +1366,11 @@ void GLimp_Shutdown( void )
 	const char *success[] = { "failed", "success" };
 	int retVal;
 
-	// FIXME: Brian, we need better fallbacks from partially initialized failures
-	if ( !qwglMakeCurrent ) {
-		return;
-	}
-
 	ri.Printf( PRINT_ALL, "Shutting down OpenGL subsystem\n" );
 
-	// restore gamma.  We do this first because 3Dfx's extension needs a valid OGL subsystem
-	WG_RestoreGamma();
-
 	// set current context to NULL
-	if ( qwglMakeCurrent )
 	{
-		retVal = qwglMakeCurrent( NULL, NULL ) != 0;
+		retVal = wglMakeCurrent( NULL, NULL ) != 0;
 
 		ri.Printf( PRINT_ALL, "...wglMakeCurrent( NULL, NULL ): %s\n", success[retVal] );
 	}
@@ -1494,7 +1378,7 @@ void GLimp_Shutdown( void )
 	// delete HGLRC
 	if ( glw_state.hGLRC )
 	{
-		retVal = qwglDeleteContext( glw_state.hGLRC ) != 0;
+		retVal = wglDeleteContext( glw_state.hGLRC ) != 0;
 		ri.Printf( PRINT_ALL, "...deleting GL context: %s\n", success[retVal] );
 		glw_state.hGLRC = NULL;
 	}
@@ -1533,7 +1417,7 @@ void GLimp_Shutdown( void )
 	}
 
 	// shutdown QGL subsystem
-	QGL_Shutdown();
+	//QGL_Shutdown();
 
 	memset( &glConfig, 0, sizeof( glConfig ) );
 	memset( &glState, 0, sizeof( glState ) );
@@ -1568,7 +1452,7 @@ void GLimp_RenderThreadWrapper( void ) {
 	glimpRenderThread();
 
 	// unbind the context before we die
-	qwglMakeCurrent( glw_state.hDC, NULL );
+	wglMakeCurrent( glw_state.hDC, NULL );
 }
 
 /*
@@ -1607,7 +1491,7 @@ static	int		wglErrors;
 void *GLimp_RendererSleep( void ) {
 	void	*data;
 
-	if ( !qwglMakeCurrent( glw_state.hDC, NULL ) ) {
+	if ( !wglMakeCurrent( glw_state.hDC, NULL ) ) {
 		wglErrors++;
 	}
 
@@ -1618,7 +1502,7 @@ void *GLimp_RendererSleep( void ) {
 
 	WaitForSingleObject( renderCommandsEvent, INFINITE );
 
-	if ( !qwglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) ) {
+	if ( !wglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) ) {
 		wglErrors++;
 	}
 
@@ -1637,7 +1521,7 @@ void *GLimp_RendererSleep( void ) {
 void GLimp_FrontEndSleep( void ) {
 	WaitForSingleObject( renderCompletedEvent, INFINITE );
 
-	if ( !qwglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) ) {
+	if ( !wglMakeCurrent( glw_state.hDC, glw_state.hGLRC ) ) {
 		wglErrors++;
 	}
 }
@@ -1646,7 +1530,7 @@ void GLimp_FrontEndSleep( void ) {
 void GLimp_WakeRenderer( void *data ) {
 	smpData = data;
 
-	if ( !qwglMakeCurrent( glw_state.hDC, NULL ) ) {
+	if ( !wglMakeCurrent( glw_state.hDC, NULL ) ) {
 		wglErrors++;
 	}
 
