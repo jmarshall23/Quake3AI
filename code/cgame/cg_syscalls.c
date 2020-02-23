@@ -449,3 +449,15 @@ void    trap_R_AddCoronaToScene(const vec3_t org, float r, float g, float b, flo
 	syscall(CG_R_ADDCORONATOSCENE, org, PASSFLOAT(r), PASSFLOAT(g), PASSFLOAT(b), PASSFLOAT(scale), id, flags);
 }
 // jmarshall end
+
+void  trap_R_AddPolyBufferToScene(polyBuffer_t* pPolyBuffer) {
+	syscall(CG_R_ADDPOLYBUFFERTOSCENE, pPolyBuffer);
+}
+
+void  trap_R_ProjectDecal(qhandle_t hShader, int numPoints, vec3_t* points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime) {
+	syscall(CG_R_PROJECTDECAL, hShader, numPoints, points, projection, color, lifeTime, fadeTime);
+}
+
+void   trap_R_ClearDecals(void) {
+	syscall(CG_R_CLEARDECALS);
+}

@@ -1676,3 +1676,6 @@ extern qboolean		initparticles;
 int CG_NewParticleArea ( int num );
 
 
+void  trap_R_AddPolyBufferToScene(polyBuffer_t* pPolyBuffer);
+void  trap_R_ProjectDecal(qhandle_t hShader, int numPoints, vec3_t* points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime);
+void   trap_R_ClearDecals(void);

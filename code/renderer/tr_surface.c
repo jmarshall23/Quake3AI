@@ -1230,6 +1230,30 @@ void RB_SurfaceDecal(srfDecal_t* srf) {
 	tess.numVertexes = numv;
 }
 
+void RB_SurfacePolyBuffer(srfPolyBuffer_t* surf) {
+	RB_EndSurface();
+
+	RB_BeginSurface(tess.shader, tess.fogNum);
+
+	// ===================================================
+	tess.numIndexes = surf->pPolyBuffer->numIndicies;
+	tess.numVertexes = surf->pPolyBuffer->numVerts;
+
+	memcpy(tess.xyz, surf->pPolyBuffer->xyz, tess.numVertexes * sizeof(vec4_t));
+	memcpy(tess.indexes, surf->pPolyBuffer->indicies, sizeof(glIndex_t) * tess.numIndexes);
+	for(int i = 0; i < tess.numVertexes; i++) {
+		
+		tess.texCoords[i][0][0] = surf->pPolyBuffer->st[i][0];
+		tess.texCoords[i][0][1] = surf->pPolyBuffer->st[i][1];
+//		tess.vertexColors[i] = surf->pPolyBuffer->color[i];
+	}
+	
+	// ===================================================
+
+	RB_EndSurface();
+}
+
+
 void (*rb_surfaceTable[SF_NUM_SURFACE_TYPES])( void *) = {
 	(void(*)(void*))RB_SurfaceBad,			// SF_BAD, 
 	(void(*)(void*))RB_SurfaceSkip,			// SF_SKIP, 

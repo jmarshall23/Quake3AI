@@ -483,6 +483,9 @@ typedef struct {
 	int			numPolys;
 	struct srfPoly_s	*polys;
 
+	int numPolyBuffers;
+	struct srfPolyBuffer_s* polybuffers;
+
 	int			numDrawSurfs;
 	struct drawSurf_s	*drawSurfs;
 
@@ -568,6 +571,7 @@ typedef enum {
 	SF_FLARE,
 	SF_ENTITY,				// beams, rails, lightning, etc that can be determined by entity
 	SF_DISPLAY_LIST,
+	SF_POLYBUFFER,
 	SF_DECAL,               // ydnar: decal surfaces
 
 	SF_NUM_SURFACE_TYPES,
@@ -593,6 +597,12 @@ typedef struct srfPoly_s {
 	int				numVerts;
 	polyVert_t		*verts;
 } srfPoly_t;
+
+typedef struct srfPolyBuffer_s {
+	surfaceType_t surfaceType;
+	int fogIndex;
+	polyBuffer_t* pPolyBuffer;
+} srfPolyBuffer_t;
 
 // ydnar: decals
 #define MAX_DECAL_VERTS         10  // worst case is triangle clipped by 6 planes
@@ -1548,6 +1558,7 @@ void RE_AddLightToScene( const vec3_t org, float intensity, float r, float g, fl
 void RE_AddAdditiveLightToScene( const vec3_t org, float intensity, float r, float g, float b );
 void RE_RenderScene( const refdef_t *fd );
 // jmarshall
+void RE_AddPolyBufferToScene(polyBuffer_t* pPolyBuffer);
 void RE_AddCoronaToScene(const vec3_t org, float r, float g, float b, float scale, int id, int flags);
 // jmarshall end
 
@@ -1736,6 +1747,8 @@ typedef struct {
 	srfDecal_t decals[MAX_DECALS];
 
 // jmarshall
+	srfPolyBuffer_t polybuffers[MAX_POLYS];
+
 	corona_t coronas[MAX_CORONAS];          //----(SA)
 
 	debugLine_t		debugLines[MAX_DEBUG_LINES];

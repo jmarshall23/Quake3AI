@@ -1185,6 +1185,8 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	re.ProjectDecal = RE_ProjectDecal;
 	re.ClearDecals = RE_ClearDecals;
 
+	re.AddPolyBufferToScene = RE_AddPolyBufferToScene;
+
 	re.LerpTag = R_LerpTag;
 	re.ModelBounds = R_ModelBounds;
 
