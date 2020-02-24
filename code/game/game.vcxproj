@@ -442,6 +442,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS;GLOBALRANK</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="bg_splines.c" />
     <ClCompile Include="BotAI\BotAI.c" />
     <ClCompile Include="BotAI\BotAI_battle.c" />
     <ClCompile Include="BotAI\BotAI_deathmatch.c" />

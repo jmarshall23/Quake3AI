@@ -135,6 +135,9 @@
     <ClCompile Include="BotAI\BotAI_battle.c">
       <Filter>Source Files\BotAI</Filter>
     </ClCompile>
+    <ClCompile Include="bg_splines.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_chat.h">

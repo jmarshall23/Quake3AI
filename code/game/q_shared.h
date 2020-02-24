@@ -1288,11 +1288,21 @@ typedef struct usercmd_s {
 
 typedef enum {
 	TR_STATIONARY,
-	TR_INTERPOLATE,				// non-parametric, but interpolate between snapshots
+	TR_INTERPOLATE,             // non-parametric, but interpolate between snapshots
 	TR_LINEAR,
 	TR_LINEAR_STOP,
-	TR_SINE,					// value = base + sin( time / duration ) * delta
-	TR_GRAVITY
+	TR_LINEAR_STOP_BACK,        //----(SA)	added.  so reverse movement can be different than forward
+	TR_SINE,                    // value = base + sin( time / duration ) * delta
+	TR_GRAVITY,
+	// Ridah
+	TR_GRAVITY_LOW,
+	TR_GRAVITY_FLOAT,           // super low grav with no gravity acceleration (floating feathers/fabric/leaves/...)
+	TR_GRAVITY_PAUSED,          //----(SA)	has stopped, but will still do a short trace to see if it should be switched back to TR_GRAVITY
+	TR_ACCELERATE,
+	TR_DECCELERATE,
+	// Gordon
+	TR_SPLINE,
+	TR_LINEAR_PATH
 } trType_t;
 
 typedef struct {

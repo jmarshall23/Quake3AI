@@ -739,3 +739,58 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 #define KAMI_BOOMSPHERE_MAXRADIUS		720
 #define KAMI_SHOCKWAVE2_MAXRADIUS		704
 
+#define MAX_SPLINE_PATHS        512
+#define MAX_SPLINE_CONTROLS     4
+#define MAX_SPLINE_SEGMENTS     16
+
+typedef struct splinePath_s splinePath_t;
+
+#define MAX_PATH_CORNERS        512
+
+typedef struct {
+	char name[64];
+	vec3_t origin;
+} pathCorner_t;
+
+extern int numPathCorners;
+extern pathCorner_t pathCorners[MAX_PATH_CORNERS];
+
+typedef struct {
+	vec3_t start;
+	vec3_t v_norm;
+	float length;
+} splineSegment_t;
+
+struct splinePath_s {
+	pathCorner_t point;
+
+	char strTarget[64];
+
+	splinePath_t* next;
+	splinePath_t* prev;
+
+	pathCorner_t controls[MAX_SPLINE_CONTROLS];
+	int numControls;
+	splineSegment_t segments[MAX_SPLINE_SEGMENTS];
+
+	float length;
+
+	qboolean isStart;
+	qboolean isEnd;
+};
+
+extern int numSplinePaths;
+extern splinePath_t splinePaths[MAX_SPLINE_PATHS];
+
+pathCorner_t* BG_Find_PathCorner(const char* match);
+splinePath_t* BG_GetSplineData(int number, qboolean* backwards);
+void BG_AddPathCorner(const char* name, vec3_t origin);
+splinePath_t* BG_AddSplinePath(const char* name, const char* target, vec3_t origin);
+void BG_BuildSplinePaths();
+splinePath_t* BG_Find_Spline(const char* match);
+float BG_SplineLength(splinePath_t* pSpline);
+void BG_AddSplineControl(splinePath_t* spline, const char* name);
+void BG_CalculateSpline_r(splinePath_t* spline, vec3_t out1, vec3_t out2, float tension);
+qboolean BG_TraverseSpline(float* deltaTime, splinePath_t** pSpline);
+void BG_LinearPathOrigin2(float radius, splinePath_t** pSpline, float* deltaTime, vec3_t result, qboolean backwards);
+void BG_ComputeSegments(splinePath_t* pSpline);

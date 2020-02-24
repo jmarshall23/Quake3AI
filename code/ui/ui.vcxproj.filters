@@ -147,6 +147,9 @@
     <ClCompile Include="ui_video.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\game\bg_splines.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ui.def">

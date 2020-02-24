@@ -25,6 +25,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "q_shared.h"
 #include "bg_public.h"
 
+int numSplinePaths;
+splinePath_t splinePaths[MAX_SPLINE_PATHS];
+
+int numPathCorners;
+pathCorner_t pathCorners[MAX_PATH_CORNERS];
+
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
 DO NOT USE THIS CLASS, IT JUST HOLDS GENERAL INFORMATION.
 The suspended flag will allow items to hang in the air, otherwise they are dropped to the next surface.
@@ -1195,44 +1201,266 @@ BG_EvaluateTrajectory
 
 ================
 */
-void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) {
-	float		deltaTime;
-	float		phase;
+void BG_EvaluateTrajectory(const trajectory_t* tr, int atTime, vec3_t result, qboolean isAngle, int splinePath) {
+	float deltaTime;
+	float phase;
+	vec3_t v;
 
-	switch( tr->trType ) {
+	splinePath_t* pSpline;
+	vec3_t vec[2];
+	qboolean backwards = qfalse;
+	float deltaTime2;
+
+	switch (tr->trType) {
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
-		VectorCopy( tr->trBase, result );
+	case TR_GRAVITY_PAUSED: //----(SA)
+		VectorCopy(tr->trBase, result);
 		break;
 	case TR_LINEAR:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 		break;
 	case TR_SINE:
-		deltaTime = ( atTime - tr->trTime ) / (float) tr->trDuration;
-		phase = sin( deltaTime * M_PI * 2 );
-		VectorMA( tr->trBase, phase, tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) / (float)tr->trDuration;
+		phase = sin(deltaTime * M_PI * 2);
+		VectorMA(tr->trBase, phase, tr->trDelta, result);
 		break;
+		//----(SA)	removed
 	case TR_LINEAR_STOP:
-		if ( atTime > tr->trTime + tr->trDuration ) {
+		if (atTime > tr->trTime + tr->trDuration) {
 			atTime = tr->trTime + tr->trDuration;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
-		if ( deltaTime < 0 ) {
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		if (deltaTime < 0) {
 			deltaTime = 0;
 		}
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 		break;
 	case TR_GRAVITY:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
-		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;     // FIXME: local gravity...
+		break;
+		// Ridah
+	case TR_GRAVITY_LOW:
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+		result[2] -= 0.5 * (DEFAULT_GRAVITY * 0.3) * deltaTime * deltaTime;     // FIXME: local gravity...
+		break;
+		// done.
+//----(SA)
+	case TR_GRAVITY_FLOAT:
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+		result[2] -= 0.5 * (DEFAULT_GRAVITY * 0.2) * deltaTime;
+		break;
+		//----(SA)	end
+				// RF, acceleration
+	case TR_ACCELERATE:     // trDelta is the ultimate speed
+		if (atTime > tr->trTime + tr->trDuration) {
+			atTime = tr->trTime + tr->trDuration;
+		}
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		// phase is the acceleration constant
+		phase = VectorLength(tr->trDelta) / (tr->trDuration * 0.001);
+		// trDelta at least gives us the acceleration direction
+		VectorNormalize2(tr->trDelta, result);
+		// get distance travelled at current time
+		VectorMA(tr->trBase, phase * 0.5 * deltaTime * deltaTime, result, result);
+		break;
+	case TR_DECCELERATE:    // trDelta is the starting speed
+		if (atTime > tr->trTime + tr->trDuration) {
+			atTime = tr->trTime + tr->trDuration;
+		}
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		// phase is the breaking constant
+		phase = VectorLength(tr->trDelta) / (tr->trDuration * 0.001);
+		// trDelta at least gives us the acceleration direction
+		VectorNormalize2(tr->trDelta, result);
+		// get distance travelled at current time (without breaking)
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, v);
+		// subtract breaking force
+		VectorMA(v, -phase * 0.5 * deltaTime * deltaTime, result, result);
+		break;
+	case TR_SPLINE:
+		if (!(pSpline = BG_GetSplineData(splinePath, &backwards))) {
+			return;
+		}
+
+		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
+
+		if (deltaTime < 0.f) {
+			deltaTime = 0.f;
+		}
+		else if (deltaTime > 1.f) {
+			deltaTime = 1.f;
+		}
+
+		if (backwards) {
+			deltaTime = 1 - deltaTime;
+		}
+
+		/*		if(pSpline->isStart) {
+					deltaTime = 1 - sin((1 - deltaTime) * M_PI * 0.5f);
+				} else if(pSpline->isEnd) {
+					deltaTime = sin(deltaTime * M_PI * 0.5f);
+				}*/
+
+		deltaTime2 = deltaTime;
+
+		BG_CalculateSpline_r(pSpline, vec[0], vec[1], deltaTime);
+
+		if (isAngle) {
+			qboolean dampin = qfalse;
+			qboolean dampout = qfalse;
+			float base1;
+
+			if (tr->trBase[0]) {
+				//				int pos = 0;
+				vec3_t result2;
+				splinePath_t* pSp2 = pSpline;
+
+				deltaTime2 += tr->trBase[0] / pSpline->length;
+
+				if (BG_TraverseSpline(&deltaTime2, &pSp2)) {
+
+					VectorSubtract(vec[1], vec[0], result);
+					VectorMA(vec[0], deltaTime, result, result);
+
+					BG_CalculateSpline_r(pSp2, vec[0], vec[1], deltaTime2);
+
+					VectorSubtract(vec[1], vec[0], result2);
+					VectorMA(vec[0], deltaTime2, result2, result2);
+
+					if (tr->trBase[0] < 0) {
+						VectorSubtract(result, result2, result);
+					}
+					else {
+						VectorSubtract(result2, result, result);
+					}
+				}
+				else {
+					VectorSubtract(vec[1], vec[0], result);
+				}
+			}
+			else {
+				VectorSubtract(vec[1], vec[0], result);
+			}
+
+			vectoangles(result, result);
+
+			base1 = tr->trBase[1];
+			if (base1 >= 10000 || base1 < -10000) {
+				dampin = qtrue;
+				if (base1 < 0) {
+					base1 += 10000;
+				}
+				else {
+					base1 -= 10000;
+				}
+			}
+
+			if (base1 >= 1000 || base1 < -1000) {
+				dampout = qtrue;
+				if (base1 < 0) {
+					base1 += 1000;
+				}
+				else {
+					base1 -= 1000;
+				}
+			}
+
+			if (dampin && dampout) {
+				result[ROLL] = base1 + ((sin(((deltaTime * 2) - 1) * M_PI * 0.5f) + 1) * 0.5f * tr->trBase[2]);
+			}
+			else if (dampin) {
+				result[ROLL] = base1 + (sin(deltaTime * M_PI * 0.5f) * tr->trBase[2]);
+			}
+			else if (dampout) {
+				result[ROLL] = base1 + ((1 - sin((1 - deltaTime) * M_PI * 0.5f)) * tr->trBase[2]);
+			}
+			else {
+				result[ROLL] = base1 + (deltaTime * tr->trBase[2]);
+			}
+		}
+		else {
+			VectorSubtract(vec[1], vec[0], result);
+			VectorMA(vec[0], deltaTime, result, result);
+		}
+
+		break;
+	case TR_LINEAR_PATH:
+		if (!(pSpline = BG_GetSplineData(splinePath, &backwards))) {
+			return;
+		}
+
+		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
+
+		if (deltaTime < 0.f) {
+			deltaTime = 0.f;
+		}
+		else if (deltaTime > 1.f) {
+			deltaTime = 1.f;
+		}
+
+		if (backwards) {
+			deltaTime = 1 - deltaTime;
+		}
+
+		if (isAngle) {
+			int pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
+			float frac;
+
+			if (pos >= MAX_SPLINE_SEGMENTS) {
+				pos = MAX_SPLINE_SEGMENTS - 1;
+				frac = pSpline->segments[pos].length;
+			}
+			else {
+				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
+			}
+
+			if (tr->trBase[0]) {
+				VectorMA(pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result);
+				VectorCopy(result, v);
+
+				BG_LinearPathOrigin2(tr->trBase[0], &pSpline, &deltaTime, v, backwards);
+				if (tr->trBase[0] < 0) {
+					VectorSubtract(v, result, result);
+				}
+				else {
+					VectorSubtract(result, v, result);
+				}
+
+				vectoangles(result, result);
+			}
+			else {
+				vectoangles(pSpline->segments[pos].v_norm, result);
+			}
+
+		}
+		else {
+			int pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
+			float frac;
+
+			if (pos >= MAX_SPLINE_SEGMENTS) {
+				pos = MAX_SPLINE_SEGMENTS - 1;
+				frac = pSpline->segments[pos].length;
+			}
+			else {
+				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
+			}
+
+			VectorMA(pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result);
+		}
+
 		break;
 	default:
-		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trTime );
+		Com_Error(ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trTime);
 		break;
 	}
 }
+
 
 /*
 ================
@@ -1241,38 +1469,75 @@ BG_EvaluateTrajectoryDelta
 For determining velocity at a given time
 ================
 */
-void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result ) {
-	float	deltaTime;
-	float	phase;
+void BG_EvaluateTrajectoryDelta(const trajectory_t* tr, int atTime, vec3_t result, qboolean isAngle, int splineData) {
+	float deltaTime;
+	float phase;
 
-	switch( tr->trType ) {
+	switch (tr->trType) {
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
-		VectorClear( result );
+		VectorClear(result);
 		break;
 	case TR_LINEAR:
-		VectorCopy( tr->trDelta, result );
+		VectorCopy(tr->trDelta, result);
 		break;
 	case TR_SINE:
-		deltaTime = ( atTime - tr->trTime ) / (float) tr->trDuration;
-		phase = cos( deltaTime * M_PI * 2 );	// derivative of sin = cos
+		deltaTime = (atTime - tr->trTime) / (float)tr->trDuration;
+		phase = cos(deltaTime * M_PI * 2);    // derivative of sin = cos
 		phase *= 0.5;
-		VectorScale( tr->trDelta, phase, result );
+		VectorScale(tr->trDelta, phase, result);
 		break;
+		//----(SA)	removed
 	case TR_LINEAR_STOP:
-		if ( atTime > tr->trTime + tr->trDuration ) {
-			VectorClear( result );
+		if (atTime > tr->trTime + tr->trDuration) {
+			VectorClear(result);
 			return;
 		}
-		VectorCopy( tr->trDelta, result );
+		VectorCopy(tr->trDelta, result);
 		break;
 	case TR_GRAVITY:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
-		VectorCopy( tr->trDelta, result );
-		result[2] -= DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
+		result[2] -= DEFAULT_GRAVITY * deltaTime;       // FIXME: local gravity...
+		break;
+		// Ridah
+	case TR_GRAVITY_LOW:
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
+		result[2] -= (DEFAULT_GRAVITY * 0.3) * deltaTime;       // FIXME: local gravity...
+		break;
+		// done.
+//----(SA)
+	case TR_GRAVITY_FLOAT:
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
+		result[2] -= (DEFAULT_GRAVITY * 0.2) * deltaTime;
+		break;
+		//----(SA)	end
+				// RF, acceleration
+	case TR_ACCELERATE: // trDelta is eventual speed
+		if (atTime > tr->trTime + tr->trDuration) {
+			VectorClear(result);
+			return;
+		}
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		phase = deltaTime / (float)tr->trDuration;
+		VectorScale(tr->trDelta, deltaTime * deltaTime, result);
+		break;
+	case TR_DECCELERATE:    // trDelta is breaking force
+		if (atTime > tr->trTime + tr->trDuration) {
+			VectorClear(result);
+			return;
+		}
+		deltaTime = (atTime - tr->trTime) * 0.001;    // milliseconds to seconds
+		VectorScale(tr->trDelta, deltaTime, result);
+		break;
+	case TR_SPLINE:
+	case TR_LINEAR_PATH:
+		VectorClear(result);
 		break;
 	default:
-		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trTime );
+		Com_Error(ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trTime);
 		break;
 	}
 }
